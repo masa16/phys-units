@@ -1,6 +1,9 @@
-# Phys::Units
+# Phys-Units
 
-TODO: Write a gem description
+GNU Units compatible library for Ruby including Classes:
+
+* Phys::Quantity
+* Phys::Unit
 
 ## Installation
 
