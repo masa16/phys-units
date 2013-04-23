@@ -1,6 +1,7 @@
 # Phys-Units
 
-GNU Units compatible library for Ruby, formerly implemented as `Quanty' class.
+GNU Units compatible library for Ruby. 
+Former name is `Quanty', the first Ruby units library released in 2001.
 This library provides the following Classes:
 
 * Phys::Quantity

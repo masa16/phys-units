@@ -7,36 +7,93 @@ module Phys
   class Unit
 
     def self.debug
-      false
+      true #false
     end
 
-    def initialize(arg,name=nil)
+    def initialize(arg,expr=nil,val=nil)
       case arg
       when Numeric
-	@factor = arg
-	alloc_dim
-      when Hash
-	@factor = 1
-	alloc_dim arg
-      when String
-	replace(Unit.find_unit(arg))
+        @factor = arg
+        alloc_dim
       when Phys::Unit
-	replace(arg)
+        replace(arg)
+      when String
+        @name = arg
+        if /^(.*)-$/ =~ @name
+          @name = $1
+          if PREFIX[@name]
+            warn "multiply-defined prefix: #{@name}"
+          else
+            PREFIX[@name] = self
+          end
+          @expr = expr
+        else
+          if LIST[@name]
+            warn "multiply-defined unit: #{@name}"
+          else
+            LIST[@name] = self
+          end
+          if expr.kind_of? Phys::Unit
+            replace(expr)
+          # base unit
+          elsif /^!/ =~ expr
+            @base = true
+            @factor = 1
+            alloc_dim({@name=>1})
+            if expr == "!dimensionless"
+              @dimensionless = true
+              if val
+                @dimension_value = val
+              else
+                @dimension_value = 1
+              end
+            end
+          else
+            @expr = expr
+          end
+        end
       else
-	raise "invalid type=#{arg.class} of arg=#{arg.inspect}"
+        raise TypeError "invalid argument"
       end
-      @name = name if name
-      if !@dim
-	raise "@dim is undefined: arg=#{arg.inspect}"
+    end
+
+    def use_dimension
+      return if @base
+      return if @dim && @factor
+      if @expr && @dim.nil?
+        puts "unit='#{@name}', parsing '#{@expr}'..." if Unit.debug
+        unit = Parse.new.parse(@expr)
+        #if unit.parse_failed?
+        #  raise "parse error"
+        #end
+        case unit
+        when Unit
+          @dim = unit.dim
+          @factor = unit.factor
+          if @dim.nil? || @factor.nil?
+            raise "parse error : #{unit.inspect}"
+          end
+        when Numeric
+          @factor = unit
+          alloc_dim
+        else
+          raise "parse error : #{self.inspect}"
+        end
+      else
+        raise "undefined unit?: #{self.inspect}"
       end
-      #p self
     end
 
     def inspect
       a = [Utils.num_inspect(@factor), @dim.inspect]
       a.push "@name="+@name.inspect if @name
+      a.push "@expr="+@expr.inspect if @expr
       a.push "@ofs="+@offset.inspect if @offset
-      a.push "@dimless=true" if @dimensionless
+      a.push "@base=true" if @base
+      a.push "@dimensionless=true" if @dimensionless
+      if @dimension_value && @dimension_value!=1
+        a.push "@dimension_value="+@dimension_value.inspect
+      end
       s = a.join(",")
       "#<#{self.class} #{s}>"
     end
@@ -45,21 +102,39 @@ module Phys
       @name = x.name.dup if x.name
       @factor = x.factor
       alloc_dim x.dim
+      if x.base
+        @base = true
+        @dimensionless = x.dimensionless
+        @dimension_value = x.dimension_value
+      end
     end
 
     def alloc_dim(hash=nil)
       case hash
       when Hash
-	@dim = hash.dup
+        @dim = hash.dup
       else
-	@dim = {}
+        @dim = {}
       end
       @dim.default = 0
     end
 
-    attr_reader   :dim
+    def dim
+      use_dimension
+      @dim
+    end
+
+    def factor
+      use_dimension
+      @factor
+    end
+
+    #attr_reader   :dim
     attr_accessor :name
-    attr_accessor :factor
+    #attr_accessor :factor
+    attr_reader   :base
+    attr_reader   :dimensionless
+    attr_reader   :dimension_value
 
     alias dimension dim
 
@@ -68,26 +143,41 @@ module Phys
     end
 
     def get_factor
+      use_dimension
       r = @factor
       @dim.each do |k,d|
-	if d != 0
-	  u = LIST[k]
-	  if u.dimensionless?
-	    r *= u.irrational**d
-	  end
-	end
+        if d != 0
+          u = LIST[k]
+          if u.dimensionless?
+            r *= u.dimension_value**d
+          end
+        end
       end
       #p [:get_factor, @factor, @dim, r]
       r
     end
 
     def dimensionless_deleted
-      hash = @dim.dup
-      hash.delete_if{|k,v| LIST[k].dimensionless?}
+      if @base
+        if @dimensionless
+          {}
+        else
+          @dim.dup
+        end
+      else
+        use_dimension
+        hash = @dim.dup
+        hash.delete_if{|k,v| LIST[k].dimensionless?}
+      end
     end
 
     def dimensionless?
-      @dim.each_key.all?{|k| LIST[k].dimensionless?}
+      if @base
+        @dimensionless
+      else
+        use_dimension
+        @dim.each_key.all?{|k| LIST[k].dimensionless?}
+      end
     end
 
     def same_dimension?(x)
@@ -97,18 +187,19 @@ module Phys
 
     def assert_dimensionless
       if !dimensionless?
-	raise "#{self.inspect} : not dimensionless"
+        @dim.each{|k,v| p [k,LIST[k],LIST[k].dimensionless?]}
+        raise "#{self.inspect} : not dimensionless"
       end
     end
 
-    def assert_same_unit(x)
+    def assert_same_dimension(x)
       if !same_dimension?(x)
-	raise "Different unit #{self.inspect} and #{x.inspect}"
+        raise "Different dimension: #{self.inspect} and #{x.inspect}"
       end
     end
 
     def convert(x,unit)
-      assert_same_unit(unit)
+      assert_same_dimension(unit)
       y = unit.convert_to_base(x)
       convert_from_base(y)
     end
@@ -142,8 +233,11 @@ module Phys
     end
 
     def add!(x)
-      x = Unit.new(x) if !x.kind_of?(Unit)
-      assert_same_unit(x)
+      if !x.kind_of?(Unit)
+        x = Unit.new(x) 
+      else
+        assert_same_dimension(x)
+      end
       @factor += x.factor
       self
     end
@@ -153,8 +247,11 @@ module Phys
     end
 
     def sbt!(x)
-      x = Unit.new(x) if !x.kind_of?(Unit)
-      assert_same_unit(x)
+      if !x.kind_of?(Unit)
+        x = Unit.new(x) 
+      else
+        assert_same_dimension(x)
+      end
       @factor -= x.factor
       self
     end
@@ -173,6 +270,7 @@ module Phys
     end
 
     def mul!(x)
+      use_dimension
       x = Unit.new(x) if !x.kind_of?(Unit)
       x.dim.each{|k,v| @dim[k] += v }
       @dim.delete_if{|k,v| v == 0 }
@@ -185,12 +283,13 @@ module Phys
     end
 
     def div!(x)
+      use_dimension
       x = Unit.new(x) if !x.kind_of?(Unit)
       x.dim.each{|k,v| @dim[k] -= v }
       if Integer===@factor && Integer===x.factor && x.factor.abs!=1
-	@factor = Rational(@factor,x.factor)
+        @factor = Rational(@factor,x.factor)
       else
-	@factor /= x.factor
+        @factor /= x.factor
       end
       self
     end
@@ -200,6 +299,7 @@ module Phys
     end
 
     def rdiv!(x)
+      use_dimension
       x = Unit.new(x) if !x.kind_of?(Unit)
       x.dim.each{|k,v| @dim[k] += v }
       @factor = Rational(@factor,x.factor)
@@ -211,6 +311,7 @@ module Phys
     end
 
     def inv!
+      use_dimension
       @dim.each{|k,v| @dim[k] = -v }
       @factor = 1/@factor
       self
@@ -221,6 +322,7 @@ module Phys
     end
 
     def pow!(x)
+      use_dimension
       x = Utils.as_numeric(x)
       @dim.each{|k,v| @dim[k] *= x }
       @factor **= x
@@ -228,12 +330,9 @@ module Phys
     end
 
     def self.func(fn, x)
-      if fn=='ln'
-	fn = 'log'
-      end
+      fn = 'log' if fn == 'ln'
       z = Unit.new(x)
-      z.factor = Math.send(fn,z.to_num)
-      z
+      Unit.new( Math.send(fn,z.to_num) )
     end
 
     def coerce(x)
@@ -246,173 +345,109 @@ module Phys
       data = self.units_dat if data.nil?
       skip = false
 
-      data.each_line do |line|
-	line.chomp!
-
-	if /^!(end)?locale(?: (\S+))?/ =~ line
-	  ed, lc = $1, $2
-	  if ed.nil? && /^#{lc}/ !~ locale
-	    skip = true
-	  else
-	    skip = false
-	  end
-	  next
-	end
-
-	next if skip
-
-	if /([^#]*)\s*#?/ =~ line
-	  line = $1
-	end
-	if /(.*)\\$/ =~ line
-	  str.concat $1+" "
-	  next
-	else
-	  str.concat line
-	end
-
-        if /^([A-Za-z_0-9À-ÿ%$"'-]+)\s+([^#]+)/ =~ str #"
-	  name,repr = $1,$2.strip
-
-	  if /^(.*)-$/ =~ name
-	    name = $1
-	    if PREFIX[name]
-	      warn "multiply-defined prefix: #{name}"
-	    end
-	    PREFIX[name] = repr
-	  else
-	    if LIST[name]
-	      warn "multiply-defined unit: #{name}"
-	    end
-	    LIST[name] = repr
-	  end
-	end
-	str = ""
+      if true
+        LIST["pi"] = Unit.new("pi","!dimensionless",Math::PI)
       end
 
-      if true
-	LIST["pi"] = BaseUnit.new("pi",true,Math::PI)
+      data.each_line do |line|
+        line.chomp!
+
+        if /^!(end)?locale(?: (\S+))?/ =~ line
+          ed, lc = $1, $2
+          if ed.nil? && /^#{lc}/ !~ locale
+            skip = true
+          else
+            skip = false
+          end
+          next
+        end
+
+        next if skip
+
+        if /([^#]*)\s*#?/ =~ line
+          line = $1
+        end
+        if /(.*)\\$/ =~ line
+          str.concat $1+" "
+          next
+        else
+          str.concat line
+        end
+
+        if /^([A-Za-z_0-9À-ÿ%$"'-]+)\s+([^#]+)/ =~ str #"
+          name,repr = $1,$2.strip
+          Unit.new(name,repr)
+        elsif !str.strip.empty?
+          puts "unrecognized definition: '#{str}'" if debug
+        end
+        str = ""
       end
 
       x = PREFIX.keys.sort{|a,b|
-	s = b.size-a.size
-	(s==0) ? (a<=>b) : s
+        s = b.size-a.size
+        (s==0) ? (a<=>b) : s
       }.join("|")
       @@prefix_regex = /^(#{x})(.+)$/
 
-      PREFIX.each do |k,v|
-	if v.kind_of? String
-	  begin
-	    PREFIX[k] = Parse.new.parse(v)
-	  rescue
-	  end
-	end
-	p [k,PREFIX[k]] if debug
-      end
-
-      LIST.each do |k,v|
-	if v.kind_of? String
-	  v = self.find_unit(k)
-	end
-	p [k,v] if debug
-      end
-
       OffsetUnit.import_temperature
 
-      #puts "-- delete:" 
-      LIST.delete_if {|k,v|
-	v.nil? or v.kind_of? String
-      }
-      PREFIX.delete_if{|k,v|
-	v.nil? or v.kind_of? String
-      }
-
-      puts "#{LIST.size} units, #{PREFIX.size} prefixes"
+      if debug
+        LIST.dup.each do |k,v|
+          p [k,v]
+          if v.kind_of? Unit
+            begin
+              v.use_dimension
+            rescue
+              puts "!! no definition: #{v.inspect} !!"
+            end
+          end
+          p [k,v]
+        end
+      end
+      puts "#{LIST.size} units, #{PREFIX.size} prefixes" if debug
     end
 
     def self.prefix_regex
       @@prefix_regex
     end
 
-    def self.find_prefix(arg)
-      if Unit.prefix_regex =~ arg
-	pfx,sfx = $1,$2
-	if pfx and stem = Unit.find_unit_stem(sfx)
-	  begin
-	    if PREFIX[pfx].kind_of? String
-	      PREFIX[pfx] = Parse.new.parse(pfx)
-	    end
-	    return PREFIX[pfx] * stem
-	  rescue
-	  end
-	end
-      end
-      nil
-    end
+    class << self
 
-    def self.find_unit_stem(x)
-      unit =  LIST[k=x] ||
-	( /(.*(?:s|z|ch))es$/ =~ x && LIST[k=$1] ) ||
-	( /(.*)s$/ =~ x && LIST[k=$1] )
-      if unit.kind_of? String
-	if /^!(\w*)/ =~ unit
-	  flag = ($1 == "dimensionless")
-	  # p [x,flag]
-	  LIST[k] = BaseUnit.new(x,flag)
-	else
-	  begin
-	    u = Parse.new.parse(unit)
-	    LIST[k] = Unit.new(u,k)
-	  rescue
-	  end
-	end
+      def find_unit(x)
+        if k = unit_stem(x)
+          return LIST[k]
+        elsif u = PREFIX[x]
+          return u
+        elsif Unit.prefix_regex =~ x
+          pfx,sfx = $1,$2
+          if pfx and k = unit_stem(sfx)
+            return PREFIX[pfx] * LIST[k]
+          end
+        end
       end
-      LIST[k]
-    end
 
-    def self.find_unit(x)
-      prefix = nil
-      unit = Unit.find_unit_stem(x)
-      return unit if unit
-      unit = PREFIX[x]
-      return unit if unit
-      unit = Unit.find_prefix(x)
-      return unit if unit
-      puts "!! no unit found: #{x} !!" if debug
-      nil
+      alias [] find_unit
+
+      def unit_stem(x)
+        if LIST[x]
+          x
+        elsif /(.*(?:s|z|ch))es$/ =~ x && LIST[k=$1]
+          k
+        elsif /(.*)s$/ =~ x && LIST[k=$1]
+          k
+        end
+      end
+
+      def word(x)
+        find_unit(x) || Unit.new(x)
+      end
     end
 
     def self.parse(str)
-      return Parse.new.parse(str)
-      u = Unit.find_unit(str)
-      if !u
-	u = Parse.new.parse(str)
-      end
-      return u
+      Unit.find_unit(str) || Parse.new.parse(str)
     end
   end
 
-  class BaseUnit < Unit
-    def initialize(s,dimless=false,v=1)
-      case s
-      when String
-	@name = s
-	@factor = 1
-	@dim = {s=>1}
-	@dim.default = 0
-	@dimensionless = dimless
-	@irrational = v
-      else
-	raise "argument must be String: #{s}"
-      end
-    end
-
-    def dimensionless?
-      @dimensionless
-    end
-
-    attr_reader :irrational
-  end
 
   class OffsetUnit < Unit
 
@@ -421,16 +456,16 @@ module Phys
       # C = (F-32)*5/9
       # K = (F-32)*5/9 + 273.15 = F*5/9-32*5/9 + 273.15
       zero_degc = LIST["stdtemp"].get_factor
-      LIST["tempC"] = OffsetUnit.new(LIST["K"],"tempC",zero_degc)
-      p LIST["tempC"]  if debug
-      LIST["tempF"] = OffsetUnit.new(LIST["K"]*Rational(5,9),"tempF",
-				     zero_degc-32*Rational(5,9))
+      OffsetUnit.new( "tempC", LIST["K"],zero_degc )
+      OffsetUnit.new( "tempF", LIST["K"]*Rational(5,9),
+                      zero_degc-32*Rational(5,9) )
+      p LIST["tempC"] if debug
       p LIST["tempF"] if debug
     end
 
-    def initialize(arg,name,offset)
+    def initialize(name,arg,offset)
       @offset = offset
-      super(arg,name)
+      super(name,arg)
     end
 
     def convert_to_base(x)

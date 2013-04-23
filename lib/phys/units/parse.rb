@@ -730,7 +730,7 @@ module_eval(<<'.,.,', 'parse.y', 38)
 
 module_eval(<<'.,.,', 'parse.y', 43)
   def _reduce_14(val, _values, result)
-     result = Unit.find_unit(val[0]) 
+     result = Unit.word(val[0]) 
     result
   end
 .,.,

@@ -41,7 +41,7 @@ rule
 
  list: numexpr
      | pexpr
-     | WORD	               { result = Unit.find_unit(val[0]) }
+     | WORD	               { result = Unit.word(val[0]) }
      | list list    = MULTIPLY { result = val[0] * val[1] }
      | list POW list           { result = val[0]** val[2] }
      | list POW '-' list = POW { result = val[0]**(-val[3]) }
