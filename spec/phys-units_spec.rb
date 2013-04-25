@@ -6,7 +6,8 @@ Q = Phys::Quantity
 
 describe "Create quantities" do
   [
-    proc{ U.parse("3.6 km/hour").get_unit_string },
+    proc{ U.parse("3.6 km/hour").unit_string },
+    proc{ Q[36,"km/hour"].to_base_unit },
     proc{ Q[30,"degree"] },
     proc{ Q[30,"degree"].want("radian") },
     proc{ Q[1,"radian"].want("degree") },

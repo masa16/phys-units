@@ -56,9 +56,6 @@ module Phys
       if @expr && @dim.nil?
         puts "unit='#{@name}', parsing '#{@expr}'..." if Unit.debug
         unit = Parse.new.parse(@expr)
-        #if unit.parse_failed?
-        #  raise "parse error"
-        #end
         case unit
         when Unit
           @dim = unit.dim
@@ -141,13 +138,14 @@ module Phys
           end
         end
       end
-      #p [:get_factor, @factor, @dim, r]
       r
     end
 
-    def get_unit_string
+    def unit_string
       use_dimension
-      a = [Utils.num_inspect(@factor)] + @dim.map do |k,d|
+      a = []
+      a << Utils.num_inspect(@factor) if @factor!=1
+      a += @dim.map do |k,d|
         if d==1
           k
         else
@@ -186,10 +184,14 @@ module Phys
       end
     end
 
-    def convert(x,unit)
-      assert_same_dimension(unit)
-      y = unit.convert_to_base(x)
-      convert_from_base(y)
+    def convert(q)
+      if Quantity===q
+        assert_same_dimension(q.unit)
+        v = q.unit.convert_to_base(q.value)
+        convert_from_base(v)
+      else
+        q / to_num
+      end
     end
 
     def convert_to_base(x)
@@ -212,6 +214,10 @@ module Phys
 
     def convert_to_float(x)
       convert_to_numeric(x).to_f
+    end
+
+    def base_unit
+      Unit.new(1,dim)
     end
 
 #--
@@ -493,12 +499,10 @@ module Phys
     end
 
     def convert_to_base(x)
-      #puts "from#{@name}toB #{x} * #{@factor} + #{@offset}"
       x * get_factor + @offset
     end
 
     def convert_from_base(x)
-      #puts "fromBto#{@name} (#{x} - #{@offset}) / #{@factor}"
       (x - @offset) / get_factor
     end
 
