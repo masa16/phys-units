@@ -1,10 +1,12 @@
 $LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
 require "phys/units"
 
+U = Phys::Unit
 Q = Phys::Quantity
 
 describe "Create quantities" do
   [
+    proc{ U.parse("3.6 km/hour").get_unit_string },
     proc{ Q[30,"degree"] },
     proc{ Q[30,"degree"].want("radian") },
     proc{ Q[1,"radian"].want("degree") },
