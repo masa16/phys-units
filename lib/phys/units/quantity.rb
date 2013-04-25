@@ -23,22 +23,22 @@ module Phys
       case a.size
       when 1
         if a[0].kind_of? String
-	  @val,@expr = 1, a[0]
+          @val,@expr = 1, a[0]
         else
-	  @val,@expr = a[0], ''
+          @val,@expr = a[0], ''
         end
-	@unit = Unit.parse(@expr)
+        @unit = Unit.parse(@expr)
       when 2
-	@val,@expr = a
-	@unit = Unit.parse(@expr)
-	if !@unit.kind_of? Unit
-	  raise ArgumentError, "cannot find unit for '#{@expr}'"
-	end
+        @val,@expr = a
+        @unit = Unit.parse(@expr)
+        if !@unit.kind_of? Unit
+          raise ArgumentError, "cannot find unit for '#{@expr}'"
+        end
       when 3
-	@val,@expr,@unit = a
-	if !@unit.kind_of? Unit
-	  raise ArgumentError, "third arg must be Phys::Unit"
-	end
+        @val,@expr,@unit = a
+        if !@unit.kind_of? Unit
+          raise ArgumentError, "third arg must be Phys::Unit"
+        end
       else
         raise ArgumentError, 'wrong # of arguments'
       end
@@ -96,24 +96,24 @@ module Phys
     def enclose_expr
       return nil if @expr.empty?
       if /\/|\||per/o =~ @expr
-	'('+@expr+')'
+        '('+@expr+')'
       else
-	@expr
+        @expr
       end
     end
 
     def enclose_expr_div
       return nil if @expr.empty?
       if /\w[^\w]+\w/o =~ @expr
-	'/('+@expr+')'
+        '/('+@expr+')'
       else
-	'/'+@expr
+        '/'+@expr
       end
     end
 
     def *(other)
       if other.kind_of?(self.class)
-	a = [self.enclose_expr, other.enclose_expr]
+        a = [self.enclose_expr, other.enclose_expr]
         a.delete(nil)
         self.class.new( @val*other.val, a.join(' '), @unit*other.unit )
       else
@@ -123,7 +123,7 @@ module Phys
 
     def /(other)
       if other.kind_of?(self.class)
-	a = [self.enclose_expr, other.enclose_expr_div]
+        a = [self.enclose_expr, other.enclose_expr_div]
         a.delete(nil)
         self.class.new( @val/other.val, a.join, @unit/other.unit )
       else
@@ -151,14 +151,14 @@ module Phys
 
     def to_s
       self.class.to_s + "[" + 
-	Unit::Utils.num_inspect(@val) +
-	",'" +@expr + "']"
+        Unit::Utils.num_inspect(@val) +
+        ",'" +@expr + "']"
     end
 
     def inspect
       "<"+self.class.to_s+":" + 
-	Unit::Utils.num_inspect(@val) +
-	",'" +@expr + "',"+@unit.inspect+">"
+        Unit::Utils.num_inspect(@val) +
+        ",'" +@expr + "',"+@unit.inspect+">"
     end
   end
 end

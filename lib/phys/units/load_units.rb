@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-module Phys
-  class Unit
-    def self.units_dat
-      <<EOL
+
+# load GNU Units
+Phys::Unit.import_units <<EOL
 #
 # This file is the units database for use with GNU units, a units conversion
 # program by Adrian Mariano adrian@cam.cornell.edu
@@ -4693,6 +4692,9 @@ acrefoot                intacrefoot
 #
 ############################################################################
 EOL
-    end
-  end
-end
+
+# define pi
+Phys::Unit.define("pi","!dimensionless",Math::PI)
+
+# define tempC and tempK
+Phys::OffsetUnit.import_temperature

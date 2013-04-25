@@ -1,35 +1,21 @@
-# -*- coding: utf-8 -*-
+#
+# phys/units/unit.rb
+#
+#   Copyright (c) 2001-2013 Masahiro Tanaka <masa16.tanaka@gmail.com>
+#
+#   This program is free software.
+#   You can distribute/modify this program under the terms of
+#   the GNU General Public License version 3 or later.
 
 module Phys
-  LIST = {}
-  PREFIX = {}
 
   class Unit
 
-    def self.debug
-      true #false
-    end
+    LIST = {}
+    PREFIX = {}
 
-    class << self
-      def define(name,expr,v=nil)
-        if /^(.*)-$/ =~ name
-          name = $1
-          if PREFIX[name]
-            warn "multiply-defined prefix: #{@name}"
-          end
-          PREFIX[name] = self.new(name,expr)
-        else
-          if LIST[name]
-            warn "multiply-defined unit: #{@name}"
-          end
-          if expr.kind_of?(String) && /^!/ =~ expr
-            dimless = (expr == "!dimensionless")
-            LIST[name] = BaseUnit.new(name,dimless,v)
-          else
-            LIST[name] = self.new(name,expr)
-          end
-        end
-      end
+    def self.prefix_regex
+      @@prefix_regex
     end
 
     def initialize(arg,expr=nil)
@@ -126,19 +112,18 @@ module Phys
       Unit.new(self)
     end
 
-    def get_factor
+    def conversion_factor
       use_dimension
-      r = @factor
+      f = @factor
       @dim.each do |k,d|
         if d != 0
           u = LIST[k]
           if u.dimensionless?
-            p u
-            r *= u.dimension_value**d
+            f *= u.dimension_value**d
           end
         end
       end
-      r
+      f
     end
 
     def unit_string
@@ -195,21 +180,21 @@ module Phys
     end
 
     def convert_to_base(x)
-      x * get_factor
+      x * conversion_factor
     end
 
     def convert_from_base(x)
-      x / get_factor
+      x / conversion_factor
     end
 
     def convert_to_numeric(x)
       assert_dimensionless
-      x * get_factor
+      x * conversion_factor
     end
 
     def to_num
       assert_dimensionless
-      get_factor
+      conversion_factor
     end
 
     def convert_to_float(x)
@@ -221,14 +206,6 @@ module Phys
     end
 
 #--
-
-    def self.cast(x)
-      if x.kind_of?(Unit)
-        x
-      else
-        Unit.new(x) 
-      end
-    end
 
     def +(x)
       x = Unit.cast(x)
@@ -329,110 +306,6 @@ module Phys
       [Unit.new(x), self]
     end
 
-    def self.import_units(data=nil,locale=nil)
-      str = ""
-      locale = locale || ENV['LOCALE']
-      data = self.units_dat if data.nil?
-      skip = false
-
-
-      data.each_line do |line|
-        line.chomp!
-
-        if /^!(end)?locale(?: (\S+))?/ =~ line
-          ed, lc = $1, $2
-          if ed.nil? && /^#{lc}/ !~ locale
-            skip = true
-          else
-            skip = false
-          end
-          next
-        end
-
-        next if skip
-
-        if /([^#]*)\s*#?/ =~ line
-          line = $1
-        end
-        if /(.*)\\$/ =~ line
-          str.concat $1+" "
-          next
-        else
-          str.concat line
-        end
-
-        if /^([A-Za-z_0-9À-ÿ%$"'-]+)\s+([^#]+)/ =~ str #"
-          name,repr = $1,$2.strip
-          Unit.define(name,repr)
-        elsif !str.strip.empty?
-          puts "unrecognized definition: '#{str}'" if debug
-        end
-        str = ""
-      end
-
-      if true
-        Unit.define("pi","!dimensionless",Math::PI)
-      end
-
-      x = PREFIX.keys.sort{|a,b|
-        s = b.size-a.size
-        (s==0) ? (a<=>b) : s
-      }.join("|")
-      @@prefix_regex = /^(#{x})(.+)$/
-
-      OffsetUnit.import_temperature
-
-      if debug
-        LIST.dup.each do |k,v|
-          p [k,v]
-          if v.kind_of? Unit
-            begin
-              v.use_dimension
-            rescue
-              puts "!! no definition: #{v.inspect} !!"
-            end
-          end
-          p [k,v]
-        end
-      end
-      puts "#{LIST.size} units, #{PREFIX.size} prefixes" if debug
-    end
-
-    def self.prefix_regex
-      @@prefix_regex
-    end
-
-    class << self
-
-      def find_unit(x)
-        unit_stem(x) || PREFIX[x] || find_prefix(x)
-      end
-
-      def find_prefix(x)
-        Unit.prefix_regex =~ x
-        pfx,sfx = $1,$2
-        if pfx and sfx and stem = unit_stem(sfx)
-          PREFIX[pfx] * stem
-        end
-      end
-
-      alias [] find_unit
-
-      def unit_stem(x)
-        LIST[x] || 
-          ( /(.*(?:s|z|ch))es$/ =~ x && LIST[$1] ) ||
-          ( /(.*)s$/ =~ x && LIST[$1] )
-      end
-
-      def word(x)
-        find_unit(x) || define(x)
-      end
-
-      def parse(str)
-        find_unit(str) || Parse.new.parse(str)
-      end
-
-    end
   end
 
 
@@ -486,7 +359,7 @@ module Phys
       # K = C + 273.15
       # C = (F-32)*5/9
       # K = (F-32)*5/9 + 273.15 = F*5/9-32*5/9 + 273.15
-      zero_degc = LIST["stdtemp"].get_factor
+      zero_degc = LIST["stdtemp"].conversion_factor
       define( "tempC", LIST["K"],zero_degc )
       define( "tempF", LIST["K"]*Rational(5,9), zero_degc-32*Rational(5,9) )
       p LIST["tempC"] if debug
@@ -499,11 +372,11 @@ module Phys
     end
 
     def convert_to_base(x)
-      x * get_factor + @offset
+      x * conversion_factor + @offset
     end
 
     def convert_from_base(x)
-      (x - @offset) / get_factor
+      (x - @offset) / conversion_factor
     end
 
     def not_allowed(*a)
