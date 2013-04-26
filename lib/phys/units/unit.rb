@@ -18,7 +18,7 @@ module Phys
       @@prefix_regex
     end
 
-    def initialize(arg,expr=nil)
+    def initialize(arg,expr=nil,offset=nil)
       case arg
       when Numeric
         @factor = arg
@@ -35,6 +35,45 @@ module Phys
       else
         raise TypeError,"invalid argument : #{arg.inspect}"
       end
+    end
+
+    attr_reader :name, :offset
+
+    def dim
+      use_dimension
+      @dim
+    end
+    alias dimension dim
+
+    def factor
+      use_dimension
+      @factor
+    end
+
+    def dimension_value
+      1
+    end
+
+    def replace(x)
+      @name = x.name.dup if x.name
+      @factor = x.factor
+      @offset = x.offset
+      alloc_dim x.dim
+    end
+
+    def alloc_dim(hash=nil)
+      case hash
+      when Hash
+        @dim = hash.dup
+      else
+        @dim = {}
+      end
+      @dim.default = 0
+    end
+
+
+    def dup
+      Unit.new(self)
     end
 
     def use_dimension
@@ -64,8 +103,7 @@ module Phys
       a = [Utils.num_inspect(@factor), @dim.inspect]
       a.push "@name="+@name.inspect if @name
       a.push "@expr="+@expr.inspect if @expr
-      a.push "@ofs="+@offset.inspect if @offset
-      a.push "@base=true" if @base
+      a.push "@offset="+@offset.inspect if @offset
       a.push "@dimensionless=true" if @dimensionless
       if @dimension_value && @dimension_value!=1
         a.push "@dimension_value="+@dimension_value.inspect
@@ -74,42 +112,18 @@ module Phys
       "#<#{self.class} #{s}>"
     end
 
-    def replace(x)
-      @name = x.name.dup if x.name
-      @factor = x.factor
-      alloc_dim x.dim
-    end
-
-    def alloc_dim(hash=nil)
-      case hash
-      when Hash
-        @dim = hash.dup
-      else
-        @dim = {}
+    def unit_string
+      use_dimension
+      a = []
+      a << Utils.num_inspect(@factor) if @factor!=1
+      a += @dim.map do |k,d|
+        if d==1
+          k
+        else
+          "#{k}^#{d}"
+        end
       end
-      @dim.default = 0
-    end
-
-    def dim
-      use_dimension
-      @dim
-    end
-
-    def factor
-      use_dimension
-      @factor
-    end
-
-    attr_accessor :name
-
-    def dimension_value
-      1
-    end
-
-    alias dimension dim
-
-    def dup
-      Unit.new(self)
+      a.join(" ")
     end
 
     def conversion_factor
@@ -126,18 +140,9 @@ module Phys
       f
     end
 
-    def unit_string
+    def scalar_unit?
       use_dimension
-      a = []
-      a << Utils.num_inspect(@factor) if @factor!=1
-      a += @dim.map do |k,d|
-        if d==1
-          k
-        else
-          "#{k}^#{d}"
-        end
-      end
-      a.join(" ")
+      (@dim.nil? || @dim.empty?) && @factor==1
     end
 
     def dimensionless_deleted
@@ -158,7 +163,7 @@ module Phys
 
     def assert_dimensionless
       if !dimensionless?
-        @dim.each{|k,v| p [k,LIST[k],LIST[k].dimensionless?]}
+        #@dim.each{|k,v| p [k,LIST[k],LIST[k].dimensionless?]}
         raise "#{self.inspect} : not dimensionless"
       end
     end
@@ -177,6 +182,10 @@ module Phys
       else
         q / to_num
       end
+    end
+
+    def convert_scale(q)
+      convert(q)
     end
 
     def convert_to_base(x)
@@ -205,23 +214,22 @@ module Phys
       Unit.new(1,dim)
     end
 
-#--
+    # Unit operation
 
-    def +(x)
-      x = Unit.cast(x)
-      assert_same_dimension(x)
-      Unit.new(@factor+x.factor,@dim.dup)
+    def operable?
+      true
     end
 
-    def -(x)
-      x = Unit.cast(x)
-      assert_same_dimension(x)
-      Unit.new(@factor-x.factor,@dim.dup)
+    def check_operable
+      if !operable?
+        raise TypeError,"non-operable for #{inspect}"
+      end
     end
 
-    def -@
-      use_dimension
-      Unit.new(-@factor,@dim.dup)
+    def check_operable2(x)
+      if !(operable? && x.operable?)
+        raise TypeError,"non-operable: #{inspect} and #{x.inspect}"
+      end
     end
 
     def dimension_binop(other)
@@ -245,7 +253,7 @@ module Phys
       end
     end
 
-    def dimension_uniop
+    def dimension_uop
       x = self.dim
       if Hash===x
         dims = {}
@@ -260,37 +268,84 @@ module Phys
       end
     end
 
-    def *(x)
+    def +(x)
       x = Unit.cast(x)
-      dims = dimension_binop(x){|a,b| a+b}
-      factor = self.factor * x.factor
+      check_operable2(x)
+      assert_same_dimension(x)
+      Unit.new(@factor+x.factor,@dim.dup)
+    end
+
+    def -(x)
+      x = Unit.cast(x)
+      check_operable2(x)
+      assert_same_dimension(x)
+      Unit.new(@factor-x.factor,@dim.dup)
+    end
+
+    def -@
+      check_operable
+      use_dimension
+      Unit.new(-@factor,@dim.dup)
+    end
+
+    def +@
+      self
+    end
+
+    def *(x)
+      y = Unit.cast(x)
+      if scalar_unit?
+        return y
+      elsif y.scalar_unit?
+        return self
+      end
+      check_operable2(y)
+      dims = dimension_binop(y){|a,b| a+b}
+      factor = self.factor * y.factor
       Unit.new(factor,dims)
     end
 
     def /(x)
-      x = Unit.cast(x)
-      dims = dimension_binop(x){|a,b| a-b}
-      factor = self.factor / x.factor
+      y = Unit.cast(x)
+      if scalar_unit?
+        return y.inv
+      elsif y.scalar_unit?
+        return self
+      end
+      check_operable2(y)
+      dims = dimension_binop(y){|a,b| a-b}
+      factor = self.factor / y.factor
       Unit.new(factor,dims)
     end
 
     def rdiv(x)
-      x = Unit.cast(x)
-      dims = dimension_binop(x){|a,b| a-b}
+      y = Unit.cast(x)
+      if scalar_unit?
+        return y.inv
+      elsif y.scalar_unit?
+        return self
+      end
+      check_operable2(y)
+      dims = dimension_binop(y){|a,b| a-b}
       factor = Rational(self.factor,x.factor)
       Unit.new(factor,dims)
     end
 
     def self.rdiv(x,y)
-      self.cast(x).rdiv(y)
+      Unit.cast(x).rdiv(y)
     end
 
     def inv
-      dims = dimension_uop{|a| -a}
-      Unit.new(1/self.factor, dims)
+      if operable?
+        dims = dimension_uop{|a| -a}
+        Unit.new(Rational(1,self.factor), dims)
+      else
+        raise TypeError,"non-operable for #{inspect}"
+      end
     end
 
     def **(x)
+      check_operable
       m = Utils.as_numeric(x)
       dims = dimension_uop{|a| a*m}
       Unit.new(@factor**m,dims)
@@ -302,11 +357,17 @@ module Phys
       Unit.new( Math.send(fn,m) )
     end
 
-    def coerce(x)
-      [Unit.new(x), self]
+    def ==(x)
+      use_dimension
+      @factor == x.factor && @dim == x.dim && 
+        offset == x.offset && dimension_value == x.dimension_value
     end
 
-  end
+    def coerce(x)
+      [Unit.find_unit(x), self]
+    end
+
+  end # Unit
 
 
   class BaseUnit < Unit
@@ -320,7 +381,7 @@ module Phys
         @dimensionless = dimless
         @dimension_value = v || 1
       else
-        raise "argument must be String: #{s}"
+        raise ArgumentError "BaseUnit#initialize: arg must be string: #{s}"
       end
     end
 
@@ -341,7 +402,7 @@ module Phys
       if @dimensionless
         {}
       else
-        @dim.dup
+       @dim.dup
       end
     end
 
@@ -355,20 +416,12 @@ module Phys
       LIST[name] = self.new(name,unit,offset)
     end
 
-    def self.import_temperature
-      # K = C + 273.15
-      # C = (F-32)*5/9
-      # K = (F-32)*5/9 + 273.15 = F*5/9-32*5/9 + 273.15
-      zero_degc = LIST["stdtemp"].conversion_factor
-      define( "tempC", LIST["K"],zero_degc )
-      define( "tempF", LIST["K"]*Rational(5,9), zero_degc-32*Rational(5,9) )
-      p LIST["tempC"] if debug
-      p LIST["tempF"] if debug
-    end
-
     def initialize(name,arg,offset)
-      @offset = offset
       super(name,arg)
+      @offset = offset
+      if offset.nil?
+        raise "offset is not supplied"
+      end
     end
 
     def convert_to_base(x)
@@ -379,20 +432,18 @@ module Phys
       (x - @offset) / conversion_factor
     end
 
-    def not_allowed(*a)
-      raise "unit operation is not allowed"
+    def convert_scale(q)
+      if Quantity===q
+        assert_same_dimension(q.unit)        
+        v = q.value * q.unit.conversion_factor
+        v = v / self.conversion_factor
+      else
+        raise "not Quantitiy : #{q.inspect}"
+      end
     end
 
-    def allowed_with_numeric(x)
-      raise "to be implemented"
-    end
-
-    %w[+ - **].each do |x|
-      alias_method x, :not_allowed
-    end
-
-    %w[* /].each do |x|
-      alias_method x, :allowed_with_numeric
+    def operable?
+      false
     end
   end
 end

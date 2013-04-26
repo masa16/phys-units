@@ -13,34 +13,20 @@ module Phys
     Quantity.new(*a)
   end
 
-  class Quantity #< Numeric
+  class Quantity
 
     def self.[](*a)
       self.new(*a)
     end
 
-    def initialize(*a)
-      case a.size
-      when 1
-        if a[0].kind_of? String
-          @val,@expr = 1, a[0]
-        else
-          @val,@expr = a[0], ''
-        end
-        @unit = Unit.parse(@expr)
-      when 2
-        @val,@expr = a
-        @unit = Unit.parse(@expr)
-        if !@unit.kind_of? Unit
-          raise ArgumentError, "cannot find unit for '#{@expr}'"
-        end
-      when 3
-        @val,@expr,@unit = a
-        if !@unit.kind_of? Unit
-          raise ArgumentError, "third arg must be Phys::Unit"
-        end
-      else
-        raise ArgumentError, 'wrong # of arguments'
+    def initialize(value,expr=nil,unit=nil)
+      @val = value
+      @expr = (@expr=='') ? nil : expr
+      @unit = unit
+      if @unit.nil?
+        @unit = Unit.parse(@expr||1)
+      elsif !@unit.kind_of? Unit
+        raise ArgumentError, "third arg must be Phys::Unit"
       end
     end
 
@@ -57,8 +43,8 @@ module Phys
     alias want convert
 
     def +(other)
-      val = @val + @unit.convert(other)
-      if @expr==''
+      val = @val + @unit.convert_scale(other)
+      if @expr.nil?
         val
       else
         self.class.new( val, @expr, @unit )
@@ -66,8 +52,8 @@ module Phys
     end
 
     def -(other)
-      val = @val - @unit.convert(other)
-      if @expr==''
+      val = @val - @unit.convert_scale(other)
+      if @expr.nil?
         val
       else
         self.class.new( val, @expr, @unit )
@@ -85,7 +71,9 @@ module Phys
     def  >  (other); @val  >  @unit.convert(other) end
 
     def **(n)
-      if /^[A-Za-z_]+&/o =~ @expr
+      if @expr.nil?
+        exprt = nil
+      elsif /^[A-Za-z_]+&/o =~ @expr
         expr = @expr+'^'+n.to_s
       else
         expr = '('+@expr+')^'+n.to_s+''
@@ -94,7 +82,7 @@ module Phys
     end
 
     def enclose_expr
-      return nil if @expr.empty?
+      return nil if @expr.nil?
       if /\/|\||per/o =~ @expr
         '('+@expr+')'
       else
@@ -103,7 +91,7 @@ module Phys
     end
 
     def enclose_expr_div
-      return nil if @expr.empty?
+      return nil if @expr.nil?
       if /\w[^\w]+\w/o =~ @expr
         '/('+@expr+')'
       else
@@ -150,15 +138,25 @@ module Phys
     alias to_float to_f
 
     def to_s
+      if @expr
+        expr = ",'" +@expr+"'"
+      else
+        expr = ""
+      end
       self.class.to_s + "[" + 
         Unit::Utils.num_inspect(@val) +
-        ",'" +@expr + "']"
+        expr + "]"
     end
 
     def inspect
-      "<"+self.class.to_s+":" + 
+      if @expr
+        expr = "," +@expr.inspect
+      else
+        expr = ""
+      end
+      "#<"+self.class.to_s+" " + 
         Unit::Utils.num_inspect(@val) +
-        ",'" +@expr + "',"+@unit.inspect+">"
+        expr+", "+@unit.inspect+">"
     end
   end
 end

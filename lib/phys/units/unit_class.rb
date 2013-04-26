@@ -15,25 +15,28 @@ module Phys
     class << self
 
       def debug
-        true #false
+        false
       end
 
       def define(name,expr,v=nil)
+        if !(String===name)
+          raise TypeError,"unit name should be string : #{name.inspect}"
+        end
         if /^(.*)-$/ =~ name
           name = $1
           if PREFIX[name]
-            warn "multiply-defined prefix: #{@name}"
+            warn "multiply-defined prefix: #{name}"
           end
           PREFIX[name] = self.new(name,expr)
         else
           if LIST[name]
-            warn "multiply-defined unit: #{@name}"
+            warn "multiply-defined unit: #{name}"
           end
           if expr.kind_of?(String) && /^!/ =~ expr
             dimless = (expr == "!dimensionless")
             LIST[name] = BaseUnit.new(name,dimless,v)
           else
-            LIST[name] = self.new(name,expr)
+            LIST[name] = self.new(name,expr,v)
           end
         end
       end
@@ -47,7 +50,24 @@ module Phys
       end
 
       def find_unit(x)
-        unit_stem(x) || PREFIX[x] || find_prefix(x)
+        numeric_unit(x) || unit_stem(x) || PREFIX[x] || find_prefix(x)
+      end
+      alias [] find_unit
+
+      def numeric_unit(x=nil)
+        if Numeric===x
+          Unit.new(x)
+        elsif x=='' || x.nil?
+          Unit.new(1)
+        else
+          nil
+        end
+      end
+
+      def unit_stem(x)
+        LIST[x] || 
+          ( /(.*(?:s|z|ch))es$/ =~ x && LIST[$1] ) ||
+          ( /(.*)s$/ =~ x && LIST[$1] )
       end
 
       def find_prefix(x)
@@ -58,20 +78,22 @@ module Phys
         end
       end
 
-      alias [] find_unit
-
-      def unit_stem(x)
-        LIST[x] || 
-          ( /(.*(?:s|z|ch))es$/ =~ x && LIST[$1] ) ||
-          ( /(.*)s$/ =~ x && LIST[$1] )
-      end
-
       def word(x)
         find_unit(x) || define(x)
       end
 
       def parse(str)
         find_unit(str) || Parse.new.parse(str)
+      end
+
+
+      def unit_chars
+        "\"-'A-Za-z_€‰ŠŒŽšœžŸ¡-¥°µ¼-¾À-öø-ÿ"
+      end
+
+      def unit_chars_jp
+        # unicode
+        "ぁ-んァ-ヶ㌀-㍗㎀-㏝㐀-龻"
       end
 
 #--
@@ -107,7 +129,7 @@ module Phys
             str.concat line
           end
 
-          if /^([A-Za-z_0-9À-ÿ%$"'-]+)\s+([^#]+)/ =~ str #"
+          if /^([#{unit_chars}0-9%$"'-]+)\s+([^#]+)/ =~ str #"
             name,repr = $1,$2.strip
             Unit.define(name,repr)
           elsif !str.strip.empty?
@@ -124,7 +146,6 @@ module Phys
 
         if debug
           LIST.dup.each do |k,v|
-            p [k,v]
             if v.kind_of? Unit
               begin
                 v.use_dimension

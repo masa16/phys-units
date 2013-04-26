@@ -80,8 +80,11 @@ class Unit
   end
 
   def parse( str )
+    return Unit.new(str) if str.empty?
     #p str
     @q = []
+
+    c = Unit.unit_chars
 
     while str.size > 0 do
       case str
@@ -94,7 +97,7 @@ class Unit
         @q.push [:DIV, $&]
       when /\Aper\b/o
         @q.push [:DIV, $&]
-      when /\A[A-Za-zÀ-ÿ_$]+([A-Za-zÀ-ÿ0-9_'-]*[A-Za-zÀ-ÿ0_$])?/o #'
+      when /\A[#{c}$]+([#{c}0-9,.-]*[#{c}0$])?/o
         @q.push [:WORD, $&]
       when /\A[%'"]'?/o
         @q.push [:WORD, $&]

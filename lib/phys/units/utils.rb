@@ -48,10 +48,11 @@ module Phys
       end
 
       def n_trail_zero(x)
-        if /^(\d*[1-9])(0*)$/ =~ x.to_s
+        s = x.to_s
+        if /^([+-]?\d*[1-9])(0*)$/ =~ s
           [$1.to_i, $2.size]
         else
-          nil
+          raise "cannot match with: '#{s}'"
         end
       end
 

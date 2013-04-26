@@ -4693,8 +4693,13 @@ acrefoot                intacrefoot
 ############################################################################
 EOL
 
-# define pi
-Phys::Unit.define("pi","!dimensionless",Math::PI)
+module Phys
+  # define pi
+  Unit.define("pi","!dimensionless",Math::PI)
 
-# define tempC and tempK
-Phys::OffsetUnit.import_temperature
+  # define tempC and tempK
+  #Phys::OffsetUnit.import_temperature
+  zero_degc = Unit["stdtemp"].conversion_factor
+  OffsetUnit.define( "tempC", Unit["K"], zero_degc )
+  OffsetUnit.define( "tempF", Unit["K"]*Rational(5,9), zero_degc-32*Rational(5,9) )
+end
