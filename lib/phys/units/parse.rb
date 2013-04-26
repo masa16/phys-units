@@ -497,7 +497,7 @@ module_eval(<<'...end parse.y/module_eval...', 'parse.y', 63)
         @q.push [:DIV, $&]
       when /\Aper\b/o
         @q.push [:DIV, $&]
-      when /\A[#{c}$]+([#{c}0-9,.-]*[#{c}0$])?/o
+      when /\A[^#{c}0-9,.-]+([^#{c}$-]*[^#{c}1-9,.])?/o
         @q.push [:WORD, $&]
       when /\A[%'"]'?/o
         @q.push [:WORD, $&]

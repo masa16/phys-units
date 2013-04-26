@@ -15,7 +15,7 @@ module Phys
     class << self
 
       def debug
-        false
+        true#false
       end
 
       def define(name,expr,v=nil)
@@ -88,40 +88,51 @@ module Phys
 
 
       def unit_chars
-        "\"-'A-Za-z_€‰ŠŒŽšœžŸ¡-¥°µ¼-¾À-öø-ÿ"
-      end
-
-      def unit_chars_jp
-        # unicode
-        "ぁ-んァ-ヶ㌀-㍗㎀-㏝㐀-龻"
+        '\\s*+\\/0-9<=>()\\[\\]^{|}~\\\\'
       end
 
 #--
 
+      def control_units_dat(var,skip,line)
+        case line
+        when /!\s*end(\w+)/
+          skip.delete($1)
+        when /!\s*locale\s+(\w+)/
+          if $1 != var['locale']
+            skip << 'locale'
+          end
+        when /!\s*set\s+(\w+)\s+(\w+)/
+          if skip.empty?
+            var[$1] ||= $2
+          end
+        when /!var\s+(\w+)\s+(\w+)?/
+          if var[$1] != $2
+            skip << 'var'
+          end
+        when /!\s*utf8/
+          if !var['utf8']
+            skip << 'utf8'
+          end
+        end
+      end
+
       def import_units(data=nil,locale=nil)
         str = ""
-        locale = locale || ENV['LOCALE']
-        data = self.units_dat if data.nil?
-        skip = false
+        var = {'locale'=>(locale||ENV['LOCALE']),'utf8'=>true}
+        skip = []
 
         data.each_line do |line|
           line.chomp!
-
-          if /^!(end)?locale(?: (\S+))?/ =~ line
-            ed, lc = $1, $2
-            if ed.nil? && /^#{lc}/ !~ locale
-              skip = true
-            else
-              skip = false
-            end
+          if /^!/ =~ line
+            control_units_dat(var,skip,line)
             next
           end
-
-          next if skip
+          next if !skip.empty?
 
           if /([^#]*)\s*#?/ =~ line
             line = $1
           end
+
           if /(.*)\\$/ =~ line
             str.concat $1+" "
             next
@@ -129,7 +140,7 @@ module Phys
             str.concat line
           end
 
-          if /^([#{unit_chars}0-9%$"'-]+)\s+([^#]+)/ =~ str #"
+          if /^([^\s()\[\]{}!*|\/^#]+)\s+([^#]+)/ =~ str
             name,repr = $1,$2.strip
             Unit.define(name,repr)
           elsif !str.strip.empty?
