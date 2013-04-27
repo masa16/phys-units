@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Phys::Unit::VERSION
   spec.authors       = ["Masahiro TANAKA"]
   spec.email         = ["masa16.tanaka@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ""
+  spec.description   = %q{GNU Units-compatible library for Ruby, formarly 'Quanty' class library.}
+  spec.summary       = %q{GNU Units-compatible library for Ruby, formarly 'Quanty' class library.}
+  spec.homepage      = "https://github.com/masa16/phys-units"
   spec.license       = "GPL"
 
   spec.files         = `git ls-files`.split($/)
