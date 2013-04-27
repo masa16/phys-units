@@ -63,21 +63,17 @@ module Phys
       end
 
       def find_unit(x)
-        numeric_unit(x) || LIST[x] || PREFIX[x] ||
-          find_prefix(x) || unit_stem(x)
-      end
-
-      alias [] find_unit
-
-      def numeric_unit(x=nil)
         if Numeric===x
           Unit.new(x)
         elsif x=='' || x.nil?
           Unit.new(1)
         else
-          nil
+          x = x.to_s
+          LIST[x] || PREFIX[x] || find_prefix(x) || unit_stem(x)
         end
       end
+
+      alias [] find_unit
 
       def unit_stem(x)
         ( /(.{3,}(?:s|z|ch))es$/ =~ x && LIST[$1] ) ||
@@ -106,24 +102,33 @@ module Phys
           if skip.empty?
             var[$1] ||= $2
           end
-        when /!var\s+(\w+)\s+(\w+)?/
+        when /!var\s+(\w+)\s+(\w+)/
           if var[$1] != $2
             skip << 'var'
           end
-        when /!\s*(\w+)(?:\s+(\w+))/
-          command = $1
+        when /!\s*(\w+)(?:\s+(\w+))?/
+          code = $1
           param = $2
-          if var[command]
-            if (param) ? (var[command]!=param) : !var[command]
-              skip << name
-            end
+          #puts " code=#{code} param=#{param}"
+          if (var[code]) ? (param && var[code]!=param) : !param
+            skip << code
           end
         end
+        #puts line
+        #puts "skip=#{skip.inspect} var=#{var.inspect}"
       end
 
       def import_units(data=nil,locale=nil)
         str = ""
-        var = {'locale'=>(locale||ENV['LOCALE']),'utf8'=>true}
+        locale ||= ENV['LC_ALL'] || ENV['LANG']
+        if /^(\w+)\./ =~ locale
+          locale = $1
+        end
+        var = {'locale'=>locale,'utf8'=>true}
+        case ENV['UNITS_ENGLISH']
+        when /US|GB/
+          var['UNITS_ENGLISH'] = ENV['UNITS_ENGLISH']
+        end
         skip = []
 
         data.each_line do |line|
