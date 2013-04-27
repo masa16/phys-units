@@ -101,7 +101,7 @@ describe "Phys::Quantity" do
 
   context "Radian" do
     describe Q[1,"radian"].want("degree") do
-      its(:value){should == Q[180,"1/pi"].want("").value}
+      its(:value){should be_within(1e-15).of Q[180,"1/pi"].to_f}
     end
     describe Math.sin(Q[30,"degree"].to_f) do
       it{should be_within(1e-15).of 0.5 }
