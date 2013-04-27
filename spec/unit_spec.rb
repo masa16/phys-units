@@ -63,6 +63,10 @@ describe "Create Units" do
     it {should be_operable}
   end
 
+  describe U[:m] do 
+    it {should == U["m"]}
+  end
+
   describe U['miles'] do
     it {should be_an_kind_of Phys::Unit}
     its(:factor) {should == 1609.344}
@@ -184,6 +188,10 @@ describe "Create Units" do
     it {should_not be_dimensionless}
     it {should_not be_scalar}
     it {should be_operable}
+  end
+
+  describe U.parse("3.6 km/hour") do
+    its(:string_form) {should == "m s^-1"}
   end
 
   describe U['tempC'] do
