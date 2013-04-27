@@ -71,11 +71,6 @@ module Phys
       @dim.default = 0
     end
 
-
-    def dup
-      Unit.new(self)
-    end
-
     def use_dimension
       return if @dim && @factor
       if @expr && @dim.nil?
@@ -86,27 +81,27 @@ module Phys
           @dim = unit.dim
           @factor = unit.factor
           if @dim.nil? || @factor.nil?
-            raise "parse error : #{unit.inspect}"
+            raise UnitParseError,"parse error : #{unit.inspect}"
           end
         when Numeric
           @factor = unit
           alloc_dim
         else
-          raise "parse error : #{self.inspect}"
+          raise UnitParseError,"parse error : #{self.inspect}"
         end
       else
-        raise "undefined unit?: #{self.inspect}"
+        raise UnitParseError,"undefined unit?: #{self.inspect}"
       end
     end
 
     def inspect
       a = [Utils.num_inspect(@factor), @dim.inspect]
-      a.push "@name="+@name.inspect if @name
-      a.push "@expr="+@expr.inspect if @expr
-      a.push "@offset="+@offset.inspect if @offset
-      a.push "@dimensionless=true" if @dimensionless
+      a << "@name="+@name.inspect if @name
+      a << "@expr="+@expr.inspect if @expr
+      a << "@offset="+@offset.inspect if @offset
+      a << "@dimensionless=true" if @dimensionless
       if @dimension_value && @dimension_value!=1
-        a.push "@dimension_value="+@dimension_value.inspect
+        a << "@dimension_value="+@dimension_value.inspect
       end
       s = a.join(",")
       "#<#{self.class} #{s}>"
@@ -126,6 +121,8 @@ module Phys
       a.join(" ")
     end
 
+    # Unit conversion
+
     def conversion_factor
       use_dimension
       f = @factor
@@ -140,7 +137,7 @@ module Phys
       f
     end
 
-    def scalar_unit?
+    def scalar?
       use_dimension
       (@dim.nil? || @dim.empty?) && @factor==1
     end
@@ -163,14 +160,13 @@ module Phys
 
     def assert_dimensionless
       if !dimensionless?
-        #@dim.each{|k,v| p [k,LIST[k],LIST[k].dimensionless?]}
-        raise "#{self.inspect} : not dimensionless"
+        raise UnitConversionError,"Not dimensionless: #{self.inspect}"
       end
     end
 
     def assert_same_dimension(x)
       if !same_dimension?(x)
-        raise "Different dimension: #{self.inspect} and #{x.inspect}"
+        raise UnitConversionError,"Different dimension: #{self.inspect} and #{x.inspect}"
       end
     end
 
@@ -222,13 +218,13 @@ module Phys
 
     def check_operable
       if !operable?
-        raise TypeError,"non-operable for #{inspect}"
+        raise UnitOperationError,"non-operable for #{inspect}"
       end
     end
 
     def check_operable2(x)
       if !(operable? && x.operable?)
-        raise TypeError,"non-operable: #{inspect} and #{x.inspect}"
+        raise UnitOperationError,"non-operable: #{inspect} and #{x.inspect}"
       end
     end
 
@@ -294,9 +290,9 @@ module Phys
 
     def *(x)
       y = Unit.cast(x)
-      if scalar_unit?
+      if scalar?
         return y
-      elsif y.scalar_unit?
+      elsif y.scalar?
         return self
       end
       check_operable2(y)
@@ -307,9 +303,9 @@ module Phys
 
     def /(x)
       y = Unit.cast(x)
-      if scalar_unit?
+      if scalar?
         return y.inv
-      elsif y.scalar_unit?
+      elsif y.scalar?
         return self
       end
       check_operable2(y)
@@ -320,9 +316,9 @@ module Phys
 
     def rdiv(x)
       y = Unit.cast(x)
-      if scalar_unit?
+      if scalar?
         return y.inv
-      elsif y.scalar_unit?
+      elsif y.scalar?
         return self
       end
       check_operable2(y)
@@ -336,12 +332,9 @@ module Phys
     end
 
     def inv
-      if operable?
-        dims = dimension_uop{|a| -a}
-        Unit.new(Rational(1,self.factor), dims)
-      else
-        raise TypeError,"non-operable for #{inspect}"
-      end
+      check_operable
+      dims = dimension_uop{|a| -a}
+      Unit.new(Rational(1,self.factor), dims)
     end
 
     def **(x)
@@ -420,7 +413,7 @@ module Phys
       super(name,arg)
       @offset = offset
       if offset.nil?
-        raise "offset is not supplied"
+        raise ArgumentError,"offset is not supplied"
       end
     end
 
@@ -438,7 +431,7 @@ module Phys
         v = q.value * q.unit.conversion_factor
         v = v / self.conversion_factor
       else
-        raise "not Quantitiy : #{q.inspect}"
+        raise TypeError,"not Quantitiy: #{q.inspect}"
       end
     end
 

@@ -12,10 +12,15 @@ module Phys
 
   class Unit
 
+    class UnitError < StandardError; end
+    class UnitParseError < UnitError; end
+    class UnitConversionError < UnitError; end
+    class UnitOperationError < UnitError; end
+
     class << self
 
       def debug
-        true#false
+        false
       end
 
       def define(name,expr,v=nil)
@@ -49,9 +54,19 @@ module Phys
         end
       end
 
-      def find_unit(x)
-        numeric_unit(x) || unit_stem(x) || PREFIX[x] || find_prefix(x)
+      def word(x)
+        find_unit(x) || define(x)
       end
+
+      def parse(x)
+        find_unit(x) || Parse.new.parse(x)
+      end
+
+      def find_unit(x)
+        numeric_unit(x) || LIST[x] || PREFIX[x] ||
+          find_prefix(x) || unit_stem(x)
+      end
+
       alias [] find_unit
 
       def numeric_unit(x=nil)
@@ -65,42 +80,28 @@ module Phys
       end
 
       def unit_stem(x)
-        LIST[x] || 
-          ( /(.*(?:s|z|ch))es$/ =~ x && LIST[$1] ) ||
-          ( /(.*)s$/ =~ x && LIST[$1] )
+        ( /(.{3,}(?:s|z|ch))es$/ =~ x && LIST[$1] ) ||
+          ( /(.{3,})s$/ =~ x && LIST[$1] )
       end
 
       def find_prefix(x)
         Unit.prefix_regex =~ x
-        pfx,sfx = $1,$2
-        if pfx and sfx and stem = unit_stem(sfx)
-          PREFIX[pfx] * stem
+        pre,post = $1,$2
+        if pre and pre and stem = (LIST[post] || unit_stem(post))
+          PREFIX[pre] * stem
         end
       end
 
-      def word(x)
-        find_unit(x) || define(x)
-      end
-
-      def parse(str)
-        find_unit(str) || Parse.new.parse(str)
-      end
-
+#--
 
       def unit_chars
         '\\s*+\\/0-9<=>()\\[\\]^{|}~\\\\'
       end
 
-#--
-
       def control_units_dat(var,skip,line)
         case line
         when /!\s*end(\w+)/
           skip.delete($1)
-        when /!\s*locale\s+(\w+)/
-          if $1 != var['locale']
-            skip << 'locale'
-          end
         when /!\s*set\s+(\w+)\s+(\w+)/
           if skip.empty?
             var[$1] ||= $2
@@ -109,9 +110,13 @@ module Phys
           if var[$1] != $2
             skip << 'var'
           end
-        when /!\s*utf8/
-          if !var['utf8']
-            skip << 'utf8'
+        when /!\s*(\w+)(?:\s+(\w+))/
+          command = $1
+          param = $2
+          if var[command]
+            if (param) ? (var[command]!=param) : !var[command]
+              skip << name
+            end
           end
         end
       end

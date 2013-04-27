@@ -44,20 +44,12 @@ module Phys
 
     def +(other)
       val = @val + @unit.convert_scale(other)
-      if @expr.nil?
-        val
-      else
-        self.class.new( val, @expr, @unit )
-      end
+      self.class.new( val, @expr, @unit )
     end
 
     def -(other)
       val = @val - @unit.convert_scale(other)
-      if @expr.nil?
-        val
-      else
-        self.class.new( val, @expr, @unit )
-      end
+      self.class.new( val, @expr, @unit )
     end
 
     def +@ ; self.class.new(  @val, @expr, @unit ) end
@@ -72,7 +64,7 @@ module Phys
 
     def **(n)
       if @expr.nil?
-        exprt = nil
+        expr = nil
       elsif /^[A-Za-z_]+&/o =~ @expr
         expr = @expr+'^'+n.to_s
       else
@@ -143,9 +135,7 @@ module Phys
       else
         expr = ""
       end
-      self.class.to_s + "[" + 
-        Unit::Utils.num_inspect(@val) +
-        expr + "]"
+      self.class.to_s+"["+Unit::Utils.num_inspect(@val)+expr+"]"
     end
 
     def inspect
@@ -154,9 +144,7 @@ module Phys
       else
         expr = ""
       end
-      "#<"+self.class.to_s+" " + 
-        Unit::Utils.num_inspect(@val) +
-        expr+", "+@unit.inspect+">"
+      "#<"+self.class.to_s+" "+Unit::Utils.num_inspect(@val)+expr+", "+@unit.inspect+">"
     end
   end
 end
