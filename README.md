@@ -36,11 +36,16 @@ Or install it yourself as:
 
 ## Features
 
-This library is discriminated from the other many units libraies
-by the following features.
+This library is discriminated from the other many units libraies for Ruby,
+by the following features:
 * Compatible with GNU Units except the nonlinear units.
 * Provides 2415 units, 85 prefixes, including UTF-8 unit names.
 * All the units are defined in unit data file of GNU Units except temperatures.
   Unit definition is not provided as codes.
-* No addition or modification to standar classes by default,
+* No addition or modification to Ruby standar classes by default,
   avoiding conflict with other libraries.
+* Calculation of values is only through the Ruby Numeric arithmetic methods.
+  None of Phys-units buisiness.
+* Conversion factors are held in Rational even defined
+  in the decimal form such as `1.0e10'.
+* PI number has a dimension.
