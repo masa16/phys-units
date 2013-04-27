@@ -78,7 +78,7 @@ module Phys
       return if @dim && @factor
       if @expr && @dim.nil?
         puts "unit='#{@name}', parsing '#{@expr}'..." if Unit.debug
-        unit = Parse.new.parse(@expr)
+        unit = Unit.parse(@expr)
         case unit
         when Unit
           @dim = unit.dim
