@@ -30,12 +30,12 @@ module Phys
         if /^(.*)-$/ =~ name
           name = $1
           if PREFIX[name]
-            warn "multiply-defined prefix: #{name}"
+            warn "prefix definition is overwritten: #{name}" if debug
           end
           PREFIX[name] = self.new(name,expr)
         else
           if LIST[name]
-            warn "multiply-defined unit: #{name}"
+            warn "unit definition is overwritten: #{name}" if debug
           end
           if expr.kind_of?(String) && /^!/ =~ expr
             dimless = (expr == "!dimensionless")

@@ -4,7 +4,7 @@
 #
 #   This program is free software.
 #   You can distribute/modify this program under the terms of
-#   the GNU General Public License version 2 or later.
+#   the GNU General Public License version 3 or later.
 
 class Parse
 

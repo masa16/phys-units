@@ -5,7 +5,7 @@
 #
 #   This program is free software.
 #   You can distribute/modify this program under the terms of
-#   the GNU General Public License version 2 or later.
+#   the GNU General Public License version 3 or later.
 
 module Phys
 
@@ -13,12 +13,29 @@ module Phys
     Quantity.new(*a)
   end
 
+  #== Usage
+  #   require 'phys/units'
+  #   Q=Phys::Quantity
+  #   Q[1.23,'km'] + Q[4.56,'m']    #=> Phys::Quanty[1.23456,'km']
+  #   Q[123,'mile'] / Q[2,'hr']     #=> Phys::Quanty[61,'mile/hr']
+  #   Q[61,'miles/hr'].want('m/s')  #=> Phys::Quanty[27.26944,'m/s']
+  #   Q[1.0,'are'] == Q[10,'m']**2  #=> true
+  #   Q[70,'tempF'] + Q[10,'tempC'] #=> Phys::Quantity[88,'tempF']
+  #   Q[20,'tempC'].want('tempF')   #=> Phys::Quantity[68,'tempF']
+  #   Math.cos(Q[60,'degree'].to_f) #=> 0.5
   class Quantity
 
-    def self.[](*a)
-      self.new(*a)
+    class << self
+      # Same as Quantity.new.
+      def [](*a)
+        self.new(*a)
+      end
     end
 
+    # Initialize a new quantity.
+    # _value_: Numeric value of quantity.
+    # _expr_: Unit string. Result of Unit.parse(_expr_) is used as a unit.
+    # _unit_: (optional) Unit of quantity instead of parsing _expr_.
     def initialize(value,expr=nil,unit=nil)
       @val = value
       expr = expr.to_s if Symbol===expr
@@ -34,20 +51,33 @@ module Phys
     attr_reader :val
     attr_reader :expr
     attr_reader :unit
+
+    # Returns the value of the quantity.
     alias value val
 
-    def convert(expr)
+    # Conversion to a quantity in another _expr_ unit.
+    def want(expr)
       unit = Unit.parse(expr)
       val  = unit.convert(self)
       self.class.new( val, expr, unit )
     end
-    alias want convert
+    alias convert want
 
+    # Addition of two quantities.
+    # Operation is made after the unit of _other_ is
+    # converted to the unit of _self_.
+    # Exception is raised if unit conversion is failed.
+    # Returns an instance of Quantity class in the unit of former quantity.
     def +(other)
       val = @val + @unit.convert_scale(other)
       self.class.new( val, @expr, @unit )
     end
 
+    # Subtraction of two quantities.
+    # Operation is made after the unit of _other_ is
+    # converted to the unit of _self_.
+    # Exception is raised if unit conversion is failed.
+    # Returns an instance of Quantity class in the unit of former quantity.
     def -(other)
       val = @val - @unit.convert_scale(other)
       self.class.new( val, @expr, @unit )
@@ -59,16 +89,38 @@ module Phys
       end
     end
 
+    # Unary Plus. Returns self.
     def +@ ; self.class.new(  @val, @expr, @unit ) end
+
+    # Unary Minus. Returns the negated quantity.
     def -@ ; self.class.new( -@val, @expr, @unit ) end
 
+    # Comparison of quantities. Comparison is made after
+    # converting _other_ to a quantity in the unit of _self_.
     def <=> (other); @val <=> @unit.convert(other) end
+
+    # Comparison of quantities. Comparison is made after
+    # converting _other_ to a quantity in the unit of _self_.
     def  == (other); @val  == @unit.convert(other) end
+
+    # Comparison of quantities. Comparison is made after
+    # converting _other_ to a quantity in the unit of _self_.
     def  >= (other); @val  >= @unit.convert(other) end
+
+    # Comparison of quantities. Comparison is made after
+    # converting _other_ to a quantity in the unit of _self_.
     def  <= (other); @val  <= @unit.convert(other) end
+
+    # Comparison of quantities. Comparison is made after
+    # converting _other_ to a quantity in the unit of _self_.
     def  <  (other); @val  <  @unit.convert(other) end
+
+    # Comparison of quantities. Comparison is made after
+    # converting _other_ to a quantity in the unit of _self_.
     def  >  (other); @val  >  @unit.convert(other) end
 
+    # Power of a quantity.
+    # Returns an instance of Quantity class in a powerd unit.
     def **(n)
       if @expr.nil?
         expr = nil
@@ -80,7 +132,7 @@ module Phys
       self.class.new( @val**n, expr, @unit**n )
     end
 
-    def enclose_expr
+    def enclose_expr     #:nodoc:
       return nil if @expr.nil?
       if /\/|\||per/o =~ @expr
         '('+@expr+')'
@@ -89,7 +141,7 @@ module Phys
       end
     end
 
-    def enclose_expr_div
+    def enclose_expr_div    #:nodoc:
       return nil if @expr.nil?
       if /\w[^\w]+\w/o =~ @expr
         '/('+@expr+')'
@@ -98,6 +150,8 @@ module Phys
       end
     end
 
+    # Multiplication of two quantities.
+    # Returns an instance of Quantity class in a multiplied unit.
     def *(other)
       if Quantity===other
         a = [self.enclose_expr, other.enclose_expr]
@@ -108,6 +162,8 @@ module Phys
       end
     end
 
+    # Division of two quantities.
+    # Returns an instance of Quantity class in a divided unit.
     %w[/ div quo].each do |s|
       define_method(s) do |other|
         if Quantity===other
@@ -121,7 +177,7 @@ module Phys
     end
     alias fdiv quo
 
-    %w[% reminder].each do |s|
+    %w[% remainder].each do |s|
       define_method(s) do |other|
         other = (Quantity===other) ? other.val : other
         self.class.new( @val.send(s,other), @expr, @unit )
@@ -141,6 +197,8 @@ module Phys
       self**2
     end
 
+    # Conversion to base unit.
+    # Returns the quantity converted to a base unit.
     def to_base_unit
       unit = @unit.base_unit
       val  = unit.convert(self)
@@ -150,6 +208,9 @@ module Phys
     alias to_si to_base_unit
     alias to_SI to_base_unit
 
+    # Conversion to Numeric.
+    # Returns Numeric if the unit is dimensionless.
+    # Raises an Error if the unit is non-dminensionless.
     def to_numeric
       @unit.convert_to_numeric(@val)
     end
