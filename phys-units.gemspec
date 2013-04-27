@@ -5,13 +5,13 @@ require 'phys/units/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "phys-units"
-  spec.version       = Phys::Units::VERSION
+  spec.version       = Phys::Unit::VERSION
   spec.authors       = ["Masahiro TANAKA"]
   spec.email         = ["masa16.tanaka@gmail.com"]
   spec.description   = %q{TODO: Write a gem description}
   spec.summary       = %q{TODO: Write a gem summary}
   spec.homepage      = ""
-  spec.license       = "MIT"
+  spec.license       = "GPL"
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }

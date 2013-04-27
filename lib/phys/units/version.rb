@@ -1,5 +1,5 @@
 module Phys
-  module Units
-    VERSION = "0.0.1"
+  class Unit
+    VERSION = "0.9.0"
   end
 end
