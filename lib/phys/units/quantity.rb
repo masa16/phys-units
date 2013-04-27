@@ -21,7 +21,8 @@ module Phys
 
     def initialize(value,expr=nil,unit=nil)
       @val = value
-      @expr = (@expr=='') ? nil : expr
+      expr = expr.to_s if Symbol===expr
+      @expr = (expr=='') ? nil : expr
       @unit = unit
       if @unit.nil?
         @unit = Unit.parse(@expr||1)
@@ -50,6 +51,12 @@ module Phys
     def -(other)
       val = @val - @unit.convert_scale(other)
       self.class.new( val, @expr, @unit )
+    end
+
+    %w[abs ceil round floor truncate].each do |s|
+      define_method(s) do
+        self.class.new( @val.send(s), @expr, @unit )
+      end
     end
 
     def +@ ; self.class.new(  @val, @expr, @unit ) end
@@ -92,7 +99,7 @@ module Phys
     end
 
     def *(other)
-      if other.kind_of?(self.class)
+      if Quantity===other
         a = [self.enclose_expr, other.enclose_expr]
         a.delete(nil)
         self.class.new( @val*other.val, a.join(' '), @unit*other.unit )
@@ -101,18 +108,37 @@ module Phys
       end
     end
 
-    def /(other)
-      if other.kind_of?(self.class)
-        a = [self.enclose_expr, other.enclose_expr_div]
-        a.delete(nil)
-        self.class.new( @val/other.val, a.join, @unit/other.unit )
-      else
-        self.class.new( @val/other, @expr, @unit )
+    %w[/ div quo].each do |s|
+      define_method(s) do |other|
+        if Quantity===other
+          a = [self.enclose_expr, other.enclose_expr_div]
+          a.delete(nil)
+          self.class.new( @val.send(s,other.val), a.join, @unit/other.unit )
+        else
+          self.class.new( @val.send(s,other), @expr, @unit )
+        end
       end
     end
+    alias fdiv quo
+
+    %w[% reminder].each do |s|
+      define_method(s) do |other|
+        other = (Quantity===other) ? other.val : other
+        self.class.new( @val.send(s,other), @expr, @unit )
+      end
+    end
+    alias modulo %
 
     def coerce(other)
       [ self.class.new(other), self ]
+    end
+
+    def abs
+      self.class.new( @val.abs, @expr, @unit )
+    end
+
+    def abs2
+      self**2
     end
 
     def to_base_unit
@@ -124,10 +150,25 @@ module Phys
     alias to_si to_base_unit
     alias to_SI to_base_unit
 
+    def to_numeric
+      @unit.convert_to_numeric(@val)
+    end
+
     def to_f
-      @unit.convert_to_float(@val)
+      to_numeric.to_f
     end
     alias to_float to_f
+
+    def to_i
+      to_numeric.to_i
+    end
+    alias to_int to_i
+    alias to_integer to_i
+
+    def to_r
+      to_numeric.to_r
+    end
+    alias to_rational to_r
 
     def to_s
       if @expr
