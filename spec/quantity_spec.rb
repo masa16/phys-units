@@ -1,8 +1,5 @@
-$LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
-require "phys/units"
-
-U = Phys::Unit
-Q = Phys::Quantity
+$LOAD_PATH.unshift File.dirname(__FILE__)
+require "helper"
 
 describe "Create quantities" do
 
@@ -43,7 +40,7 @@ describe "Create quantities" do
     it { Q[36,"km/hour"].to_base_unit.should == Q[10,"m/s"] }
     it { Q[36,"km/hour"].want('m/s').value.should == 10 }
     it { Q[1,"radian"].want("degree").value.should == Q[180,"1/pi"].want("").value }
-    it { Math.sin(Q[30,"degree"].to_f).should == 0.5 }
+    it { Math.sin(Q[30,"degree"].to_f).should be_within(1e-15).of 0.5 }
     it { Q[100,"cm"].want("m").value.should == 1 }
   end
 

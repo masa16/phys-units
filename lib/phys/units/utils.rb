@@ -64,13 +64,13 @@ module Phys
             return int_inspect(n)
           end
           if check_decimal(d)
-            return "%g" % x.to_f
+            return x.to_f.inspect
           end
           if check_decimal(n)
             if n==1
               return "(1/"+int_inspect(d)+")"
             else
-              return "(1/%g)" % Rational(d,n).to_f
+              return "(1/%s)" % Rational(d,n).to_f.inspect
             end
           end
           ud,nd = n_trail_zero(d)

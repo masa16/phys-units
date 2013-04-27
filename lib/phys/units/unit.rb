@@ -21,6 +21,7 @@ module Phys
     def initialize(arg,expr=nil,offset=nil)
       case arg
       when Numeric
+        arg = Rational(arg) if Integer===arg
         @factor = arg
         alloc_dim(expr)
       when Phys::Unit
@@ -28,7 +29,9 @@ module Phys
       when String
         @name = arg
         if expr.kind_of? Phys::Unit
-          replace(expr)
+          @factor = expr.factor
+          @offset = expr.offset
+          alloc_dim expr.dim
         else
           @expr = expr
         end
@@ -37,7 +40,7 @@ module Phys
       end
     end
 
-    attr_reader :name, :offset
+    attr_reader :name, :offset, :expr
 
     def dim
       use_dimension
@@ -120,6 +123,7 @@ module Phys
       end
       a.join(" ")
     end
+    alias string_form unit_string
 
     # Unit conversion
 
