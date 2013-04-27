@@ -1,7 +1,8 @@
 # Phys-Units
 
 GNU Units-compatible library for Ruby. 
-Former name is `Quanty', the first Ruby units library released in 2001.
+Former name is [Quanty](http://narray.rubyforge.org/quanty/quanty-en.html),
+the first Ruby units library released in 2001.
 This library provides the following Classes:
 
 * Phys::Quantity
