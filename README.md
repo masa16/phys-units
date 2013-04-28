@@ -36,15 +36,15 @@ Or install it yourself as:
 
 ## Features
 
-Phys-Units library is discriminated from the other many units libraies for Ruby,
+Phys-Units library is discriminated from many other units libraies for Ruby,
 by the following features:
-* Compatible with GNU Units except the nonlinear units.
+* Compatible with GNU Units except nonlinear units.
 * Provides 2415 units, 85 prefixes, including UTF-8 unit names.
-* All the units are defined in a unit data file from GNU Units
+* All units are defined in a unit data file from GNU Units
   and not defined as a Ruby codes, except temperature definitions.
 * No addition or modification to Ruby standard classes by default,
   avoiding conflict with other libraries.
-* Calculation of values is only through the Ruby Numeric arithmetic methods.
+* Calculation of values is through Ruby Numeric arithmetic methods.
   None of the Phys-Units lib's buisiness.
 * Conversion factors are held in Rational even defined
   in the decimal form such as `1.0e10'.
