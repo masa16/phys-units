@@ -16,9 +16,9 @@ module Phys
   #== Usage
   #   require 'phys/units'
   #   Q=Phys::Quantity
-  #   Q[1.23,'km'] + Q[4.56,'m']    #=> Phys::Quanty[1.23456,'km']
-  #   Q[123,'mile'] / Q[2,'hr']     #=> Phys::Quanty[61,'mile/hr']
-  #   Q[61,'miles/hr'].want('m/s')  #=> Phys::Quanty[27.26944,'m/s']
+  #   Q[1.23,'km'] + Q[4.56,'m']    #=> Phys::Quantity[1.23456,'km']
+  #   Q[123,'mile'] / Q[2,'hr']     #=> Phys::Quantity[61,'mile/hr']
+  #   Q[61,'miles/hr'].want('m/s')  #=> Phys::Quantity[27.26944,'m/s']
   #   Q[1.0,'are'] == Q[10,'m']**2  #=> true
   #   Q[70,'tempF'] + Q[10,'tempC'] #=> Phys::Quantity[88,'tempF']
   #   Q[20,'tempC'].want('tempF')   #=> Phys::Quantity[68,'tempF']
@@ -67,7 +67,7 @@ module Phys
     # Operation is made after the unit of _other_ is
     # converted to the unit of _self_.
     # Exception is raised if unit conversion is failed.
-    # Returns an instance of Quantity class in the unit of former quantity.
+    # Returns an instance of Quantity class in the _self_ unit.
     def +(other)
       val = @val + @unit.convert_scale(other)
       self.class.new( val, @expr, @unit )
@@ -77,16 +77,34 @@ module Phys
     # Operation is made after the unit of _other_ is
     # converted to the unit of _self_.
     # Exception is raised if unit conversion is failed.
-    # Returns an instance of Quantity class in the unit of former quantity.
+    # Returns an instance of Quantity class in _self_ unit.
     def -(other)
       val = @val - @unit.convert_scale(other)
       self.class.new( val, @expr, @unit )
     end
 
-    %w[abs ceil round floor truncate].each do |s|
-      define_method(s) do
-        self.class.new( @val.send(s), @expr, @unit )
-      end
+    def abs
+      self.class.new( @val.abs, @expr, @unit )
+    end
+
+    def abs2
+      self**2
+    end
+
+    def ceil
+      self.class.new( @val.ceil, @expr, @unit )
+    end
+
+    def round
+      self.class.new( @val.round, @expr, @unit )
+    end
+
+    def floor
+      self.class.new( @val.floor, @expr, @unit )
+    end
+
+    def truncate
+      self.class.new( @val.truncate, @expr, @unit )
     end
 
     # Unary Plus. Returns self.
@@ -132,7 +150,7 @@ module Phys
       self.class.new( @val**n, expr, @unit**n )
     end
 
-    def enclose_expr     #:nodoc:
+    def enclose_expr     #:nodoc: used internally
       return nil if @expr.nil?
       if /\/|\||per/o =~ @expr
         '('+@expr+')'
@@ -140,8 +158,8 @@ module Phys
         @expr
       end
     end
-
-    def enclose_expr_div    #:nodoc:
+    
+    def enclose_expr_div    #:nodoc: used internally
       return nil if @expr.nil?
       if /\w[^\w]+\w/o =~ @expr
         '/('+@expr+')'
@@ -164,37 +182,56 @@ module Phys
 
     # Division of two quantities.
     # Returns an instance of Quantity class in a divided unit.
-    %w[/ div quo].each do |s|
-      define_method(s) do |other|
-        if Quantity===other
-          a = [self.enclose_expr, other.enclose_expr_div]
-          a.delete(nil)
-          self.class.new( @val.send(s,other.val), a.join, @unit/other.unit )
-        else
-          self.class.new( @val.send(s,other), @expr, @unit )
-        end
+    def /(other)
+      if Quantity===other
+        a = [self.enclose_expr, other.enclose_expr_div]
+        a.delete(nil)
+        self.class.new( @val/other.val, a.join, @unit/other.unit )
+      else
+        self.class.new( @val/other, @expr, @unit )
+      end
+    end
+
+    # Division of two quantities.
+    # Returns an instance of Quantity class in a divided unit.
+    def quo(other)
+      if Quantity===other
+        a = [self.enclose_expr, other.enclose_expr_div]
+        a.delete(nil)
+        self.class.new( @val.quo(other.val), a.join, @unit/other.unit )
+      else
+        self.class.new( @val.quo(other), @expr, @unit )
       end
     end
     alias fdiv quo
 
-    %w[% remainder].each do |s|
-      define_method(s) do |other|
-        other = (Quantity===other) ? other.val : other
-        self.class.new( @val.send(s,other), @expr, @unit )
-      end
+    # Division with Remainder of two quantities.
+    # Before the operation, it converts _other_ into the _self_ unit.
+    def div(other)
+      @val.div( @unit.convert(other) )
+    end
+
+    # Remainder of two quantities.
+    # Before the operation, it converts _other_ into the _self_ unit.
+    def remainder(other)  #:nodoc: used internally
+      @val.remainder( @unit.convert(other) )
+    end
+
+    # Modulo of two quantities.
+    # Before the operation, it converts _other_ into the _self_ unit.
+    def %(other)
+      @val % @unit.convert(other)
     end
     alias modulo %
 
+    # Division and Modulo of two quantities.
+    # Before the operation, it converts _other_ into the _self_ unit.
+    def divmod(other)
+      @val.divmod( @unit.convert(other) )
+    end
+
     def coerce(other)
       [ self.class.new(other), self ]
-    end
-
-    def abs
-      self.class.new( @val.abs, @expr, @unit )
-    end
-
-    def abs2
-      self**2
     end
 
     # Conversion to base unit.
@@ -214,6 +251,7 @@ module Phys
     def to_numeric
       @unit.convert_to_numeric(@val)
     end
+    alias to_num to_numeric
 
     def to_f
       to_numeric.to_f

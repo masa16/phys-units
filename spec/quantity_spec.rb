@@ -3,6 +3,42 @@ require "helper"
 
 describe "Phys::Quantity" do
 
+  context "methods" do
+    describe Q[1.25,"km"] do
+      before {@q = Q[1.25,"km"]; @r = Q[500,"m"]}
+      it {@q.value.should == 1.25}
+      it {@q.expr.should == "km"}
+      it {@q.unit.should == Phys::Unit["km"]}
+      it {@q.want("cm").value.should == 125000}
+      it {(@q + @r).should == Q[1.75,"km"]}
+      it {(@q - @r).should == Q[0.75,"km"]}
+      it {@q.abs.should == Q[1.25,"km"]}
+      it {@q.abs2.should == Q[1.5625,"km^2"]}
+      it {@q.ceil.should == Q[2,"km"]}
+      it {@q.round.should == Q[1,"km"]}
+      it {@q.floor.should == Q[1,"km"]}
+      it {@q.truncate.should == Q[1,"km"]}
+      it {(+@q).should == Q[1.25,"km"]}
+      it {(-@q).should == Q[-1.25,"km"]}
+      it {(@q <=> @r).should == 1}
+      it {(@q == @r).should be_false}
+      it {(@q > @r).should be_true}
+      it {(@q >= @r).should be_true}
+      it {(@q < @r).should be_false}
+      it {(@q <= @r).should be_false}
+      it {(@q **2).should == Q[1.5625,"km^2"]}
+      it {(@q * @r).should == Q[0.625,"km^2"]}
+      it {(@q / @r).should == Q[2.5]}
+      it {(@q.quo @r).should == Q[2.5]}
+      it {(@q.div @r).should == 2}
+      it {(@q % @r).should == 0.25}
+      it {(@q.divmod @r).should == [2,0.25]}
+      it {(@q.remainder @r).should == 0.25}
+      it {@q.to_base_unit.value.should == 1250}
+    end
+  end
+
+
   context "Dimensionless" do
     describe Q[1] do
       it {should be_an_instance_of Phys::Quantity}
