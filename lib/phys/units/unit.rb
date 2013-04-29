@@ -174,25 +174,25 @@ module Phys
       end
     end
 
-    def convert(q)
-      if Quantity===q
-        assert_same_dimension(q.unit)
-        v = q.unit.convert_to_base(q.value)
-        convert_from_base(v)
+    def convert(quantity)
+      if Quantity===quantity
+        assert_same_dimension(quantity.unit)
+        v = quantity.unit.convert_value_to_base_unit(quantity.value)
+        convert_value_from_base_unit(v)
       else
-        q / to_num
+        quantity / to_numeric
       end
     end
 
-    def convert_scale(q)
-      convert(q)
+    def convert_scale(quantity)
+      convert(quantity)
     end
 
-    def convert_to_base(x)
+    def convert_value_to_base_unit(x)
       x * conversion_factor
     end
 
-    def convert_from_base(x)
+    def convert_value_from_base_unit(x)
       x / conversion_factor
     end
 
@@ -201,10 +201,11 @@ module Phys
       x * conversion_factor
     end
 
-    def to_num
+    def to_numeric
       assert_dimensionless
       conversion_factor
     end
+    alias to_num to_numeric
 
     def convert_to_float(x)
       convert_to_numeric(x).to_f
@@ -350,7 +351,7 @@ module Phys
 
     def self.func(fn, x)
       fn = 'log' if fn == 'ln'
-      m = Unit.new(x).to_num
+      m = Unit.new(x).to_numeric
       Unit.new( Math.send(fn,m) )
     end
 
@@ -421,21 +422,21 @@ module Phys
       end
     end
 
-    def convert_to_base(x)
+    def convert_value_to_base_unit(x)
       x * conversion_factor + @offset
     end
 
-    def convert_from_base(x)
+    def convert_value_from_base_unit(x)
       (x - @offset) / conversion_factor
     end
 
-    def convert_scale(q)
-      if Quantity===q
-        assert_same_dimension(q.unit)        
-        v = q.value * q.unit.conversion_factor
+    def convert_scale(quantity)
+      if Quantity===quantity
+        assert_same_dimension(quantity.unit)        
+        v = quantity.value * quantity.unit.conversion_factor
         v = v / self.conversion_factor
       else
-        raise TypeError,"not Quantitiy: #{q.inspect}"
+        raise TypeError,"not Quantitiy: #{quantity.inspect}"
       end
     end
 
