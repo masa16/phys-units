@@ -1,4 +1,5 @@
 require "phys/units/version"
+require "phys/units/errors.rb"
 require "phys/units/unit_class.rb"
 require "phys/units/unit.rb"
 require "phys/units/utils.rb"

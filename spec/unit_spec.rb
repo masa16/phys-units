@@ -227,7 +227,7 @@ describe "Create Units" do
 
   describe "temperature unit" do
     it "operation error" do
-      expect {U['tempC']*2}.to raise_error(Phys::Unit::UnitOperationError)
+      expect {U['tempC']*2}.to raise_error(Phys::UnitOperationError)
     end
   end
 

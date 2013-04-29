@@ -12,11 +12,6 @@ module Phys
 
   class Unit
 
-    class UnitError < StandardError; end
-    class UnitParseError < UnitError; end
-    class UnitConversionError < UnitError; end
-    class UnitOperationError < UnitError; end
-
     class << self
 
       def debug

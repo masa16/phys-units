@@ -31,8 +31,11 @@ describe "Phys::Quantity" do
       it {(@q / @r).should == Q[2.5]}
       it {(@q.quo @r).should == Q[2.5]}
       it {(@q.div @r).should == 2}
+      it {(@q.div 0.5).should == Q[2,"km"]}
       it {(@q % @r).should == 0.25}
+      it {(@q % 0.5).should == Q[0.25,"km"]}
       it {(@q.divmod @r).should == [2,0.25]}
+      it {(@q.divmod 0.5).should == [Q[2,"km"],Q[0.25,"km"]]}
       it {(@q.remainder @r).should == 0.25}
       it {@q.to_base_unit.value.should == 1250}
     end

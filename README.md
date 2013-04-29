@@ -3,24 +3,20 @@
 GNU Units-compatible library for Ruby. 
 Former name is [Quanty](http://narray.rubyforge.org/quanty/quanty-en.html),
 the first Ruby units library released in 2001.
-This library provides the following Classes:
 
-* Phys::Quantity
-* Phys::Unit
+## Phys::Quantity
+is a primary class of Phys-Units library, to be manipulated by users.
+See Documentation at [Rubygems Site](https://rubygems.org/gems/phys-units)
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-    gem 'phys-units'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
+Install from gem as:
 
     $ gem install phys-units
+
+Or install from source tree:
+
+    $ ruby setup.rb
 
 ## Usage
 
@@ -38,6 +34,7 @@ Or install it yourself as:
 
 Phys-Units library is discriminated from many other units libraies for Ruby,
 by the following features:
+
 * Compatible with GNU Units except nonlinear units.
 * Provides 2415 units, 85 prefixes, including UTF-8 unit names.
 * All units are defined in a unit data file from GNU Units
@@ -49,3 +46,9 @@ by the following features:
 * Conversion factors are held in Rational even defined
   in the decimal form such as `1.0e10'.
 * PI number has a dimension.
+
+## Copying License
+GPL3
+
+## Author
+Masahiro TANAKA
