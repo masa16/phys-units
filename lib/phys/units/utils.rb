@@ -23,7 +23,7 @@ module Phys
         when Numeric
           x
         when Unit
-          x.to_num
+          x.to_numeric
         else
           raise "Not Numric or #{self.class}: #{x.inspect}"
         end
