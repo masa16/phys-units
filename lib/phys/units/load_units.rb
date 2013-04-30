@@ -927,8 +927,8 @@ wc                      water            # water column
 mach                    331.46 m/s       # speed of sound in dry air at STP
 standardtemp            273.15 K         # standard temperature
 stdtemp                 standardtemp
-normaltemp              tempF(70)        # for gas density, from NIST
-normtemp                normaltemp       # Handbook 44
+#normaltemp              tempF(70)        # for gas density, from NIST
+#normtemp                normaltemp       # Handbook 44
 
 # Weight of mercury and water at different temperatures using the standard
 # force of gravity.
@@ -3446,62 +3446,6 @@ megalerg                megaerg    # 'L' added to make it pronounceable [18].
 
 unitedstatesdollar      US$
 $                       dollar
-mark                    germanymark
-bolivar                 venezuelanbolivarfuerte
-bolivarfuerte           bolivar        # The currency was revalued by
-oldbolivar              1|1000 bolivar # a factor of 1000.
-peseta                  spainpeseta
-rand                    southafricarand
-escudo                  portugalescudo
-guilder                 netherlandsguilder
-hollandguilder          netherlandsguilder
-peso                    mexicopeso
-yen                     japanyen
-lira                    italylira
-rupee                   indiarupee
-drachma                 greecedrachma
-franc                   francefranc
-markka                  finlandmarkka
-britainpound            unitedkingdompound
-greatbritainpound       unitedkingdompound
-poundsterling           britainpound
-yuan                    chinayuan
-
-# Some European currencies have permanent fixed exchange rates with
-# the Euro.  These rates were taken from the EC's web site:
-# http://ec.europa.eu/economy_finance/euro/adoption/conversion/index_en.htm
-
-austriaschilling        1|13.7603 euro
-belgiumfranc            1|40.3399 euro
-estoniakroon            1|15.6466 euro # Equal to 1|8 germanymark
-finlandmarkka           1|5.94573 euro
-francefranc             1|6.55957 euro
-germanymark             1|1.95583 euro
-greecedrachma           1|340.75 euro
-irelandpunt             1|0.787564 euro
-italylira               1|1936.27 euro
-luxembourgfranc         1|40.3399 euro
-netherlandsguilder      1|2.20371 euro
-portugalescudo          1|200.482 euro
-spainpeseta             1|166.386 euro
-cypruspound             1|0.585274 euro
-maltalira               1|0.429300 euro
-sloveniatolar           1|239.640 euro
-slovakiakoruna          1|30.1260 euro
-
-UKP                     GBP        # Not an ISO code, but looks like one, and
-                                   # sometimes used on usenet.
-VEB                     1|1000 VEF # old venezuelan bolivar
-
-!include currency.units
-
-# Money on the gold standard, used in the late 19th century and early
-# 20th century.
-
-olddollargold           23.22 grains goldprice  # Used until 1934
-newdollargold           96|7 grains goldprice   # After Jan 31, 1934
-dollargold              newdollargold
-poundgold               113 grains goldprice
 
 # Nominal masses of US coins.  Note that dimes, quarters and half dollars
 # have weight proportional to value.  Before 1965 it was $40 / kg.
@@ -3513,45 +3457,6 @@ USquarterweight         US$ 0.25 / (20 US$ / lb)   # Since 1965
 UShalfdollarweight      US$ 0.50 / (20 US$ / lb)   # Since 1971
 USdollarmass            8.1 grams
 
-# British currency
-
-quid                    britainpound        # Slang names
-fiver                   5 quid
-tenner                  10 quid
-monkey                  500 quid
-brgrand                 1000 quid
-bob                     shilling
-
-shilling                1|20 britainpound   # Before decimalisation, there
-oldpence                1|12 shilling       # were 20 shillings to a pound,
-farthing                1|4 oldpence        # each of twelve old pence
-guinea                  21 shilling         # Still used in horse racing
-crown                   5 shilling
-florin                  2 shilling
-groat                   4 oldpence
-tanner                  6 oldpence
-brpenny                 0.01 britainpound
-pence                   brpenny
-tuppence                2 pence
-tuppenny                tuppence
-ha'penny                halfbrpenny
-hapenny                 ha'penny
-oldpenny                oldpence
-oldtuppence             2 oldpence
-oldtuppenny             oldtuppence
-threepence              3 oldpence    # threepence never refers to new money
-threepenny              threepence
-oldthreepence           threepence
-oldthreepenny           threepence
-oldhalfpenny            halfoldpenny
-oldha'penny             oldhalfpenny
-oldhapenny              oldha'penny
-brpony                  25 britainpound
-
-# Canadian currency
-
-loony                   1 canadadollar    # This coin depicts a loon
-toony                   2 canadadollar
 
 #
 # Units used for measuring volume of wood
@@ -5205,7 +5110,7 @@ hogshead                brhogshead
 # U+2150-               1|7  For some reason these characters are getting
 # U+2151-               1|9  flagged as invalid UTF8.
 # U+2152-               1|10
-ℯ                       exp(1)      # U+212F, base of natural log
+#ℯ                       exp(1)      # U+212F, base of natural log
 
 µ-                      micro       # micro sign U+00B5
 μ-                      micro       # small mu U+03BC
@@ -5223,13 +5128,6 @@ röntgen                 roentgen
 K                       K          # Kelvin symbol, U+212A
 ℓ                       liter      # unofficial abbreviation used in some places
 ¢                       cent
-£                       britainpound
-¥                       japanyen
-€                       euro
-₩                       southkoreawon
-₪                       israelnewshekel
-₤                       lira
-₨                       rupee
 
 Ω                       ohm       # Ohm symbol U+2126
 Ω                       ohm       # Greek capital omega U+03A9
