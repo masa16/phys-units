@@ -5301,4 +5301,6 @@ module Phys
   zero_degc = Unit["stdtemp"].conversion_factor
   OffsetUnit.define( "tempC", Unit["K"], zero_degc )
   OffsetUnit.define( "tempF", Unit["K"]*Rational(5,9), zero_degc-32*Rational(5,9) )
+
+  #puts "#{Phys::Unit::LIST.size} units, #{Phys::Unit::PREFIX.size} prefixes"
 end

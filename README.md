@@ -5,7 +5,17 @@ Former name is [Quanty](http://narray.rubyforge.org/quanty/quanty-en.html),
 the first Ruby units library released in 2001.
 
 ## Phys::Quantity
-is a primary class of Phys-Units library, to be manipulated by users.
+is the primary class of Phys-Units library, to be manipulated by users.
+It contains:
+
+* *Value* :
+  +value+ must be a class instance having arithmetic methods,
+  but it is not necessary to be a Numeric.
+  This is a duck typing way. 
+* *Unit* :
+  +unit+ is a instance of Phys::Unit class
+  obtained by parsing a +expr+ string.
+
 See Documentation at [Rubygems Site](https://rubygems.org/gems/phys-units)
 
 ## Installation
@@ -36,7 +46,7 @@ Phys-Units library is discriminated from many other units libraies for Ruby,
 by the following features:
 
 * Compatible with GNU Units except nonlinear units.
-* Provides 2415 units, 85 prefixes, including UTF-8 unit names.
+* Provides 2331 units, 85 prefixes, including UTF-8 unit names.
 * All units are defined in a unit data file from GNU Units
   and not defined as a Ruby codes, except temperature definitions.
 * No addition or modification to Ruby standard classes by default,
@@ -47,8 +57,18 @@ by the following features:
   in the decimal form such as `1.0e10'.
 * PI number has a dimension.
 
+## Platforms tested
+
+* ruby 2.0.0p0 (2013-02-24 revision 39474) [x86_64-linux]
+
 ## Copying License
-GPL3
+
+This program is free software.
+You can distribute/modify this program
+under the same terms as GPL3.
+See "COPYING" file.
+NO WARRANTY.
 
 ## Author
+
 Masahiro TANAKA
