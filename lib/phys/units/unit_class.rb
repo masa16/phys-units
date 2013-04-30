@@ -50,11 +50,12 @@ module Phys
       end
 
       def word(x)
-        find_unit(x) || define(x)
+        find_unit(x) or raise UnitError, "Undefined unit: #{x.inspect}"
+        #find_unit(x) || define(x,nil)
       end
 
       def parse(x)
-        find_unit(x) || Parse.new.parse(x)
+        find_unit(x) || Unit.cast(Parse.new.parse(x))
       end
 
       def find_unit(x)
@@ -71,8 +72,8 @@ module Phys
       alias [] find_unit
 
       def unit_stem(x)
-        ( /(.{3,}(?:s|z|ch))es$/ =~ x && LIST[$1] ) ||
-          ( /(.{3,})s$/ =~ x && LIST[$1] )
+        ( /(.{2,}(?:s|z|ch))es$/ =~ x && LIST[$1] ) ||
+          ( /(.{2,})s$/ =~ x && LIST[$1] )
       end
 
       def find_prefix(x)
@@ -86,7 +87,7 @@ module Phys
 #--
 
       def unit_chars
-        '\\s*+\\/0-9<=>()\\[\\]^{|}~\\\\'
+        '\\s*+\\/<=>()\\[\\]^{|}~\\\\'
       end
 
       def control_units_dat(var,skip,line)

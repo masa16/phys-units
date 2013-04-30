@@ -212,7 +212,7 @@ module Phys
     end
 
     def base_unit
-      Unit.new(1,dim)
+      Unit.new(1,dimensionless_deleted)
     end
 
     # Unit operation
@@ -294,40 +294,40 @@ module Phys
     end
 
     def *(x)
-      y = Unit.cast(x)
+      x = Unit.cast(x)
       if scalar?
-        return y
-      elsif y.scalar?
+        return x
+      elsif x.scalar?
         return self
       end
-      check_operable2(y)
-      dims = dimension_binop(y){|a,b| a+b}
-      factor = self.factor * y.factor
+      check_operable2(x)
+      dims = dimension_binop(x){|a,b| a+b}
+      factor = self.factor * x.factor
       Unit.new(factor,dims)
     end
 
     def /(x)
-      y = Unit.cast(x)
+      x = Unit.cast(x)
       if scalar?
-        return y.inv
-      elsif y.scalar?
+        return x.inv
+      elsif x.scalar?
         return self
       end
-      check_operable2(y)
-      dims = dimension_binop(y){|a,b| a-b}
-      factor = self.factor / y.factor
+      check_operable2(x)
+      dims = dimension_binop(x){|a,b| a-b}
+      factor = self.factor / x.factor
       Unit.new(factor,dims)
     end
 
     def rdiv(x)
-      y = Unit.cast(x)
+      x = Unit.cast(x)
       if scalar?
-        return y.inv
-      elsif y.scalar?
+        return x.inv
+      elsif x.scalar?
         return self
       end
-      check_operable2(y)
-      dims = dimension_binop(y){|a,b| a-b}
+      check_operable2(x)
+      dims = dimension_binop(x){|a,b| a-b}
       factor = Rational(self.factor,x.factor)
       Unit.new(factor,dims)
     end
@@ -340,6 +340,10 @@ module Phys
       check_operable
       dims = dimension_uop{|a| -a}
       Unit.new(Rational(1,self.factor), dims)
+    end
+
+    def self.inv(x)
+      Unit.cast(x).inv
     end
 
     def **(x)
