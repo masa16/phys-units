@@ -9,14 +9,21 @@
 
 module Phys
 
+  # alias to Phys::Quantity.new
   def Quantity(*a)
     Quantity.new(*a)
   end
 
   # Phys::Quantity is a class to represent physical quantities
   # with unit of measure.
-  # It contains a value in Numeric or similar class,
-  # and unit in Phys::Unit class.
+  # It contains:
+  # * *Value* of the quantity.
+  #   +value+ must be a class instance having arithmetic methods,
+  #   but it is not necessary to be a Numeric.
+  #   This is a duck typing way. 
+  # * *Unit* of the quantity.
+  #   +unit+ is a instance of Phys::Unit class
+  #   obtained by parsing a +expr+ string.
   #== Usage
   #   require 'phys/units'
   #   Q=Phys::Quantity
@@ -33,7 +40,7 @@ module Phys
       # Alias to Phys::Quantity.new.
       # @param  [Object] value
       #         Value of quantity.
-      # @param  [String] expr  unit expression.
+      # @param  [String] expr  a string of unit expression.
       #         If +expr+ is not supplied, it becomes dimeinsionless.
       # @return [Phys::Quantity]
       # @raise  [Phys::UnitConversionError] if unit conversion is failed.
@@ -45,9 +52,7 @@ module Phys
     # Initialize a new quantity.
     # @param  [Object] value
     #         Value of quantity.
-    #         +value+ must be a class instance having arithmetic methods
-    #         in a duck typing way.
-    # @param  [String] expr  unit expression.
+    # @param  [String] expr  a string of unit expression.
     #         If +expr+ is not supplied, it becomes dimeinsionless.
     # @param  [Phys::Unit] unit  (optional)
     # @raise  [Phys::UnitConversionError] if unit conversion is failed.
@@ -86,7 +91,7 @@ module Phys
     end
     alias convert want
 
-    # Addition of two quantities.
+    # Addition.
     # Before the operation, it converts +other+ to the unit of +self+.
     # * If the +other+ param is Phys::Quantity,
     #   +other+ is converted to the unit of +self+.
@@ -101,7 +106,7 @@ module Phys
       self.class.new( val, @expr, @unit )
     end
 
-    # Subtraction of two quantities.
+    # Subtraction.
     # Before the operation, it converts +other+ to the unit of +self+.
     # * If the +other+ param is Phys::Quantity,
     #   +other+ is converted to the unit of +self+.
@@ -116,32 +121,32 @@ module Phys
       self.class.new( val, @expr, @unit )
     end
 
-    # @return [Phys::Quantity] abs quantity in the unit of +self+.
+    # @return [Phys::Quantity] Abs. in the unit of +self+.
     def abs
       self.class.new( @val.abs, @expr, @unit )
     end
 
-    # @return [Phys::Quantity] abs2 quantity in the squared unit of +self+.
+    # @return [Phys::Quantity] Abs2. in the squared unit of +self+.
     def abs2
       self**2
     end
 
-    # @return [Phys::Quantity] ceil quantity in the unit of +self+.
+    # @return [Phys::Quantity] Ceil. in the unit of +self+.
     def ceil
       self.class.new( @val.ceil, @expr, @unit )
     end
 
-    # @return [Phys::Quantity] round quantity in the unit of +self+.
+    # @return [Phys::Quantity] Round. in the unit of +self+.
     def round
       self.class.new( @val.round, @expr, @unit )
     end
 
-    # @return [Phys::Quantity] floor quantity in the unit of +self+.
+    # @return [Phys::Quantity] Floor. in the unit of +self+.
     def floor
       self.class.new( @val.floor, @expr, @unit )
     end
 
-    # @return [Phys::Quantity] truncate quantity in the unit of +self+.
+    # @return [Phys::Quantity] Truncate. in the unit of +self+.
     def truncate
       self.class.new( @val.truncate, @expr, @unit )
     end
@@ -153,58 +158,81 @@ module Phys
     end
 
     # Unary Minus.
-    # @return [Phys::Quantity] a quantity in the unit of +self+.
+    # @return [Phys::Quantity] in the unit of +self+.
     def -@
       self.class.new( -@val, @expr, @unit )
     end
 
     # Comparison of quantities.
     # Before the comparison, it converts +other+ to the unit of +self+.
+    # @param  [Phys::Quantity] other
     # @return [Integer]
+    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
     def <=> (other)
       @val <=> @unit.convert(other)
     end
 
-    # Comparison of quantities.
+    # Comparison. Returns +true+ if +self+ has the same value as +other+. 
     # Before the comparison, it converts +other+ to the unit of +self+.
+    # @param  [Phys::Quantity] other
     # @return [Boolean]
+    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
     def  == (other)
       @val  == @unit.convert(other)
     end
 
-    # Comparison of quantities.
+    # Comparison. Returns +true+ if +self+ is greather-than or equal-to +other+.
     # Before the comparison, it converts +other+ to the unit of +self+.
+    # @param  [Phys::Quantity] other
     # @return [Boolean]
+    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
     def  >= (other)
       @val  >= @unit.convert(other)
     end
 
-    # Comparison of quantities.
+    # Comparison. Returns +true+ if +self+ is less-than or equal-to +other+.
     # Before the comparison, it converts +other+ to the unit of +self+.
+    # @param  [Phys::Quantity] other
     # @return [Boolean]
+    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
     def  <= (other)
       @val  <= @unit.convert(other)
     end
 
-    # Comparison of quantities.
+    # Comparison. Returns +true+ if +self+ is less than +other+.
     # Before the comparison, it converts +other+ to the unit of +self+.
+    # @param  [Phys::Quantity] other
     # @return [Boolean]
+    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
     def  <  (other)
       @val  <  @unit.convert(other)
     end
 
-    # Comparison of quantities.
+    # Comparison. Returns +true+ if +self+ is greater than +other+.
     # Before the comparison, it converts +other+ to the unit of +self+.
+    # @param  [Phys::Quantity] other
     # @return [Boolean]
+    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
     def  >  (other)
       @val  >  @unit.convert(other)
+    end
+
+    # Closeness. Returns +true+ if +self+ and +other+ is close to each other
+    # within +epsilon+ relative to the absolute values.
+    # Before the comparison, it converts +other+ to the unit of +self+.
+    # @param  [Phys::Quantity] other
+    # @param  [Numeric] epsilon
+    # @return [Boolean]
+    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
+    def close_to(other,epsilon=Float::EPSILON)
+      other_value = @unit.convert(other)
+      (@val-other_value).abs/(@val.abs+other_value.abs) <= epsilon
     end
 
     # Power of a quantity.
     # @param  [Numeric] n
     # @return [Phys::Quantity] a quantity in the +n+ -powered unit of +self+.
     # @raise  [Phys::UnitConversionError] if unit conversion is failed.
-    #
     def **(n)
       if @expr.nil?
         expr = nil
@@ -240,7 +268,7 @@ module Phys
       end
     end
 
-    # Multiplication of two quantities.
+    # Multiplication.
     # If the +other+ param is *not* Phys::Quantity,
     # +other+ is regarded as a dimensionless value.
     # @param  [Object] other
@@ -258,7 +286,7 @@ module Phys
       end
     end
 
-    # Division of two quantities.
+    # Division.
     # If the +other+ param is *not* Phys::Quantity,
     # +other+ is regarded as a dimensionless value.
     # @param  [Object] other
@@ -276,7 +304,7 @@ module Phys
       end
     end
 
-    # Division of two quantities.
+    # Division more correctly.
     # If the +other+ param is *not* Phys::Quantity,
     # +other+ is regarded as a dimensionless value.
     # @param  [Object] other
@@ -295,7 +323,7 @@ module Phys
     end
     alias fdiv quo
 
-    # Division of two quantities without Remainder.
+    # Division without Modulo.
     # * If the +other+ param is Phys::Quantity,
     #   +other+ is converted to the unit of +self+,
     #   and returns +div+ of values.
@@ -314,7 +342,7 @@ module Phys
       end
     end
 
-    # Remainder of two quantities.
+    # Remainder.
     # * If the +other+ param is Phys::Quantity,
     #   +other+ is converted to the unit of +self+,
     #   and returns +remainder+ of values.
@@ -333,7 +361,7 @@ module Phys
       end
     end
 
-    # Modulo of two quantities.
+    # Modulo.
     # * If the +other+ param is Phys::Quantity,
     #   +other+ is converted to the unit of +self+,
     #   and returns +modulo+ of values.
@@ -353,7 +381,7 @@ module Phys
     end
     alias modulo %
 
-    # Division and Modulo of two quantities.
+    # Division with Modulo.
     # * If the +other+ param is Phys::Quantity,
     #   +other+ is converted to the unit of +self+,
     #   and returns +divmod+ of values.
@@ -383,7 +411,6 @@ module Phys
     # Returns the quantity converted to a base unit.
     # @return [Phys::Quantity] a quantity in the base unit.
     # @raise  [Phys::UnitConversionError] if unit conversion is failed.
-    #
     def to_base_unit
       unit = @unit.base_unit
       val  = unit.convert(self)
@@ -396,7 +423,6 @@ module Phys
     # Conversion to Numeric.
     # @return [Numeric]
     # @raise  [Phys::UnitConversionError] if the unit is non-dminensionless.
-    #
     def to_numeric
       @unit.convert_to_numeric(@val)
     end
@@ -405,7 +431,6 @@ module Phys
     # Conversion to Float.
     # @return [Float]
     # @raise  [Phys::UnitConversionError] if the unit is non-dminensionless.
-    #
     def to_f
       to_numeric.to_f
     end
@@ -414,7 +439,6 @@ module Phys
     # Conversion to Integer.
     # @return [Integer]
     # @raise  [Phys::UnitConversionError] if the unit is non-dminensionless.
-    #
     def to_i
       to_numeric.to_i
     end
@@ -424,7 +448,6 @@ module Phys
     # Conversion to Rational.
     # @return [Rational]
     # @raise  [Phys::UnitConversionError] if the unit is non-dminensionless.
-    #
     def to_r
       to_numeric.to_r
     end
@@ -432,7 +455,6 @@ module Phys
 
     # Conversion to String.
     # @return [String]
-    #
     def to_s
       if @expr
         expr = ",'" +@expr+"'"
@@ -444,7 +466,6 @@ module Phys
 
     # Inspect String.
     # @return [String]
-    #
     def inspect
       if @expr
         expr = "," +@expr.inspect
