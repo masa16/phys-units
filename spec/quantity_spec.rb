@@ -147,4 +147,11 @@ describe "Phys::Quantity" do
     end
   end
 
+  context "Complex units" do
+    describe Q[1,"(8/pi^2)(lbm/ft^3)ft(ft^3/s)^2(1/in^5)"] do
+      it{should be_a_quantity_close_to Q[43.533969,"psi"]}
+    end
+  end
+
 end
+
