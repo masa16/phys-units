@@ -481,7 +481,6 @@ module_eval(<<'...end parse.y/module_eval...', 'parse.y', 63)
 
   def parse( str )
     return Unit.new(str) if str.empty?
-    #p str
     @q = []
 
     c = Unit.unit_chars
@@ -490,15 +489,24 @@ module_eval(<<'...end parse.y/module_eval...', 'parse.y', 63)
       case str
       when /\A[\s]+/o
       when /\A(\d+)(?:(?:\.(\d*))?(?:[eE]([+-]?\d+))?)/o
-	@q.push [:NUMBER, build_num($1,$2,$3)]
+        @q.push [:NUMBER, build_num($1,$2,$3)]
       when /\A(sin|cos|tan|log|ln|log2)\b/o
         @q.push [:UFUNC, $&]
       when /\A\//o
         @q.push [:DIV, $&]
       when /\Aper\b/o
         @q.push [:DIV, $&]
-      when /\A[^#{c}0-9,.-]+([^#{c}$-]*[^#{c}1-9,.])?/o
-        @q.push [:WORD, $&]
+        when /\A([^#{c}0-9,.-]([^#{c}$-]*[^#{c}0-9,.])?)(\d)?/o
+        a = $&
+        x = $1
+        n = $3
+        if n && n.to_i >= 2
+            @q.push [:WORD, x]
+            @q.push [:POW, '']
+            @q.push [:NUMBER, n.to_i]
+        else
+          @q.push [:WORD, a]
+        end
       when /\A[%'"]'?/o
         @q.push [:WORD, $&]
       when /\A\^|\A\*\*/o
