@@ -76,7 +76,7 @@ module Phys
     # @return [String] unit expression
     attr_reader :expr
 
-    # @return [Phys::Unit] unit
+    # @return [Phys::Unit] Phys::Unit instance
     attr_reader :unit
 
     # Conversion to a quantity in another unit.
@@ -121,44 +121,57 @@ module Phys
       self.class.new( val, @expr, @unit )
     end
 
-    # @return [Phys::Quantity] Abs. in the unit of +self+.
+    # Absolute. Returns a quantity in the same unit of +self+.
+    # @return [Phys::Quantity]
     def abs
       self.class.new( @val.abs, @expr, @unit )
     end
 
-    # @return [Phys::Quantity] Abs2. in the squared unit of +self+.
+    # Square. Returns a quantity in squared unit of +self+.
+    # @return [Phys::Quantity]
     def abs2
       self**2
     end
 
-    # @return [Phys::Quantity] Ceil. in the unit of +self+.
+    # Ceil. Returns a quantity with the smallest Integer value greater
+    # than or equal to +self+ value, in the same unit of +self+.
+    # @return [Phys::Quantity]
     def ceil
       self.class.new( @val.ceil, @expr, @unit )
     end
 
-    # @return [Phys::Quantity] Round. in the unit of +self+.
-    def round
-      self.class.new( @val.round, @expr, @unit )
+    # Round. Rounds +self+ value to a given precision in decimal digits
+    # (default 0 digits).
+    # Returns a quantity with the rounded value in the same unit of +self+.
+    # @return [Phys::Quantity]
+    def round(ndigits=nil)
+      val = ndigits ? @val.round : @val.round(ndigits)
+      self.class.new( val, @expr, @unit )
     end
 
-    # @return [Phys::Quantity] Floor. in the unit of +self+.
+    # Floor. Returns a quantity with the largest integer value
+    # less than or equal to +self+ value, in the same unit of +self+.
+    # @return [Phys::Quantity]
     def floor
       self.class.new( @val.floor, @expr, @unit )
     end
 
-    # @return [Phys::Quantity] Truncate. in the unit of +self+.
+    # Truncate. Returns a quantity with the value truncated to an integer,
+    # in the same unit of +self+.
+    # @return [Phys::Quantity]
     def truncate
       self.class.new( @val.truncate, @expr, @unit )
     end
 
-    # Unary Plus.
-    # @return [Phys::Quantity] +self+.
+    # Unary Plus. Returns +self+.
+    # @return [Phys::Quantity]
     def +@
       self.class.new(  @val, @expr, @unit )
     end
 
-    # Unary Minus.
-    # @return [Phys::Quantity] in the unit of +self+.
+    # Unary Minus. Returns a quantity with negative value
+    # in the same unit of +self+.
+    # @return [Phys::Quantity]
     def -@
       self.class.new( -@val, @expr, @unit )
     end
@@ -217,8 +230,8 @@ module Phys
       @val  >  @unit.convert(other)
     end
 
-    # Closeness. Returns +true+ if +self+ and +other+ is close to each other
-    # within +epsilon+ relative to the absolute values.
+    # Closeness. Returns +true+ if difference between +self+ and +other+ is
+    # smaller than +epsilon+ times sum of their absolute values.
     # Before the comparison, it converts +other+ to the unit of +self+.
     # @param  [Phys::Quantity] other
     # @param  [Numeric] epsilon
@@ -226,7 +239,8 @@ module Phys
     # @raise  [Phys::UnitConversionError] if unit conversion is failed.
     def close_to(other,epsilon=Float::EPSILON)
       other_value = @unit.convert(other)
-      (@val-other_value).abs/(@val.abs+other_value.abs) <= epsilon
+      abs_sum = @val.abs+other_value.abs
+      abs_sum==0 || (@val-other_value).abs/abs_sum <= epsilon
     end
 
     # Power of a quantity.
@@ -271,9 +285,9 @@ module Phys
     # Multiplication.
     # If the +other+ param is *not* Phys::Quantity,
     # +other+ is regarded as a dimensionless value.
+    # The values and units are multiplied respectively.
     # @param  [Object] other
     # @return [Phys::Quantity] a quantity
-    # both the values and units are multiplied respectively.
     # @raise  [Phys::UnitOperationError] if unit is not operable.
     #
     def *(other)
@@ -289,9 +303,9 @@ module Phys
     # Division.
     # If the +other+ param is *not* Phys::Quantity,
     # +other+ is regarded as a dimensionless value.
+    # The values and units are divided respectively.
     # @param  [Object] other
     # @return [Phys::Quantity] a quantity
-    # both the values and units are divided respectively.
     # @raise  [Phys::UnitOperationError] if unit is not operable.
     #
     def /(other)
@@ -307,9 +321,9 @@ module Phys
     # Division more correctly.
     # If the +other+ param is *not* Phys::Quantity,
     # +other+ is regarded as a dimensionless value.
+    # The values and units are divided respectively.
     # @param  [Object] other
     # @return [Phys::Quantity] a quantity
-    # both the values and units are divided respectively.
     # @raise  [Phys::UnitOperationError] if unit is not operable.
     #
     def quo(other)
@@ -422,7 +436,7 @@ module Phys
 
     # Conversion to Numeric.
     # @return [Numeric]
-    # @raise  [Phys::UnitConversionError] if the unit is non-dminensionless.
+    # @raise  [Phys::UnitConversionError] if the unit is *not* dimensionless.
     def to_numeric
       @unit.convert_to_numeric(@val)
     end
@@ -430,7 +444,7 @@ module Phys
 
     # Conversion to Float.
     # @return [Float]
-    # @raise  [Phys::UnitConversionError] if the unit is non-dminensionless.
+    # @raise  [Phys::UnitConversionError] if the unit is *not* dimensionless.
     def to_f
       to_numeric.to_f
     end
@@ -438,7 +452,7 @@ module Phys
 
     # Conversion to Integer.
     # @return [Integer]
-    # @raise  [Phys::UnitConversionError] if the unit is non-dminensionless.
+    # @raise  [Phys::UnitConversionError] if the unit is *not* dimensionless.
     def to_i
       to_numeric.to_i
     end
@@ -447,7 +461,7 @@ module Phys
 
     # Conversion to Rational.
     # @return [Rational]
-    # @raise  [Phys::UnitConversionError] if the unit is non-dminensionless.
+    # @raise  [Phys::UnitConversionError] if the unit is *not* dimensionless.
     def to_r
       to_numeric.to_r
     end
