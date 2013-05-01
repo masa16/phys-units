@@ -16,7 +16,8 @@ It contains:
   +unit+ is a instance of Phys::Unit class
   obtained by parsing a +expr+ string.
 
-See Documentation at [Rubygems Site](https://rubygems.org/gems/phys-units)
+See [Phys::Quantity Documentation](http://rubydoc.info/gems/phys-units/frames/Phys/Quantity)
+ at [Rubygems Site](https://rubygems.org/gems/phys-units)
 
 ## Installation
 
