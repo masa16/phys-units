@@ -58,7 +58,7 @@ module Phys
     # @raise  [Phys::UnitConversionError] if unit conversion is failed.
     #
     def initialize(value,expr=nil,unit=nil)
-      @val = value
+      @value = value
       expr = expr.to_s if Symbol===expr
       @expr = (expr=='') ? nil : expr
       @unit = unit
@@ -69,14 +69,18 @@ module Phys
       end
     end
 
-    # @return [Object] value of the quantity
-    attr_reader :val
-    alias value val
+    # Value of the quantity.
+    # Instance of classes with same arithmetic methods as Numric.
+    # @return [Object]
+    attr_reader :value
+    alias val value
 
-    # @return [String] unit expression
+    # Unit expression. Given as the second parameter of the Quantity constructor.
+    # @return [String]
     attr_reader :expr
 
-    # @return [Phys::Unit] Phys::Unit instance
+    # Unit of the quantity. Instance of Phys::Unit class.
+    # @return [Phys::Unit]
     attr_reader :unit
 
     # Conversion to a quantity in another unit.
@@ -102,7 +106,7 @@ module Phys
     # @raise  [Phys::UnitConversionError] if unit conversion is failed.
     #
     def +(other)
-      val = @val + @unit.convert_scale(other)
+      val = @value + @unit.convert_scale(other)
       self.class.new( val, @expr, @unit )
     end
 
@@ -117,14 +121,14 @@ module Phys
     # @raise  [Phys::UnitConversionError] if unit conversion is failed.
     #
     def -(other)
-      val = @val - @unit.convert_scale(other)
+      val = @value - @unit.convert_scale(other)
       self.class.new( val, @expr, @unit )
     end
 
     # Absolute. Returns a quantity in the same unit of +self+.
     # @return [Phys::Quantity]
     def abs
-      self.class.new( @val.abs, @expr, @unit )
+      self.class.new( @value.abs, @expr, @unit )
     end
 
     # Square. Returns a quantity in squared unit of +self+.
@@ -137,7 +141,7 @@ module Phys
     # than or equal to +self+ value, in the same unit of +self+.
     # @return [Phys::Quantity]
     def ceil
-      self.class.new( @val.ceil, @expr, @unit )
+      self.class.new( @value.ceil, @expr, @unit )
     end
 
     # Round. Rounds +self+ value to a given precision in decimal digits
@@ -145,7 +149,7 @@ module Phys
     # Returns a quantity with the rounded value in the same unit of +self+.
     # @return [Phys::Quantity]
     def round(ndigits=nil)
-      val = ndigits ? @val.round : @val.round(ndigits)
+      val = ndigits ? @value.round(ndigits) : @value.round
       self.class.new( val, @expr, @unit )
     end
 
@@ -153,27 +157,27 @@ module Phys
     # less than or equal to +self+ value, in the same unit of +self+.
     # @return [Phys::Quantity]
     def floor
-      self.class.new( @val.floor, @expr, @unit )
+      self.class.new( @value.floor, @expr, @unit )
     end
 
     # Truncate. Returns a quantity with the value truncated to an integer,
     # in the same unit of +self+.
     # @return [Phys::Quantity]
     def truncate
-      self.class.new( @val.truncate, @expr, @unit )
+      self.class.new( @value.truncate, @expr, @unit )
     end
 
     # Unary Plus. Returns +self+.
     # @return [Phys::Quantity]
     def +@
-      self.class.new(  @val, @expr, @unit )
+      self.class.new(  @value, @expr, @unit )
     end
 
     # Unary Minus. Returns a quantity with negative value
     # in the same unit of +self+.
     # @return [Phys::Quantity]
     def -@
-      self.class.new( -@val, @expr, @unit )
+      self.class.new( -@value, @expr, @unit )
     end
 
     # Comparison of quantities.
@@ -182,7 +186,7 @@ module Phys
     # @return [Integer]
     # @raise  [Phys::UnitConversionError] if unit conversion is failed.
     def <=> (other)
-      @val <=> @unit.convert(other)
+      @value <=> @unit.convert(other)
     end
 
     # Comparison. Returns +true+ if +self+ has the same value as +other+. 
@@ -191,7 +195,7 @@ module Phys
     # @return [Boolean]
     # @raise  [Phys::UnitConversionError] if unit conversion is failed.
     def  == (other)
-      @val  == @unit.convert(other)
+      @value  == @unit.convert(other)
     end
 
     # Comparison. Returns +true+ if +self+ is greather-than or equal-to +other+.
@@ -200,7 +204,7 @@ module Phys
     # @return [Boolean]
     # @raise  [Phys::UnitConversionError] if unit conversion is failed.
     def  >= (other)
-      @val  >= @unit.convert(other)
+      @value  >= @unit.convert(other)
     end
 
     # Comparison. Returns +true+ if +self+ is less-than or equal-to +other+.
@@ -209,7 +213,7 @@ module Phys
     # @return [Boolean]
     # @raise  [Phys::UnitConversionError] if unit conversion is failed.
     def  <= (other)
-      @val  <= @unit.convert(other)
+      @value  <= @unit.convert(other)
     end
 
     # Comparison. Returns +true+ if +self+ is less than +other+.
@@ -218,7 +222,7 @@ module Phys
     # @return [Boolean]
     # @raise  [Phys::UnitConversionError] if unit conversion is failed.
     def  <  (other)
-      @val  <  @unit.convert(other)
+      @value  <  @unit.convert(other)
     end
 
     # Comparison. Returns +true+ if +self+ is greater than +other+.
@@ -227,7 +231,7 @@ module Phys
     # @return [Boolean]
     # @raise  [Phys::UnitConversionError] if unit conversion is failed.
     def  >  (other)
-      @val  >  @unit.convert(other)
+      @value  >  @unit.convert(other)
     end
 
     # Closeness. Returns +true+ if difference between +self+ and +other+ is
@@ -239,8 +243,8 @@ module Phys
     # @raise  [Phys::UnitConversionError] if unit conversion is failed.
     def close_to(other,epsilon=Float::EPSILON)
       other_value = @unit.convert(other)
-      abs_sum = @val.abs+other_value.abs
-      abs_sum==0 || (@val-other_value).abs/abs_sum <= epsilon
+      abs_sum = @value.abs+other_value.abs
+      abs_sum==0 || (@value-other_value).abs/abs_sum <= epsilon
     end
 
     # Power of a quantity.
@@ -255,7 +259,7 @@ module Phys
       else
         expr = '('+@expr+')^'+n.to_s+''
       end
-      self.class.new( @val**n, expr, @unit**n )
+      self.class.new( @value**n, expr, @unit**n )
     end
 
     # (internally used method)
@@ -294,9 +298,9 @@ module Phys
       if Quantity===other
         a = [self.enclose_expr, other.enclose_expr]
         a.delete(nil)
-        self.class.new( @val*other.val, a.join(' '), @unit*other.unit )
+        self.class.new( @value*other.value, a.join(' '), @unit*other.unit )
       else
-        self.class.new( @val*other, @expr, @unit )
+        self.class.new( @value*other, @expr, @unit )
       end
     end
 
@@ -312,9 +316,9 @@ module Phys
       if Quantity===other
         a = [self.enclose_expr, other.enclose_expr_div]
         a.delete(nil)
-        self.class.new( @val/other.val, a.join, @unit/other.unit )
+        self.class.new( @value/other.value, a.join, @unit/other.unit )
       else
-        self.class.new( @val/other, @expr, @unit )
+        self.class.new( @value/other, @expr, @unit )
       end
     end
 
@@ -330,9 +334,9 @@ module Phys
       if Quantity===other
         a = [self.enclose_expr, other.enclose_expr_div]
         a.delete(nil)
-        self.class.new( @val.quo(other.val), a.join, @unit/other.unit )
+        self.class.new( @value.quo(other.value), a.join, @unit/other.unit )
       else
-        self.class.new( @val.quo(other), @expr, @unit )
+        self.class.new( @value.quo(other), @expr, @unit )
       end
     end
     alias fdiv quo
@@ -350,9 +354,9 @@ module Phys
     #
     def div(other)
       if Quantity===other
-        @val.div( @unit.convert(other) )
+        @value.div( @unit.convert(other) )
       else
-        self.class.new( @val.div(other), @expr, @unit )
+        self.class.new( @value.div(other), @expr, @unit )
       end
     end
 
@@ -369,9 +373,9 @@ module Phys
     #
     def remainder(other)  #:nodoc: used internally
       if Quantity===other
-        @val.remainder( @unit.convert(other) )
+        @value.remainder( @unit.convert(other) )
       else
-        self.class.new( @val.remainder(other), @expr, @unit )
+        self.class.new( @value.remainder(other), @expr, @unit )
       end
     end
 
@@ -388,9 +392,9 @@ module Phys
     #
     def %(other)
       if Quantity===other
-        @val % @unit.convert(other)
+        @value % @unit.convert(other)
       else
-        self.class.new( @val % other, @expr, @unit )
+        self.class.new( @value % other, @expr, @unit )
       end
     end
     alias modulo %
@@ -408,9 +412,9 @@ module Phys
     #
     def divmod(other)
       if Quantity===other
-        @val.divmod( @unit.convert(other) )
+        @value.divmod( @unit.convert(other) )
       else
-        d,m = @val.divmod(other)
+        d,m = @value.divmod(other)
         [ self.class.new( d, @expr, @unit ),
           self.class.new( m, @expr, @unit ) ]
       end
@@ -438,7 +442,7 @@ module Phys
     # @return [Numeric]
     # @raise  [Phys::UnitConversionError] if the unit is *not* dimensionless.
     def to_numeric
-      @unit.convert_to_numeric(@val)
+      @unit.convert_to_numeric(@value)
     end
     alias to_num to_numeric
 
@@ -475,7 +479,7 @@ module Phys
       else
         expr = ""
       end
-      self.class.to_s+"["+Unit::Utils.num_inspect(@val)+expr+"]"
+      self.class.to_s+"["+Unit::Utils.num_inspect(@value)+expr+"]"
     end
 
     # Inspect String.
@@ -486,7 +490,7 @@ module Phys
       else
         expr = ""
       end
-      "#<"+self.class.to_s+" "+Unit::Utils.num_inspect(@val)+expr+", "+@unit.inspect+">"
+      "#<"+self.class.to_s+" "+Unit::Utils.num_inspect(@value)+expr+", "+@unit.inspect+">"
     end
   end
 end
