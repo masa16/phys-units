@@ -1,6 +1,6 @@
 # Phys-Units
 
-GNU Units-compatible library for Ruby. 
+GNU Units-compatible library for Ruby.
 Former name is [Quanty](http://narray.rubyforge.org/quanty/quanty-en.html),
 the first Ruby units library released in 2001.
 
@@ -8,10 +8,10 @@ the first Ruby units library released in 2001.
 is the primary class of Phys-Units library, to be manipulated by users.
 It contains:
 
-* *Value* 
+* *Value*
   must be a class instance having arithmetic methods,
   but it is not necessary to be a Numeric.
-  This is a duck typing way. 
+  This is a duck typing way.
 * *Unit*
   is a instance of Phys::Unit class
   obtained by parsing a *expr* string.
@@ -40,6 +40,13 @@ Or install from source tree:
     Q[70,'tempF'] + Q[10,'tempC'] #=> Phys::Quantity[88,'tempF']
     Q[20,'tempC'].want('tempF')   #=> Phys::Quantity[68,'tempF']
     Math.cos(Q[60,'degree'].to_f) #=> 0.5
+
+    require 'phys/units/jp'
+    q = Phys::Quantity
+    q[1,"寸"].want("cm")    #=> Phys::Quantity[(1/0.33),"cm"]
+    q[1,"坪"].want("m^2")   #=> Phys::Quantity[(1/0.3025),"m^2"]
+    q[1,"升"].want("l")     #=> Phys::Quantity[(2401/1331),"l"]
+    q[1,"貫"].want("kg")    #=> Phys::Quantity[3.75,"kg"]
 
 ## Features
 

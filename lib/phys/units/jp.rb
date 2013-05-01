@@ -2,6 +2,7 @@
 require "phys/units"
 
 Phys::Unit.import_units <<EOL
+!utf8
 # Japanese Number units
 一-		1
 二-		2
@@ -164,4 +165,5 @@ Phys::Unit.import_units <<EOL
 両		10 匁		# = 37.5 g
 匁		momme		# = 3.75 g
 #
+!endutf8
 EOL
