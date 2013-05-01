@@ -36,14 +36,10 @@ keys.each do |k,u|
 
   if /\* ([\d.e+-]+)\s+\/ ([\d.e+-]+)/m =~ x
     factor = $1
-    secondarg = if s == ''
-                  ""
-                else
-                  ",#{s.inspect}"
-                end
+    s2 = (s=='') ? "" : ",#{s.inspect}"
     puts <<EOL
   describe Q[1,#{n.inspect}] do
-    it {should be_a_quantity_close_to Q[#{factor}#{secondarg}] }
+    it {should be_a_quantity_close_to Q[#{factor}#{s2}] }
   end
 EOL
     factor = factor.to_f
