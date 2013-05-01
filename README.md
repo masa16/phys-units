@@ -17,7 +17,7 @@ It contains:
   obtained by parsing a +expr+ string.
 
 See [Phys::Quantity Documentation](http://rubydoc.info/gems/phys-units/frames/Phys/Quantity)
- at [Rubygems Site](https://rubygems.org/gems/phys-units)
+for more details.
 
 ## Installation
 
