@@ -41,13 +41,6 @@ Or install from source tree:
     Q[20,'tempC'].want('tempF')   #=> Phys::Quantity[68,'tempF']
     Math.cos(Q[60,'degree'].to_f) #=> 0.5
 
-    require 'phys/units/jp'
-    q = Phys::Quantity
-    q[1,"寸"].want("cm")    #=> Phys::Quantity[(1/0.33),"cm"]
-    q[1,"坪"].want("m^2")   #=> Phys::Quantity[(1/0.3025),"m^2"]
-    q[1,"升"].want("l")     #=> Phys::Quantity[(2401/1331),"l"]
-    q[1,"貫"].want("kg")    #=> Phys::Quantity[3.75,"kg"]
-
 ## Features
 
 Phys-Units library is discriminated from many other units libraies for Ruby,
@@ -64,6 +57,7 @@ by the following features:
 * Conversion factors are held in Rational even defined
   in the decimal form such as `1.0e10'.
 * PI number has a dimension.
+* Japanese units enabled by require 'phys/units/jp'.
 
 ## Platforms tested
 
