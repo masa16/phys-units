@@ -13,8 +13,8 @@ It contains:
   but it is not necessary to be a Numeric.
   This is a duck typing way.
 * *Unit*
-  is a instance of Phys::Unit class
-  obtained by parsing a *expr* string.
+  is an instance of Phys::Unit class
+  obtained by parsing *expr* string.
 
 See [Phys::Quantity Documentation](http://rubydoc.info/gems/phys-units/frames/Phys/Quantity)
 for more details.
