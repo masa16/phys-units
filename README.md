@@ -48,12 +48,12 @@ by the following features:
 
 * Compatible with GNU Units except nonlinear units.
 * Provides 2331 units, 85 prefixes, including UTF-8 unit names.
-* Defines Units by reading GNU Units data,
+* Defines Units by reading GNU Units text data,
   unlike other libraries which define Units in Ruby code.
-* No addition or modification to Ruby standard classes by default,
+* No addition or modification to Ruby standard classes,
   avoiding conflict with other libraries.
 * Calculation of values is through Ruby Numeric arithmetic methods.
-  None of the Phys-Units lib's buisiness.
+  Phys-Units does not care it.
 * Conversion factors are internally held in Rational form even
   defined as the decimal form such as `1.0e10'.
 * PI number has a dimension.
