@@ -52,7 +52,6 @@ end
 
 ---- header ----
 
-# -*- coding: utf-8 -*-
 # parse.y, parse.rb
 #
 #   by Masahiro Tanaka <masa16.tanaka@gmail.com>
@@ -83,7 +82,7 @@ class Unit
     return Unit.new(str) if str.empty?
     @q = []
 
-    c = Unit.unit_chars
+    c = Unit.unit_exclude_chars
 
     while str.size > 0 do
       case str

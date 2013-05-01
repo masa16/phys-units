@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # phys/units/unit_class.rb
 #
@@ -86,7 +85,7 @@ module Phys
 
 #--
 
-      def unit_chars
+      def unit_exclude_chars
         '\\s*+\\/<=>()\\[\\]^{|}~\\\\'
       end
 

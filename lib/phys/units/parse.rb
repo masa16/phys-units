@@ -450,7 +450,6 @@ end
 ###### racc/parser.rb end
 
 
-# -*- coding: utf-8 -*-
 # parse.y, parse.rb
 #
 #   by Masahiro Tanaka <masa16.tanaka@gmail.com>
@@ -459,7 +458,7 @@ module Phys
 class Unit
 class Parse < Racc::Parser
 
-module_eval(<<'...end parse.y/module_eval...', 'parse.y', 63)
+module_eval(<<'...end parse.y/module_eval...', 'parse.y', 62)
 
   def build_num(ov,ud,pw)
     if ud.nil? && pw.nil?
@@ -483,7 +482,7 @@ module_eval(<<'...end parse.y/module_eval...', 'parse.y', 63)
     return Unit.new(str) if str.empty?
     @q = []
 
-    c = Unit.unit_chars
+    c = Unit.unit_exclude_chars
 
     while str.size > 0 do
       case str
