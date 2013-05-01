@@ -247,7 +247,7 @@ module Phys
       abs_sum==0 || (@value-other_value).abs/abs_sum <= epsilon
     end
 
-    # Power of a quantity.
+    # Exponentiation.
     # @param  [Numeric] n
     # @return [Phys::Quantity] a quantity in the +n+ -powered unit of +self+.
     # @raise  [Phys::UnitConversionError] if unit conversion is failed.
@@ -490,7 +490,7 @@ module Phys
       else
         expr = ""
       end
-      "#<"+self.class.to_s+" "+Unit::Utils.num_inspect(@value)+expr+", "+@unit.inspect+">"
+      self.class.to_s+"["+Unit::Utils.num_inspect(@value)+expr+"] "+@unit.inspect
     end
   end
 end
