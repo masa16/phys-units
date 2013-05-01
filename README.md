@@ -8,12 +8,12 @@ the first Ruby units library released in 2001.
 is the primary class of Phys-Units library, to be manipulated by users.
 It contains:
 
-* *Value* :
-  +value+ must be a class instance having arithmetic methods,
+* *Value* 
+  must be a class instance having arithmetic methods,
   but it is not necessary to be a Numeric.
   This is a duck typing way. 
-* *Unit* :
-  +unit+ is a instance of Phys::Unit class
+* *Unit*
+  is a instance of Phys::Unit class
   obtained by parsing a +expr+ string.
 
 See [Phys::Quantity Documentation](http://rubydoc.info/gems/phys-units/frames/Phys/Quantity)
