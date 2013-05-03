@@ -16,7 +16,7 @@ It contains:
   is an instance of Phys::Unit class
   obtained by parsing *expr* string.
 
-See [Phys::Quantity Documentation](http://rubydoc.info/gems/phys-units/frames/Phys/Quantity)
+See [Phys-Units Documentation](http://rubydoc.info/gems/phys-units/frames)
 for more details.
 
 ## Installation
