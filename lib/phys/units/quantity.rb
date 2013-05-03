@@ -10,9 +10,9 @@
 module Phys
 
   # alias to Phys::Quantity.new
-  def Quantity(*a)
-    Quantity.new(*a)
-  end
+  #def Quantity(*a)
+  #  Quantity.new(*a)
+  #end
 
   # Phys::Quantity is a class to represent physical quantities
   # with unit of measure.
@@ -189,7 +189,7 @@ module Phys
       @value <=> @unit.convert(other)
     end
 
-    # Comparison. Returns +true+ if +self+ has the same value as +other+.
+    # Equality. Returns +true+ if +self+ has the same value as +other+.
     # Before the comparison, it converts +other+ to the unit of +self+.
     # @param  [Phys::Quantity] other
     # @return [Boolean]

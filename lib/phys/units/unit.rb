@@ -11,9 +11,10 @@ module Phys
 
   # Phys::Unit is a class to represent Physical Unit of Measure.
   # It must have:
-  # * *Factor* of the unit. Conversion factor to its base units.
+  # * *Factor* of the unit. Conversion factor to +dimension+,
+  #   i.e., its base units.
   # * *Dimension* of the unit.
-  #   Dimension is a hash with base units and dimension values.
+  #   Dimension is a hash table with base units and dimension values.
   #   Example:
   #     Phys::Unit["N"].dimension #=> {"kg"=>1, "m"=>1, "s"=>-2}
   #== Usage
@@ -48,13 +49,15 @@ module Phys
     end
 
     # Initialize a new unit.
-    # @overload initialize(factor,dimension)
-    #   @param [Numeric] factor. Unit conversion factor.
-    #   @param [Hash] dimension. Dimension hash.
-    # @overload initialize(unit_expr)
-    #   @param [String] unit_expr. Unit string parsed later.
-    # @overload initialize(unit)
-    #   @param [Phys::Unit] unit. Use data of the unit.
+    # @overload initialize(factor,dimension=nil)
+    #   @param [Numeric] factor  Unit conversion factor.
+    #   @param [Hash] dimension  Dimension hash.
+    # @overload initialize(expr,name=nil)
+    #   @param [String] expr  Unit string to be parsed later.
+    #   @param [String] name  Name of this unit.
+    # @overload initialize(unit,name=nil)
+    #   @param [Phys::Unit] unit  Copy contents from the argument.
+    #   @param [String] name  Name of this unit.
     # @raise  [TypeError] if invalit arg types.
     #
     def initialize(arg,extr=nil)
