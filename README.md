@@ -16,7 +16,7 @@ It contains:
   is an instance of Phys::Unit class
   obtained by parsing *expr* string.
 
-See [Phys-Units Documentation](http://rubydoc.info/gems/phys-units/frames)
+See [Phys-Units Documentation](http://rubydoc.info/gems/phys-units/0.9.3/frames)
 for more details.
 
 ## Installation
@@ -40,6 +40,8 @@ Or install from source tree:
     Q[70,'tempF'] + Q[10,'tempC'] #=> Phys::Quantity[88,'tempF']
     Q[20,'tempC'].want('tempF')   #=> Phys::Quantity[68,'tempF']
     Math.cos(Q[60,'degree'].to_f) #=> 0.5
+
+    Phys::Unit["m/s"] === Q[1,'miles/hr'] #=> true
 
 ## Features
 

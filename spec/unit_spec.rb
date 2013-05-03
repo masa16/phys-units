@@ -173,6 +173,7 @@ describe "Create Units" do
     it {should_not be_dimensionless}
     it {should_not be_scalar}
     it {should be_operable}
+    it {should === Q[1,'miles/hr']}
   end
 
   describe U.parse('(m/s)**2') do
