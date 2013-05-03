@@ -723,7 +723,7 @@ module_eval(<<'.,.,', 'parse.y', 31)
 
 module_eval(<<'.,.,', 'parse.y', 35)
   def _reduce_10(val, _values, result)
-     result = Unit.rdiv(val[0],val[2]) 
+     result = val[0] / val[2] 
     result
   end
 .,.,

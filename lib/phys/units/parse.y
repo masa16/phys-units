@@ -33,7 +33,7 @@ rule
      ;
 
  numexpr: NUMBER
-        | numexpr '|' numexpr { result = Unit.rdiv(val[0],val[2]) }
+        | numexpr '|' numexpr { result = val[0] / val[2] }
         ;
 
  pexpr: '(' expr ')'          { result = val[1] }

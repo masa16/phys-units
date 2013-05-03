@@ -465,29 +465,6 @@ module Phys
       Unit.new(factor,dims)
     end
 
-    # Rational division of units.
-    # Both units must be operable.
-    # @param  [Phys::Unit, Numeric] x  other unit
-    # @return [Phys::Unit]
-    # @raise  [Phys::UnitError] if not operable.
-    def rdiv(x)
-      x = Unit.cast(x)
-      if scalar?
-        return x.inverse
-      elsif x.scalar?
-        return self
-      end
-      check_operable2(x)
-      dims = dimension_binop(x){|a,b| a-b}
-      factor = Rational(self.factor,x.factor)
-      Unit.new(factor,dims)
-    end
-
-    # @visibility private
-    def self.rdiv(x,y)
-      Unit.cast(x).rdiv(y)
-    end
-
     # Inverse of units.
     # This unit must be operable.
     # @param  [Phys::Unit, Numeric] unit
