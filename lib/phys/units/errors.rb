@@ -1,10 +1,5 @@
 module Phys
+  # Error in Unit handling
   class UnitError < StandardError
-  end
-  class UnitParseError < UnitError
-  end
-  class UnitConversionError < UnitError
-  end
-  class UnitOperationError < UnitError
   end
 end

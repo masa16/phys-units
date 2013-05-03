@@ -84,16 +84,16 @@ module Phys
           @dim = unit.dim
           @factor = unit.factor
           if @dim.nil? || @factor.nil?
-            raise UnitParseError,"parse error : #{unit.inspect}"
+            raise UnitError,"parse error : #{unit.inspect}"
           end
         when Numeric
           @factor = unit
           alloc_dim
         else
-          raise UnitParseError,"parse error : #{self.inspect}"
+          raise UnitError,"parse error : #{self.inspect}"
         end
       else
-        raise UnitParseError,"undefined unit?: #{self.inspect}"
+        raise UnitError,"undefined unit?: #{self.inspect}"
       end
     end
 
@@ -164,13 +164,13 @@ module Phys
 
     def assert_dimensionless
       if !dimensionless?
-        raise UnitConversionError,"Not dimensionless: #{self.inspect}"
+        raise UnitError,"Not dimensionless: #{self.inspect}"
       end
     end
 
     def assert_same_dimension(x)
       if !same_dimension?(x)
-        raise UnitConversionError,"Different dimension: #{self.inspect} and #{x.inspect}"
+        raise UnitError,"Different dimension: #{self.inspect} and #{x.inspect}"
       end
     end
 
@@ -223,13 +223,13 @@ module Phys
 
     def check_operable
       if !operable?
-        raise UnitOperationError,"non-operable for #{inspect}"
+        raise UnitError,"non-operable for #{inspect}"
       end
     end
 
     def check_operable2(x)
       if !(operable? && x.operable?)
-        raise UnitOperationError,"non-operable: #{inspect} and #{x.inspect}"
+        raise UnitError,"non-operable: #{inspect} and #{x.inspect}"
       end
     end
 
@@ -241,7 +241,7 @@ module Phys
           keys = x.keys | y.keys
           dims = {}
           dims.default = 0
-          keys.each do |k| 
+          keys.each do |k|
             v = yield( x[k]||0, y[k]||0 )
             dims[k] = v if v!=0
           end
@@ -361,7 +361,7 @@ module Phys
 
     def ==(x)
       use_dimension
-      @factor == x.factor && @dim == x.dim && 
+      @factor == x.factor && @dim == x.dim &&
         offset == x.offset && dimension_value == x.dimension_value
     end
 
@@ -436,7 +436,7 @@ module Phys
 
     def convert_scale(quantity)
       if Quantity===quantity
-        assert_same_dimension(quantity.unit)        
+        assert_same_dimension(quantity.unit)
         v = quantity.value * quantity.unit.conversion_factor
         v = v / self.conversion_factor
       else

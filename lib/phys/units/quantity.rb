@@ -20,7 +20,7 @@ module Phys
   # * *Value* of the quantity.
   #   +value+ must be a class instance having arithmetic methods,
   #   but it is not necessary to be a Numeric.
-  #   This is a duck typing way. 
+  #   This is a duck typing way.
   # * *Unit* of the quantity.
   #   +unit+ is a instance of Phys::Unit class
   #   obtained by parsing a +expr+ string.
@@ -43,7 +43,7 @@ module Phys
       # @param  [String] expr  a string of unit expression.
       #         If +expr+ is not supplied, it becomes dimeinsionless.
       # @return [Phys::Quantity]
-      # @raise  [Phys::UnitConversionError] if unit conversion is failed.
+      # @raise  [Phys::UnitError] if unit conversion is failed.
       def [](value,expr=nil)
         self.new(value,expr)
       end
@@ -55,7 +55,7 @@ module Phys
     # @param  [String] expr  a string of unit expression.
     #         If +expr+ is not supplied, it becomes dimeinsionless.
     # @param  [Phys::Unit] unit  (optional)
-    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
+    # @raise  [Phys::UnitError] if unit conversion is failed.
     #
     def initialize(value,expr=nil,unit=nil)
       @value = value
@@ -86,7 +86,7 @@ module Phys
     # Conversion to a quantity in another unit.
     # @param  [String] expr unit expression.
     # @return [Phys::Quantity] quantity in the unit of +expr+.
-    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
+    # @raise  [Phys::UnitError] if unit conversion is failed.
     #
     def want(expr)
       unit = Unit.parse(expr)
@@ -103,7 +103,7 @@ module Phys
     #   both params must be dimensionless.
     # @param  [Object] other
     # @return [Phys::Quantity] a quantity in the unit of +self+.
-    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
+    # @raise  [Phys::UnitError] if unit conversion is failed.
     #
     def +(other)
       val = @value + @unit.convert_scale(other)
@@ -118,7 +118,7 @@ module Phys
     #   both params must be dimensionless.
     # @param  [Object] other
     # @return [Phys::Quantity] a quantity in the unit of +self+.
-    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
+    # @raise  [Phys::UnitError] if unit conversion is failed.
     #
     def -(other)
       val = @value - @unit.convert_scale(other)
@@ -184,16 +184,16 @@ module Phys
     # Before the comparison, it converts +other+ to the unit of +self+.
     # @param  [Phys::Quantity] other
     # @return [Integer]
-    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
+    # @raise  [Phys::UnitError] if unit conversion is failed.
     def <=> (other)
       @value <=> @unit.convert(other)
     end
 
-    # Comparison. Returns +true+ if +self+ has the same value as +other+. 
+    # Comparison. Returns +true+ if +self+ has the same value as +other+.
     # Before the comparison, it converts +other+ to the unit of +self+.
     # @param  [Phys::Quantity] other
     # @return [Boolean]
-    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
+    # @raise  [Phys::UnitError] if unit conversion is failed.
     def  == (other)
       @value  == @unit.convert(other)
     end
@@ -202,7 +202,7 @@ module Phys
     # Before the comparison, it converts +other+ to the unit of +self+.
     # @param  [Phys::Quantity] other
     # @return [Boolean]
-    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
+    # @raise  [Phys::UnitError] if unit conversion is failed.
     def  >= (other)
       @value  >= @unit.convert(other)
     end
@@ -211,7 +211,7 @@ module Phys
     # Before the comparison, it converts +other+ to the unit of +self+.
     # @param  [Phys::Quantity] other
     # @return [Boolean]
-    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
+    # @raise  [Phys::UnitError] if unit conversion is failed.
     def  <= (other)
       @value  <= @unit.convert(other)
     end
@@ -220,7 +220,7 @@ module Phys
     # Before the comparison, it converts +other+ to the unit of +self+.
     # @param  [Phys::Quantity] other
     # @return [Boolean]
-    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
+    # @raise  [Phys::UnitError] if unit conversion is failed.
     def  <  (other)
       @value  <  @unit.convert(other)
     end
@@ -229,7 +229,7 @@ module Phys
     # Before the comparison, it converts +other+ to the unit of +self+.
     # @param  [Phys::Quantity] other
     # @return [Boolean]
-    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
+    # @raise  [Phys::UnitError] if unit conversion is failed.
     def  >  (other)
       @value  >  @unit.convert(other)
     end
@@ -240,7 +240,7 @@ module Phys
     # @param  [Phys::Quantity] other
     # @param  [Numeric] epsilon
     # @return [Boolean]
-    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
+    # @raise  [Phys::UnitError] if unit conversion is failed.
     def close_to(other,epsilon=Float::EPSILON)
       other_value = @unit.convert(other)
       abs_sum = @value.abs+other_value.abs
@@ -250,7 +250,7 @@ module Phys
     # Exponentiation.
     # @param  [Numeric] n
     # @return [Phys::Quantity] a quantity in the +n+ -powered unit of +self+.
-    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
+    # @raise  [Phys::UnitError] if unit conversion is failed.
     def **(n)
       if @expr.nil?
         expr = nil
@@ -273,7 +273,7 @@ module Phys
         @expr
       end
     end
-    
+
     # (internally used method)
     # @private
     # @return [String]
@@ -292,7 +292,7 @@ module Phys
     # The values and units are multiplied respectively.
     # @param  [Object] other
     # @return [Phys::Quantity] a quantity
-    # @raise  [Phys::UnitOperationError] if unit is not operable.
+    # @raise  [Phys::UnitError] if unit is not operable.
     #
     def *(other)
       if Quantity===other
@@ -310,7 +310,7 @@ module Phys
     # The values and units are divided respectively.
     # @param  [Object] other
     # @return [Phys::Quantity] a quantity
-    # @raise  [Phys::UnitOperationError] if unit is not operable.
+    # @raise  [Phys::UnitError] if unit is not operable.
     #
     def /(other)
       if Quantity===other
@@ -328,7 +328,7 @@ module Phys
     # The values and units are divided respectively.
     # @param  [Object] other
     # @return [Phys::Quantity] a quantity
-    # @raise  [Phys::UnitOperationError] if unit is not operable.
+    # @raise  [Phys::UnitError] if unit is not operable.
     #
     def quo(other)
       if Quantity===other
@@ -350,7 +350,7 @@ module Phys
     #   and returns +div+ of Phys::Quantity.
     # @param  [Object] other
     # @return [Object] div
-    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
+    # @raise  [Phys::UnitError] if unit conversion is failed.
     #
     def div(other)
       if Quantity===other
@@ -369,7 +369,7 @@ module Phys
     #   and returns +remainder+ of Phys::Quantity.
     # @param  [Object] other
     # @return [Object] remainder
-    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
+    # @raise  [Phys::UnitError] if unit conversion is failed.
     #
     def remainder(other)  #:nodoc: used internally
       if Quantity===other
@@ -388,7 +388,7 @@ module Phys
     #   and returns +modulo+ of Phys::Quantity.
     # @param  [Object] other
     # @return [Object] modulo
-    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
+    # @raise  [Phys::UnitError] if unit conversion is failed.
     #
     def %(other)
       if Quantity===other
@@ -408,7 +408,7 @@ module Phys
     #   and returns +divmod+ of Phys::Quantity.
     # @param  [Object] other
     # @return [Array] result of +divmod+, an array of [quotient, modulo].
-    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
+    # @raise  [Phys::UnitError] if unit conversion is failed.
     #
     def divmod(other)
       if Quantity===other
@@ -428,7 +428,7 @@ module Phys
     # Conversion to base unit.
     # Returns the quantity converted to a base unit.
     # @return [Phys::Quantity] a quantity in the base unit.
-    # @raise  [Phys::UnitConversionError] if unit conversion is failed.
+    # @raise  [Phys::UnitError] if unit conversion is failed.
     def to_base_unit
       unit = @unit.base_unit
       val  = unit.convert(self)
@@ -440,7 +440,7 @@ module Phys
 
     # Conversion to Numeric.
     # @return [Numeric]
-    # @raise  [Phys::UnitConversionError] if the unit is *not* dimensionless.
+    # @raise  [Phys::UnitError] if the unit is *not* dimensionless.
     def to_numeric
       @unit.convert_to_numeric(@value)
     end
@@ -448,7 +448,7 @@ module Phys
 
     # Conversion to Float.
     # @return [Float]
-    # @raise  [Phys::UnitConversionError] if the unit is *not* dimensionless.
+    # @raise  [Phys::UnitError] if the unit is *not* dimensionless.
     def to_f
       to_numeric.to_f
     end
@@ -456,7 +456,7 @@ module Phys
 
     # Conversion to Integer.
     # @return [Integer]
-    # @raise  [Phys::UnitConversionError] if the unit is *not* dimensionless.
+    # @raise  [Phys::UnitError] if the unit is *not* dimensionless.
     def to_i
       to_numeric.to_i
     end
@@ -465,7 +465,7 @@ module Phys
 
     # Conversion to Rational.
     # @return [Rational]
-    # @raise  [Phys::UnitConversionError] if the unit is *not* dimensionless.
+    # @raise  [Phys::UnitError] if the unit is *not* dimensionless.
     def to_r
       to_numeric.to_r
     end

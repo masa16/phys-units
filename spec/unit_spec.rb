@@ -63,7 +63,7 @@ describe "Create Units" do
     it {should be_operable}
   end
 
-  describe U[:m] do 
+  describe U[:m] do
     it {should == U["m"]}
   end
 
@@ -227,7 +227,7 @@ describe "Create Units" do
 
   describe "temperature unit" do
     it "operation error" do
-      expect {U['tempC']*2}.to raise_error(Phys::UnitOperationError)
+      expect {U['tempC']*2}.to raise_error(Phys::UnitError)
     end
   end
 
