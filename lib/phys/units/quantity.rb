@@ -193,9 +193,15 @@ module Phys
     # Before the comparison, it converts +other+ to the unit of +self+.
     # @param  [Phys::Quantity] other
     # @return [Boolean]
-    # @raise  [Phys::UnitError] if unit conversion is failed.
-    def  == (other)
-      @value  == @unit.convert(other)
+    def == (other)
+      if Quantity===other
+        @unit.conformable?(other.unit) &&
+          @value == @unit.convert(other)
+      elsif @unit.dimensionless?
+        @unit.convert_value_to_base_unit(@value) == other
+      else
+        false
+      end
     end
 
     # Comparison. Returns +true+ if +self+ is greather-than or equal-to +other+.
@@ -203,8 +209,8 @@ module Phys
     # @param  [Phys::Quantity] other
     # @return [Boolean]
     # @raise  [Phys::UnitError] if unit conversion is failed.
-    def  >= (other)
-      @value  >= @unit.convert(other)
+    def >= (other)
+      @value >= @unit.convert(other)
     end
 
     # Comparison. Returns +true+ if +self+ is less-than or equal-to +other+.
@@ -212,8 +218,8 @@ module Phys
     # @param  [Phys::Quantity] other
     # @return [Boolean]
     # @raise  [Phys::UnitError] if unit conversion is failed.
-    def  <= (other)
-      @value  <= @unit.convert(other)
+    def <= (other)
+      @value <= @unit.convert(other)
     end
 
     # Comparison. Returns +true+ if +self+ is less than +other+.
@@ -221,8 +227,8 @@ module Phys
     # @param  [Phys::Quantity] other
     # @return [Boolean]
     # @raise  [Phys::UnitError] if unit conversion is failed.
-    def  <  (other)
-      @value  <  @unit.convert(other)
+    def < (other)
+      @value < @unit.convert(other)
     end
 
     # Comparison. Returns +true+ if +self+ is greater than +other+.
@@ -230,8 +236,8 @@ module Phys
     # @param  [Phys::Quantity] other
     # @return [Boolean]
     # @raise  [Phys::UnitError] if unit conversion is failed.
-    def  >  (other)
-      @value  >  @unit.convert(other)
+    def > (other)
+      @value > @unit.convert(other)
     end
 
     # Closeness. Returns +true+ if difference between +self+ and +other+ is
