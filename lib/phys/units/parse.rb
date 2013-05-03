@@ -456,9 +456,10 @@ end
 #
 module Phys
 class Unit
+# @visibility private
 class Parse < Racc::Parser
 
-module_eval(<<'...end parse.y/module_eval...', 'parse.y', 62)
+module_eval(<<'...end parse.y/module_eval...', 'parse.y', 63)
 
   def build_num(ov,ud,pw)
     if ud.nil? && pw.nil?
@@ -479,7 +480,7 @@ module_eval(<<'...end parse.y/module_eval...', 'parse.y', 62)
   end
 
   def parse( str )
-    return Unit.new(str) if str.empty?
+    return Unit.new(1) if str.empty?
     @q = []
 
     c = Unit.unit_exclude_chars
@@ -676,7 +677,7 @@ Racc_debug_parser = false
 
 module_eval(<<'.,.,', 'parse.y', 23)
   def _reduce_2(val, _values, result)
-     result = Unit.inv(val[1]) 
+     result = Unit.inverse(val[1]) 
     result
   end
 .,.,

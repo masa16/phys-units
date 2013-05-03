@@ -4526,7 +4526,7 @@ pfund                   500 g
 #
 # If you would like to help expand this section and understand
 # cyrillic transliteration, let me know.  These measures are meant to
-# reflect common usage, e.g. in translated literature.  
+# reflect common usage, e.g. in translated literature.
 #
 
 dessiatine              2400 sazhen^2    # Land measure
@@ -5294,10 +5294,9 @@ EOL
 
 module Phys
   # define pi
-  Unit.define("pi","!dimensionless",Math::PI)
+  BaseUnit.define("pi","!dimensionless",Math::PI)
 
   # define tempC and tempK
-  #Phys::OffsetUnit.import_temperature
   zero_degc = Unit["stdtemp"].conversion_factor
   OffsetUnit.define( "tempC", Unit["K"], zero_degc )
   OffsetUnit.define( "tempF", Unit["K"]*Rational(5,9), zero_degc-32*Rational(5,9) )

@@ -263,7 +263,7 @@ module Phys
     end
 
     # (internally used method)
-    # @private
+    # @visibility private
     # @return [String]
     def enclose_expr     #:nodoc: used internally
       return nil if @expr.nil?
@@ -275,7 +275,7 @@ module Phys
     end
 
     # (internally used method)
-    # @private
+    # @visibility private
     # @return [String]
     def enclose_expr_div    #:nodoc: used internally
       return nil if @expr.nil?
@@ -442,7 +442,7 @@ module Phys
     # @return [Numeric]
     # @raise  [Phys::UnitError] if the unit is *not* dimensionless.
     def to_numeric
-      @unit.convert_to_numeric(@value)
+      @unit.to_numeric * @value
     end
     alias to_num to_numeric
 

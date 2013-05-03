@@ -13,11 +13,15 @@ module Phys
 
     class << self
 
+      # @visibility private
       def debug
         false
       end
 
-      def define(name,expr,v=nil)
+      # Define New Unit.  Expression is not parsed in this method.
+      # @param [String] name Name of this unit.
+      # @param [String] expr Expression.
+      def define(name,expr)
         if !(String===name)
           raise TypeError,"unit name should be string : #{name.inspect}"
         end
@@ -26,37 +30,47 @@ module Phys
           if PREFIX[name]
             warn "prefix definition is overwritten: #{name}" if debug
           end
-          PREFIX[name] = self.new(name,expr)
+          PREFIX[name] = self.new(expr,name)
         else
           if LIST[name]
             warn "unit definition is overwritten: #{name}" if debug
           end
           if expr.kind_of?(String) && /^!/ =~ expr
             dimless = (expr == "!dimensionless")
-            LIST[name] = BaseUnit.new(name,dimless,v)
+            LIST[name] = BaseUnit.new(name,dimless)
           else
-            LIST[name] = self.new(name,expr,v)
+            LIST[name] = self.new(expr,name)
           end
         end
       end
 
+
+      # Force argument to be Phys::Unit.
+      # @return [Phys::Unit]
       def cast(x)
         if x.kind_of?(Unit)
           x
         else
-          Unit.new(x) 
+          Unit.new(x)
         end
       end
 
+      # Used in Parser.
+      # @visibility private
       def word(x)
         find_unit(x) or raise UnitError, "Undefined unit: #{x.inspect}"
-        #find_unit(x) || define(x,nil)
       end
 
+      # Searches a registered unit and then Parse as a unit string
+      # if not registered.
+      # @return [Phys::Unit]
       def parse(x)
         find_unit(x) || Unit.cast(Parse.new.parse(x))
       end
+      alias [] parse
 
+      # Searches a registered unit.
+      # @return [Phys::Unit, NilClass]
       def find_unit(x)
         if Numeric===x
           Unit.new(x)
@@ -68,13 +82,13 @@ module Phys
         end
       end
 
-      alias [] find_unit
-
+      # @visibility private
       def unit_stem(x)
         ( /(.{2,}(?:s|z|ch))es$/ =~ x && LIST[$1] ) ||
           ( /(.{2,})s$/ =~ x && LIST[$1] )
       end
 
+      # @visibility private
       def find_prefix(x)
         Unit.prefix_regex =~ x
         pre,post = $1,$2
@@ -85,10 +99,12 @@ module Phys
 
 #--
 
+      # @visibility private
       def unit_exclude_chars
         '\\s*+\\/<=>()\\[\\]^{|}~\\\\'
       end
 
+      # @visibility private
       def control_units_dat(var,skip,line)
         case line
         when /!\s*end(\w+)/
@@ -113,7 +129,10 @@ module Phys
         #puts "skip=#{skip.inspect} var=#{var.inspect}"
       end
 
-      def import_units(data=nil,locale=nil)
+      # Import Units.dat from text.
+      # @param [String] data Text string of Units.dat.
+      # @param [String] locale (optional) Set "en_GB" for UK units.
+      def import_units(data,locale=nil)
         str = ""
         locale ||= ENV['LC_ALL'] || ENV['LANG']
         if /^(\w+)\./ =~ locale

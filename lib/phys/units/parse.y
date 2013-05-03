@@ -21,7 +21,7 @@ class Parse
 rule
 
  target:  expr
-       |  DIV list { result = Unit.inv(val[1]) }
+       |  DIV list { result = Unit.inverse(val[1]) }
        ;
 
  expr: list
@@ -30,10 +30,10 @@ rule
      | expr '-' expr    { result = val[0] - val[2] }
      | expr '*' expr    { result = val[0] * val[2] }
      | expr DIV expr    { result = val[0] / val[2] }
-     ; 
+     ;
 
  numexpr: NUMBER
-        | numexpr '|' numexpr { result = Unit.rdiv(val[0],val[2]) } 
+        | numexpr '|' numexpr { result = Unit.rdiv(val[0],val[2]) }
         ;
 
  pexpr: '(' expr ')'          { result = val[1] }
@@ -58,6 +58,7 @@ end
 #
 module Phys
 class Unit
+# @visibility private
 ---- inner ----
 
   def build_num(ov,ud,pw)
@@ -79,7 +80,7 @@ class Unit
   end
 
   def parse( str )
-    return Unit.new(str) if str.empty?
+    return Unit.new(1) if str.empty?
     @q = []
 
     c = Unit.unit_exclude_chars

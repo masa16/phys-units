@@ -9,6 +9,7 @@
 
 module Phys
   class Unit
+    # @visibility private
     module Utils
       module_function
 
@@ -75,12 +76,12 @@ module Phys
           end
           ud,nd = n_trail_zero(d)
           if nd > 3
-            return Rational(n,ud).inspect + 
+            return Rational(n,ud).inspect +
               ("*%.0e"%10**(-nd))
           end
           un,nn = n_trail_zero(n)
           if nn > 3
-            return Rational(un,d).inspect + 
+            return Rational(un,d).inspect +
               ("*%.0e"%10**(nn))
           end
         end
