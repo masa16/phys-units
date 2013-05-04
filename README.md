@@ -4,21 +4,6 @@ GNU Units-compatible library for Ruby.
 Former name is [Quanty](http://narray.rubyforge.org/quanty/quanty-en.html),
 the first Ruby units library released in 2001.
 
-## Phys::Quantity
-is the primary class of Phys-Units library, to be manipulated by users.
-It contains:
-
-* *Value*
-  must be a class instance having arithmetic methods,
-  but it is not necessary to be a Numeric.
-  This is a duck typing way.
-* *Unit*
-  is an instance of Phys::Unit class
-  obtained by parsing *expr* string.
-
-See [Phys-Units Documentation](http://rubydoc.info/gems/phys-units/0.9.3/frames)
-for more details.
-
 ## Installation
 
 Install from gem as:
@@ -29,10 +14,49 @@ Or install from source tree:
 
     $ ruby setup.rb
 
-## Usage
+## Overview
 
-    require 'phys/units'
+### Phys::Quantity
+is the primary class of Phys-Units library, to be manipulated by users.
+It contains *Value* and *Unit*.
+
+* *Value*
+  must be a class instance having arithmetic methods,
+  but it is not necessary to be a Numeric.
+  This is a duck typing way.
+
+        Phys::Quantity[2.5,"miles"].value  #=> 2.5
+
+* *Unit*
+  is an instance of Phys::Unit class obtained by parsing *expr* string.
+
+        Phys::Quantity[2.5,"miles"].unit   #=> #<Phys::Unit 1609.344,{"m"=>1},@expr="5280 ft">
+
+### Phys::Unit
+is a class to represent Physical Units of measurement.
+Used in the Phys::Quantity class.
+It must have:
+
+* *Factor* of the unit. Scaling factor to its base unit.
+  Example:
+
+        Phys::Unit["km"].factor    #=> 1000
+
+* *Dimension* of the unit.
+  Dimension is a hash table with base units and its dimensions.
+  Example:
+
+        Phys::Unit["N"].dimension  #=> {"kg"=>1, "m"=>1, "s"=>-2}
+
+See [Phys-Units Documentation](http://rubydoc.info/gems/phys-units/0.9.3/frames)
+for more details.
+
+### Examples
+
+    require "phys/units"
     Q = Phys::Quantity
+    U = Phys::Unit
+
     Q[1.23,'km'] + Q[4.56,'m']    #=> Phys::Quantity[1.23456,'km']
     Q[123,'mile'] / Q[2,'hr']     #=> Phys::Quantity[61,'mile/hr']
     Q[61,'miles/hr'].want('m/s')  #=> Phys::Quantity[27.26944,'m/s']
@@ -41,11 +65,22 @@ Or install from source tree:
     Q[20,'tempC'].want('tempF')   #=> Phys::Quantity[68,'tempF']
     Math.cos(Q[60,'degree'].to_f) #=> 0.5
 
-    Phys::Unit["m/s"] === Q[1,'miles/hr'] #=> true
+    U["m/s"] === Q[1,'miles/hr']  #=> true
+
+    case Q[1,"miles/hr"]
+    when U["LENGTH"]
+      puts "length"
+    when U["TIME"]
+      puts "time"
+    when U["VELOCITY"]
+      puts "velocity"
+    else
+      puts "other"
+    end                    #=> "velocity"
 
 ## Features
 
-Phys-Units library is discriminated from many other units libraies for Ruby,
+Phys-Units library is discriminated from many other units libraries for Ruby,
 by the following features:
 
 * Compatible with GNU Units except nonlinear units.

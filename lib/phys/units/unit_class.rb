@@ -165,8 +165,7 @@ module Phys
           end
 
           if /^([^\s()\[\]{}!*|\/^#]+)\s+([^#]+)/ =~ str
-            name,repr = $1,$2.strip
-            Unit.define(name,repr)
+            Unit.define($1,$2.strip)
           elsif !str.strip.empty?
             puts "unrecognized definition: '#{str}'" if debug
           end

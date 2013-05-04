@@ -9,33 +9,37 @@
 
 module Phys
 
-  # Phys::Unit is a class to represent Physical Unit of Measure.
+  # Phys::Unit is a class to represent Physical Units of measurement.
+  # Used in the Phys::Quantity class.
   # It must have:
-  # * *Factor* of the unit. Conversion factor to +dimension+,
-  #   i.e., its base units.
+  # * *Factor* of the unit. Scale factor to its base unit.
+  #     Phys::Unit["km"].factor #=> 1000
   # * *Dimension* of the unit.
-  #   Dimension is a hash table with base units and dimension values.
-  #   Example:
+  #   Dimension is a hash table with base units and its dimensions.
   #     Phys::Unit["N"].dimension #=> {"kg"=>1, "m"=>1, "s"=>-2}
-  #== Usage
-  #   require "phys/units"
-  #   Q = Phys::Quantity
-  #   U = Phys::Unit
+  #== Examples
+  #  require "phys/units"
+  #  Q = Phys::Quantity
+  #  U = Phys::Unit
   #
-  #   U["miles"] / U["hr"]   #=> #<Phys::Unit 0.44704,{"m"=>1, "s"=>-1}>
-  #   U["hr"] + U["30 min"]  #=> #<Phys::Unit 5400,{"s"=>1}>
-  #   U["(m/s)"]**2          #=> #<Phys::Unit 1,{"m"=>2, "s"=>-2}>
+  #  U["miles"] / U["hr"]         #=> #<Phys::Unit 0.44704,{"m"=>1, "s"=>-1}>
+  #  U["hr"] + U["30 min"]        #=> #<Phys::Unit 5400,{"s"=>1}>
+  #  U["(m/s)"]**2                #=> #<Phys::Unit 1,{"m"=>2, "s"=>-2}>
+  #  U["m/s"] === Q[1,'miles/hr'] #=> true
   #
-  #   case Q[1,"miles/hr"]
-  #   when U["m"]
-  #     "length"
-  #   when U["s"]
-  #     "time"
-  #   when U["m/s"]
-  #     "velocity"
-  #   else
-  #     "other"
-  #   end                    #=> "velocity"
+  #  case Q[1,"miles/hr"]
+  #  when U["m"]
+  #    "length"
+  #  when U["s"]
+  #    "time"
+  #  when U["m/s"]
+  #    "velocity"
+  #  else
+  #    "other"
+  #  end                    #=> "velocity"
+  #
+  # @see Quantity
+  #
   class Unit
 
     # @visibility private
@@ -50,7 +54,7 @@ module Phys
 
     # Initialize a new unit.
     # @overload initialize(factor,dimension=nil)
-    #   @param [Numeric] factor  Unit conversion factor.
+    #   @param [Numeric] factor  Unit scale factor.
     #   @param [Hash] dimension  Dimension hash.
     # @overload initialize(expr,name=nil)
     #   @param [String] expr  Unit string to be parsed later.
@@ -58,7 +62,7 @@ module Phys
     # @overload initialize(unit,name=nil)
     #   @param [Phys::Unit] unit  Copy contents from the argument.
     #   @param [String] name  Name of this unit.
-    # @raise  [TypeError] if invalit arg types.
+    # @raise  [TypeError] if invalid arg types.
     #
     def initialize(arg,extr=nil)
       case arg
@@ -97,16 +101,21 @@ module Phys
     end
     alias dim dimension
 
-    # Conversion factor except the dimension-value.
+    # Scale factor excluding the dimension-value.
     # @return [Numeric]
+    # @example
+    #   Phys::Unit["deg"].dimension         #=> {"pi"=>1, "radian"=>1}
+    #   Phys::Unit["deg"].factor            #=> (1/180)
+    #   Phys::Unit["deg"].conversion_factor #=> 0.017453292519943295
+    # @see #conversion_factor
     def factor
       use_dimension
       @factor
     end
 
-    # Dimension value. Returns PI number for pi dimension,
-    # otherwise returns one. see BaseUnit.
+    # Dimension value. Always returns 1 unless BaseUnit.
     # @return [Numeric]
+    # @see BaseUnit#dimension_value
     def dimension_value
       1
     end
@@ -154,7 +163,10 @@ module Phys
 
     # Inspect string.
     # @return [String]
+    # @example
+    #   Phys::Unit["N"].inspect #=> '#<Phys::Unit 1,{"kg"=>1, "m"=>1, "s"=>-2},@expr="newton">'
     def inspect
+      use_dimension
       a = [Utils.num_inspect(@factor), @dim.inspect]
       #a << "@name="+@name.inspect if @name
       a << "@expr="+@expr.inspect if @expr
@@ -167,8 +179,10 @@ module Phys
       "#<#{self.class} #{s}>"
     end
 
-    # Make unit string from dimension.
+    # Make a string of this unit expressed in base units.
     # @return [String]
+    # @example
+    #   Phys::Unit["psi"].string_form #=> "(8896443230521/129032)*1e-04 kg m^-1 s^-2"
     def unit_string
       use_dimension
       a = []
@@ -184,8 +198,13 @@ module Phys
     end
     alias string_form unit_string
 
-    # Conversion Factor to base unit.
+    # Conversion Factor to base unit, including dimension-value.
     # @return [Numeric]
+    # @example
+    #   Phys::Unit["deg"].dimension         #=> {"pi"=>1, "radian"=>1}
+    #   Phys::Unit["deg"].factor            #=> (1/180)
+    #   Phys::Unit["deg"].conversion_factor #=> 0.017453292519943295
+    # @see #factor
     def conversion_factor
       use_dimension
       f = @factor
@@ -202,7 +221,7 @@ module Phys
 
     # Returns true if scalar unit.
     # *Scalar* means the unit does not have any dimension
-    # including dimensionless-dimension, and its factor is one.
+    # including dimensionless-units, and its factor is one.
     # @return [Boolean]
     def scalar?
       use_dimension
@@ -314,7 +333,7 @@ module Phys
     alias to_num to_numeric
 
 
-    # Returns Base Unit excluding dimensionless-dimension.
+    # Returns Base Unit excluding dimensionless-units.
     # @return [Phys::Unit]
     def base_unit
       Unit.new(1,dimensionless_deleted)
@@ -367,7 +386,7 @@ module Phys
           x.dup
         end
       else
-        raise "dimensin not defined"
+        raise "dimension not defined"
       end
     end
 
@@ -384,7 +403,7 @@ module Phys
         end
         dims
       else
-        raise "dimensin not defined"
+        raise "dimension not defined"
       end
     end
 
@@ -525,8 +544,9 @@ module Phys
   end # Unit
 
 
-  # BaseUnit is a class to represent units defined by "!" in unit.dat
-  # including SI units.
+  # BaseUnit is a class to represent units defined by "!"
+  # in the data form of GNU units.
+  # It includes SI units and dimensinless units such as radian.
   class BaseUnit < Unit
 
     def self.define(name,expr,dimval=nil)
@@ -575,7 +595,7 @@ module Phys
 
 
   # OffsetUnit is a class to represent units with offset value.
-  # Focused on Farenheight/Celsius temperature.
+  # Allows Farenheight/Celsius temperature.
   class OffsetUnit < Unit
 
     def self.define(name,unit,offset=nil)
@@ -600,7 +620,7 @@ module Phys
         v = quantity.value * quantity.unit.conversion_factor
         v = v / self.conversion_factor
       else
-        raise UnitError,"not Quantitiy: #{quantity.inspect}"
+        raise UnitError,"not Quantity: #{quantity.inspect}"
       end
     end
 
