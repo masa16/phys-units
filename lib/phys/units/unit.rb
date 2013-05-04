@@ -10,12 +10,13 @@
 module Phys
 
   # Phys::Unit is a class to represent Physical Units of measurement.
-  # Used in the Phys::Quantity class.
-  # It must have:
-  # * *Factor* of the unit. Scale factor to its base unit.
+  # This class is used in the Phys::Quantity for calculations with Units,
+  # and users do not always need to know its mechanism.
+  # It has *Factor* and *Dimension*:
+  # * *Factor* of the unit is a scale factor relative to its base unit.
   #     Phys::Unit["km"].factor #=> 1000
-  # * *Dimension* of the unit.
-  #   Dimension is a hash table with base units and its dimensions.
+  # * *Dimension* of the unit
+  #   is a hash table containing base units and dimensions as key-value pairs.
   #     Phys::Unit["N"].dimension #=> {"kg"=>1, "m"=>1, "s"=>-2}
   #== Examples
   #  require "phys/units"

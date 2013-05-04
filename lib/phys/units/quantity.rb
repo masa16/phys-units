@@ -14,8 +14,10 @@ module Phys
   #  Quantity.new(*a)
   #end
 
-  # Phys::Quantity is a class to represent Physical Quantities
-  # with a Unit of measurement. It contains *Value* and *Unit*.
+  # Phys::Quantity is the primary class of Phys-Units library,
+  # intended to be manipulated by users.
+  # This class represents Physical Quantities with a Unit of measurement.
+  # It contains *Value* and *Unit*.
   # * *Value*
   #   must be an instance having arithmetic methods,
   #   but it is not necessary to be a Numeric.

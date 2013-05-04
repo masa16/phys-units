@@ -18,7 +18,7 @@ module Phys
         false
       end
 
-      # Define New Unit.  Expression is not parsed in this method.
+      # Define a new Unit. Expression is not parsed at the time of this method.
       # @param [String] name Name of this unit.
       # @param [String] expr Expression.
       def define(name,expr)
@@ -45,7 +45,7 @@ module Phys
       end
 
 
-      # Force argument to be Phys::Unit.
+      # Force the argument to be Phys::Unit.
       # @return [Phys::Unit]
       def cast(x)
         if x.kind_of?(Unit)
@@ -61,7 +61,7 @@ module Phys
         find_unit(x) or raise UnitError, "Undefined unit: #{x.inspect}"
       end
 
-      # Searches a registered unit and then Parse as a unit string
+      # Searches a registered unit and then parse as a unit string
       # if not registered.
       # @return [Phys::Unit]
       def parse(x)
