@@ -4,6 +4,10 @@ GNU Units-compatible library for Ruby.
 Former name is [Quanty](http://narray.rubyforge.org/quanty/quanty-en.html),
 the first Ruby units library released in 2001.
 
+* [GitHub](https://github.com/masa16/phys-units)
+* [RubyGems](https://rubygems.org/gems/phys-units)
+* [Class Documentation](http://rubydoc.info/gems/phys-units/frames/)
+
 ## Installation
 
 Install from gem as:
@@ -47,9 +51,6 @@ It must have:
   Example:
 
         Phys::Unit["N"].dimension  #=> {"kg"=>1, "m"=>1, "s"=>-2}
-
-See [Phys-Units Documentation](http://rubydoc.info/gems/phys-units/0.9.3/frames)
-for more details.
 
 ### Examples
 

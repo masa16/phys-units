@@ -267,8 +267,8 @@ module Phys
       end
     end
 
-    # Comformability of units. Returns true if conversion to the unit of +x+ is allowed.
-    # @param [Object] x  other object (unit or quantity or numeric or other)
+    # Comformability of units. Returns true if unit conversion between +self+ and +x+ is possible.
+    # @param [Object] x  other object (Unit or Quantity or Numeric or something else)
     # @return [Boolean]
     def conformable?(x)
       case x
