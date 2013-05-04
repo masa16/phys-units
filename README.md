@@ -81,7 +81,7 @@ It has *Factor* and *Dimension*:
 
 ## Features
 
-Phys-Units library is discriminated from many other units libraries for Ruby,
+Phys-Units library is differentiated from many other units libraries for Ruby,
 by the following features:
 
 * Compatible with GNU Units except nonlinear units.
