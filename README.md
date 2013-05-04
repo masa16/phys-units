@@ -1,6 +1,6 @@
 # Phys-Units
 
-GNU Units-compatible library for Ruby.
+[GNU Units](http://www.gnu.org/software/units/)-compatible library for Ruby.
 Former name is [Quanty](http://narray.rubyforge.org/quanty/quanty-en.html),
 the first Ruby units library released in 2001.
 
@@ -86,7 +86,8 @@ by the following features:
 
 * Compatible with GNU Units except nonlinear units.
 * Provides 2331 units, 85 prefixes, including UTF-8 unit names.
-* Defines Units by reading GNU Units text data,
+* Defines Units by reading GNU Units text data
+  (see [load_units.rb](https://github.com/masa16/phys-units/blob/master/lib/phys/units/load_units.rb)),
   unlike other libraries which define Units in Ruby code.
 * No addition or modification to Ruby standard classes,
   avoiding conflict with other libraries.
