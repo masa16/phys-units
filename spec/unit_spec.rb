@@ -38,7 +38,7 @@ describe "Create Units" do
     its(:factor) {should == 1}
     its(:conversion_factor) {should == Math::PI}
     its(:name) {should == 'pi'}
-    its(:expr) {should be_nil}
+    its(:expr) {should == '!dimensionless'}
     its(:offset) {should be_nil}
     its(:dimension) {should == {'pi'=>1}}
     its(:dimension_value) {should == Math::PI}
@@ -53,7 +53,7 @@ describe "Create Units" do
     its(:factor) {should == 1}
     its(:conversion_factor) {should == 1}
     its(:name) {should == 'm'}
-    its(:expr) {should be_nil}
+    its(:expr) {should == '!'}
     its(:offset) {should be_nil}
     its(:dimension) {should == {'m'=>1}}
     its(:dimension_value) {should == 1}
