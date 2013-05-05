@@ -19,11 +19,15 @@ module Phys
       end
 
       # Define a new Unit. Expression is not parsed at the time of this method.
-      # @param [String] name Name of this unit.
+      # @param [String,Symbol] name Name of this unit.
       # @param [String] expr Expression.
       def define(name,expr)
-        if !(String===name)
-          raise TypeError,"unit name should be string : #{name.inspect}"
+        case name
+        when String
+        when Symbol
+          name = name.to_s
+        else
+          raise TypeError,"Unit name must be String or Symbol: #{name.inspect}"
         end
         if /^(.*)-$/ =~ name
           name = $1
@@ -36,8 +40,7 @@ module Phys
             warn "unit definition is overwritten: #{name}" if debug
           end
           if expr.kind_of?(String) && /^!/ =~ expr
-            dimless = (expr == "!dimensionless")
-            LIST[name] = BaseUnit.new(name,dimless)
+            LIST[name] = BaseUnit.new(expr,name)
           else
             LIST[name] = self.new(expr,name)
           end
@@ -46,9 +49,11 @@ module Phys
 
 
       # Force the argument to be Phys::Unit.
+      # @param [Phys::Unit,Numeric]
       # @return [Phys::Unit]
       def cast(x)
-        if x.kind_of?(Unit)
+        case x
+        when Unit
           x
         else
           Unit.new(x)
@@ -63,6 +68,7 @@ module Phys
 
       # Searches a registered unit and then parse as a unit string
       # if not registered.
+      # @param [String,Symbol,Numeric,Unit,Quantity,NilClass] x
       # @return [Phys::Unit]
       def parse(x)
         find_unit(x) || Unit.cast(Parse.new.parse(x))
@@ -70,15 +76,27 @@ module Phys
       alias [] parse
 
       # Searches a registered unit.
+      # @param [String,Symbol,Numeric,Unit,Quantity,NilClass] x
       # @return [Phys::Unit, NilClass]
       def find_unit(x)
-        if Numeric===x
+        case x
+        when String,Symbol
+          x = x.to_s.strip
+          if x==''
+            Unit.new(1)
+          else
+            LIST[x] || PREFIX[x] || find_prefix(x) || unit_stem(x)
+          end
+        when Numeric
           Unit.new(x)
-        elsif x=='' || x.nil?
+        when NilClass
           Unit.new(1)
+        when Unit
+          x
+        when Quantity
+          x.unit
         else
-          x = x.to_s
-          LIST[x] || PREFIX[x] || find_prefix(x) || unit_stem(x)
+          raise TypeError, "Invalid argument: #{x.inspect}"
         end
       end
 
