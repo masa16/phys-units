@@ -89,8 +89,9 @@ by the following features:
 * Defines Units by reading GNU Units text data
   (see [load_units.rb](https://github.com/masa16/phys-units/blob/master/lib/phys/units/load_units.rb)),
   unlike other libraries which define Units in Ruby code.
-* No addition or modification to Ruby standard classes,
-  avoiding conflict with other libraries.
+* Provides orthodox design of class interface.
+* No addition or modification to Ruby standard classes in standard usage,
+  to avoid conflicts with other libraries.
 * Calculation of values is through Ruby Numeric arithmetic methods.
   Phys-Units does not care it.
 * Conversion factors are internally held in Rational form even
