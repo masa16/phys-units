@@ -18,12 +18,11 @@ module Phys
   # intended to be manipulated by users.
   # This class represents Physical Quantities with a Unit of measurement.
   # It contains *Value* and *Unit*.
-  # * *Value*
+  # * *Value* of the quantity
   #   must be an instance having arithmetic methods,
   #   but it is not necessary to be a Numeric.
   #   This is a duck typing way.
-  #        Phys::Quantity[2.5,"miles"].value #=> 2.5
-  #
+  #        Phys::Quantity[2.5,"miles"].value    #=> 2.5
   #        Phys::Quantity[NArray.float(5).indgen,"miles"].want("m").value
   #        #=> NArray.float(5):
   #            [ 0.0, 1609.34, 3218.69, 4828.03, 6437.38 ]
@@ -32,52 +31,77 @@ module Phys
   #   see document of Phys::Unit.
   #        Phys::Quantity[2.5,"miles"].unit #=> #<Phys::Unit 1609.344,{"m"=>1},@expr="5280 ft">
   #
-  #== Examples
-  #  require 'phys/units'
-  #  Q = Phys::Quantity
+  # @example
+  #   require 'phys/units'
+  #   Q = Phys::Quantity
   #
-  #  Q[1.23,'km'] + Q[4.56,'m']    #=> Phys::Quantity[1.23456,'km']
-  #  Q[123,'mile'] / Q[2,'hr']     #=> Phys::Quantity[61,'mile/hr']
-  #  Q[61,'miles/hr'].want('m/s')  #=> Phys::Quantity[27.26944,'m/s']
-  #  Q[1.0,'are'] == Q[10,'m']**2  #=> true
-  #  Q[70,'tempF'] + Q[10,'tempC'] #=> Phys::Quantity[88,'tempF']
-  #  Q[20,'tempC'].want('tempF')   #=> Phys::Quantity[68,'tempF']
-  #  Math.cos(Q[60,'degree'].to_f) #=> 0.5
+  #   Q[1.23,'km'] + Q[4.56,'m']    #=> Phys::Quantity[1.23456,'km']
+  #   Q[123,'mile'] / Q[2,'hr']     #=> Phys::Quantity[61,'mile/hr']
+  #   Q[61,'miles/hr'].want('m/s')  #=> Phys::Quantity[27.26944,'m/s']
+  #   Q[1.0,'are'] == Q[10,'m']**2  #=> true
+  #   Q[70,'tempF'] + Q[10,'tempC'] #=> Phys::Quantity[88,'tempF']
+  #   Q[20,'tempC'].want('tempF')   #=> Phys::Quantity[68,'tempF']
+  #   Math.cos(Q[60,'degree'].to_f) #=> 0.5
   #
   # @see Unit
   #
   class Quantity
 
+    @@verbose_inspect = false
+
     class << self
       # Alias to Phys::Quantity.new.
-      # @param  [Object] value
-      #         Value of quantity.
-      # @param  [String] expr  a string of unit expression.
-      #         If +expr+ is not supplied, it becomes dimensionless.
+      #   @param [Object]      value  Value of quantity.
+      #   @param [String,Symbol] expr  Unit string to be parsed later.
+      # @overload initialize(value,unit)
+      #   @param [Object]      value  Value of quantity.
+      #   @param [Phys::Unit]  unit   This unit is copyed if exists.
+      # @overload initialize(value)
+      #   @param [Object]      value  Value of dimensionless quantity.
       # @return [Phys::Quantity]
-      # @raise  [Phys::UnitError] if unit conversion is failed.
+      # @raise [TypeError] if invalid arg types.
+      # @raise [Phys::UnitError] if unit conversion is failed.
       def [](value,expr=nil)
         self.new(value,expr)
       end
     end
 
     # Initialize a new quantity.
-    # @param  [Object] value
-    #         Value of quantity.
-    # @param  [String] expr  a string of unit expression.
-    #         If +expr+ is not supplied, it becomes dimensionless.
-    # @param  [Phys::Unit] unit  (optional)
-    # @raise  [Phys::UnitError] if unit conversion is failed.
+    # @overload initialize(value,expr,unit=nil)
+    #   @param [Object]     value  Value of quantity.
+    #   @param [String,Symbol] expr  Unit string to be parsed later.
+    #   @param [Phys::Unit] unit   This unit is copyed if exists.
+    # @overload initialize(value,unit)
+    #   @param [Object]     value  Value of quantity.
+    #   @param [Phys::Unit] unit   This unit is copyed if exists.
+    # @overload initialize(value)
+    #   @param [Object]     value  Value of dimensionless quantity.
+    # @raise [TypeError] if invalid arg types.
+    # @raise [Phys::UnitError] if unit conversion is failed.
     #
     def initialize(value,expr=nil,unit=nil)
       @value = value
-      expr = expr.to_s if Symbol===expr
-      @expr = (expr=='') ? nil : expr
-      @unit = unit
-      if @unit.nil?
+      case expr
+      when String, Symbol
+        @expr = expr.to_s.strip
+        @expr = nil if @expr==''
+        @unit = unit
+      when NilClass
+        @expr = nil
+        @unit = unit
+      when Unit
+        raise "Wrong # of argument" if unit
+        @expr = nil
+        @unit = expr
+      else
+        raise ArgumentError,"Second argument is invalid: #{expr.inspect}"
+      end
+      case @unit
+      when NilClass
         @unit = Unit.parse(@expr||1)
-      elsif !@unit.kind_of? Unit
-        raise ArgumentError, "third arg must be Phys::Unit"
+      when Unit
+      else
+        raise ArgumentError, "Third argument is invalid: #{@unit.inspect}"
       end
     end
 
@@ -96,13 +120,28 @@ module Phys
     attr_reader :unit
 
     # Conversion to a quantity in another unit.
-    # @param  [String] expr unit expression.
-    # @return [Phys::Quantity] quantity in the unit of +expr+.
+    # @param  [String,Symbol,Unit,Quantity] unit unit expression.
+    # @return [Phys::Quantity] quantity in the unit of +unit+.
     # @raise  [Phys::UnitError] if unit conversion is failed.
     #
-    def want(expr)
-      unit = Unit.parse(expr)
-      val  = unit.convert(self)
+    def want(unit=nil)
+      case unit
+      when Unit
+        expr = unit.expr
+      when Quantity
+        expr = unit.expr
+        unit = unit.unit
+      when String,Symbol
+        expr = unit
+        unit = Unit.parse(expr)
+      when Numeric
+        unit = Unit.cast(unit)
+      when NilClass
+        unit = Unit.cast(1)
+      else
+        raise TypeError, "invalid argument: #{unit.inspect}"
+      end
+      val = unit.convert(self)
       self.class.new( val, expr, unit )
     end
     alias convert want
@@ -272,7 +311,7 @@ module Phys
     def **(n)
       if @expr.nil?
         expr = nil
-      elsif /^[A-Za-z_]+&/o =~ @expr
+      elsif /^[A-Za-z_]+$/o =~ @expr
         expr = @expr+'^'+n.to_s
       else
         expr = '('+@expr+')^'+n.to_s+''
@@ -508,7 +547,32 @@ module Phys
       else
         expr = ""
       end
-      self.class.to_s+"["+Unit::Utils.num_inspect(@value)+expr+"] "+@unit.inspect
+      if @@verbose_inspect
+        sufx = " "+@unit.inspect
+      else
+        sufx = ""
+      end
+      self.class.to_s+"["+Unit::Utils.num_inspect(@value)+expr+"]"+sufx
     end
+
+    # Comformability of quantity. Returns true if unit conversion between +self+ and +x+ is possible.
+    # @param [Object] x  other object (Unit or Quantity or Numeric or something else)
+    # @return [Boolean]
+    def ===(x)
+      case x
+      when Unit
+        unit === x
+      when Quantity
+        unit === x.unit
+      when Numeric
+        unit.dimensionless?
+      else
+        false
+      end
+    end
+    alias conformable? ===
+    alias compatible? ===
+    alias conversion_allowed? ===
+
   end
 end
