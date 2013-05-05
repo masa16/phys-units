@@ -4,7 +4,7 @@ module Phys
   module UnitMeasures
     def self.included(mod)
       Phys::Unit::LIST.each do |k,u|
-        if /^[A-Z]+$/ =~ k
+        if /^[A-Z]\w*$/ =~ k
           const_set(k,u)
         end
       end
@@ -33,7 +33,7 @@ module Phys
   #   (1*miles/hr).want m/s    #=> Phys::Quantity[0.44704,"m/s"]
   #
   module UnitsMixin
-    #include UnitMeasures
+    include UnitMeasures
     module_function
     alias method_missing_units_alias method_missing
     def method_missing(method, *args, &block)
