@@ -99,6 +99,31 @@ by the following features:
 * PI number has a dimension.
 * Japanese Units are available by require 'phys/units/jp'.
 
+## Appendix Feature
+
+Mix-in feature provides simple calculator of units.
+Caution: The use of Mix-in may cause conflicts with other library.
+
+    $ irb -rphys/units/mixin
+
+    irb> (2.5.miles/hr).want m/s
+    => Phys::Quantity[1.1176,"m/s"]
+
+    irb> 23.tempC.want tempF
+    => Phys::Quantity[73.4,"tempF"]
+
+    irb> print_units LENGTH
+    m                               !
+    meter                           m
+    LENGTH                          meter
+     :
+
+    irb> print_units ENERGY
+    joule                           N m
+    J                               joule
+    prout                           185.5 keV
+     :
+
 ## Platforms tested
 
 * ruby 2.0.0p0 (2013-02-24 revision 39474) [x86_64-linux]
