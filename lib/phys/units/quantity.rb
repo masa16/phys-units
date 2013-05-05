@@ -18,16 +18,17 @@ module Phys
   # intended to be manipulated by users.
   # This class represents Physical Quantities with a Unit of measurement.
   # It contains *Value* and *Unit*.
-  # * *Value* of the quantity
-  #   must be an instance having arithmetic methods,
+  # * *Value* of the quantity is provided as the first parameter of
+  #   Quantity constructor (alias is +Quantity.[]+).
+  #   It must be a class instance having arithmetic methods,
   #   but it is not necessary to be a Numeric.
   #   This is a duck typing way.
   #        Phys::Quantity[2.5,"miles"].value    #=> 2.5
   #        Phys::Quantity[NArray.float(5).indgen,"miles"].want("m").value
   #        #=> NArray.float(5):
   #            [ 0.0, 1609.34, 3218.69, 4828.03, 6437.38 ]
-  # * *Unit*
-  #   is an instance of Phys::Unit class obtained by parsing *expr* string.
+  # * *Unit* is an instance of Phys::Unit class.
+  #   It is obtained by parsing the second argument of Quantity constructor.
   #   see document of Phys::Unit.
   #        Phys::Quantity[2.5,"miles"].unit #=> #<Phys::Unit 1609.344,{"m"=>1},@expr="5280 ft">
   #
