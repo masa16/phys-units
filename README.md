@@ -25,7 +25,7 @@ is the primary class of Phys-Units library, intended to be manipulated by users.
 This class represents Physical Quantities with a Unit of measurement.
 It contains *Value* and *Unit*.
 
-* *Value*
+* *Value* of the quantity
   must be a class instance having arithmetic methods,
   but it is not necessary to be a Numeric.
   This is a duck typing way.
