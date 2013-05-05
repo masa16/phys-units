@@ -18,26 +18,26 @@ module Phys
   # * *Dimension* of the unit
   #   is a hash table containing base units and dimensions as key-value pairs.
   #     Phys::Unit["N"].dimension #=> {"kg"=>1, "m"=>1, "s"=>-2}
-  #== Examples
-  #  require "phys/units"
-  #  Q = Phys::Quantity
-  #  U = Phys::Unit
+  # @example
+  #   require "phys/units"
+  #   Q = Phys::Quantity
+  #   U = Phys::Unit
   #
-  #  U["miles"] / U["hr"]         #=> #<Phys::Unit 0.44704,{"m"=>1, "s"=>-1}>
-  #  U["hr"] + U["30 min"]        #=> #<Phys::Unit 5400,{"s"=>1}>
-  #  U["(m/s)"]**2                #=> #<Phys::Unit 1,{"m"=>2, "s"=>-2}>
-  #  U["m/s"] === Q[1,'miles/hr'] #=> true
+  #   U["miles"] / U["hr"]         #=> #<Phys::Unit 0.44704,{"m"=>1, "s"=>-1}>
+  #   U["hr"] + U["30 min"]        #=> #<Phys::Unit 5400,{"s"=>1}>
+  #   U["(m/s)"]**2                #=> #<Phys::Unit 1,{"m"=>2, "s"=>-2}>
+  #   U["m/s"] === Q[1,'miles/hr'] #=> true
   #
-  #  case Q[1,"miles/hr"]
-  #  when U["m"]
-  #    "length"
-  #  when U["s"]
-  #    "time"
-  #  when U["m/s"]
-  #    "velocity"
-  #  else
-  #    "other"
-  #  end                    #=> "velocity"
+  #   case Q[1,"miles/hr"]
+  #   when U["m"]
+  #     "length"
+  #   when U["s"]
+  #     "time"
+  #   when U["m/s"]
+  #     "velocity"
+  #   else
+  #     "other"
+  #   end                    #=> "velocity"
   #
   # @see Quantity
   #
@@ -65,21 +65,21 @@ module Phys
     #   @param [String] name  Name of this unit.
     # @raise  [TypeError] if invalid arg types.
     #
-    def initialize(arg,extr=nil)
-      case arg
+    def initialize(a1,a2=nil)
+      case a1
       when Numeric
-        arg = Rational(arg) if Integer===arg
-        @factor = arg
-        alloc_dim(extr)
+        a1 = Rational(a1) if Integer===a1
+        @factor = a1
+        alloc_dim(a2)
       when Phys::Unit
-        @factor = arg.factor
-        alloc_dim arg.dim
-        @name = extr
+        @factor = a1.factor
+        alloc_dim a1.dim
+        @name = a2.strip if a2
       when String
-        @expr = arg
-        @name = extr
+        @expr = a1.strip
+        @name = a2.strip if a2
       else
-        raise TypeError,"invalid argument : #{arg.inspect}"
+        raise TypeError,"Invalid argument: #{a1.inspect}"
       end
     end
 
@@ -169,7 +169,7 @@ module Phys
     def inspect
       use_dimension
       a = [Utils.num_inspect(@factor), @dim.inspect]
-      #a << "@name="+@name.inspect if @name
+      a << "@name="+@name.inspect if @name
       a << "@expr="+@expr.inspect if @expr
       a << "@offset="+@offset.inspect if @offset
       a << "@dimensionless=true" if @dimensionless
@@ -271,7 +271,7 @@ module Phys
     # Comformability of units. Returns true if unit conversion between +self+ and +x+ is possible.
     # @param [Object] x  other object (Unit or Quantity or Numeric or something else)
     # @return [Boolean]
-    def conformable?(x)
+    def ===(x)
       case x
       when Unit
         dimensionless_deleted == x.dimensionless_deleted
@@ -283,9 +283,9 @@ module Phys
         false
       end
     end
-    alias === conformable?
-    alias compatible? conformable?
-    alias conversion_allowed? conformable?
+    alias conformable? ===
+    alias compatible? ===
+    alias conversion_allowed? ===
 
     # Convert a quantity to this unit.
     # @param [Phys::Quantity] quantity to be converted.
@@ -551,21 +551,26 @@ module Phys
   class BaseUnit < Unit
 
     def self.define(name,expr,dimval=nil)
-      dimles = (expr == "!dimensionless")
-      LIST[name] = self.new(name,dimles,dimval)
+      if LIST[name]
+        warn "unit definition is overwritten: #{name}" if debug
+      end
+      LIST[name] = self.new(expr,name,dimval)
     end
 
-    def initialize(name,dimless=false,dimval=nil)
+    def initialize(expr,name,dimval=nil)
       case name
       when String
-        @name = name
+        @name = name.strip
         @factor = 1
-        @dim = {name=>1}
+        @dim = {@name=>1}
         @dim.default = 0
-        @dimensionless = dimless
+        @expr = expr
+        if String===expr && /!dimensionless/ =~ expr
+          @dimensionless = true
+        end
         @dimension_value = dimval || 1
       else
-        raise ArgumentError "BaseUnit#initialize: arg must be string: #{s}"
+        raise ArgumentError,"Second argument must be string: #{name}"
       end
     end
 
