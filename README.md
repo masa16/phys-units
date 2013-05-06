@@ -89,7 +89,7 @@ It has *Factor* and *Dimension*:
 Phys-Units library is differentiated from many other units libraries for Ruby,
 by the following features:
 
-* Compatible with GNU Units except nonlinear units.
+* Compatible with GNU Units except currency and nonlinear units.
 * Provides 2331 units, 85 prefixes, including UTF-8 unit names.
 * Defines Units by reading GNU Units text data
   (see [load_units.rb](https://github.com/masa16/phys-units/blob/master/lib/phys/units/load_units.rb)),

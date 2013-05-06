@@ -620,7 +620,7 @@ module Phys
   #  Phys::Quantity[3,:tempC] * Phys::Quantity[3,:m]       #=> UnitError
   #  Phys::Quantity[3,:tempC] ** 2                         #=> UnitError
   #
-  #  # Next examples are currently valid, but I suggest the use of degC and degF.
+  #  # Next examples currently work, but I suggest the use of degC and degF.
   #  Phys::Quantity[3,:tempC] + Phys::Quantity[10,:tempF]  #=> Phys::Quantity[(77/9),"tempC"]
   #  Phys::Quantity[3,:tempC] * 2                          #=> Phys::Quantity[6,"tempC"]
   class OffsetUnit < Unit
