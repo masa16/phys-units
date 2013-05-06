@@ -8,6 +8,7 @@ def close_values(a,b)
 end
 
 puts <<EOL
+# -*- coding: utf-8 -*-
 $LOAD_PATH.unshift File.dirname(__FILE__)
 require "helper"
 
