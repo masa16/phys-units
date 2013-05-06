@@ -43,12 +43,13 @@ module Phys
   #
   class Unit
 
-    # @visibility private
+    # Hash table of registered units.
     LIST = {}
-    # @visibility private
+    # Hash table of registered prefixes.
     PREFIX = {}
 
-    # @visibility private
+    # Regex for registered prefixes.
+    # @return [Regexp]
     def self.prefix_regex
       @@prefix_regex
     end

@@ -14,6 +14,8 @@ module Phys
   # Defines method with unit name.
   # *Caution*: Variable names may conflict with unit names.
   # @example
+  #   require 'phys/units'
+  #
   #   Phys::UnitsMixin.module_eval do
   #     puts 123.4*km
   #     puts (23*mile/hr).want(m/s)
@@ -60,6 +62,8 @@ module Phys
   # ActiveSupport-like mix-in.
   # *Caution*: This kind of global change will cause unexpected problems.
   # @example
+  #   require 'phys/units'
+  #
   #   class Numeric
   #     include Phys::UnitsNumericMixin
   #   end

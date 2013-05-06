@@ -50,8 +50,9 @@ module Phys
 
 
       # Force the argument to be Phys::Unit.
-      # @param [Phys::Unit,Numeric]
+      # @param [Object] x
       # @return [Phys::Unit]
+      # @raise  [TypeError] if invalid type for units.
       def cast(x)
         case x
         when Unit
