@@ -1,3 +1,6 @@
+if RUBY_VERSION<'1.9.0'
+  require "rational"
+end
 require "phys/units/version"
 require "phys/units/errors.rb"
 require "phys/units/unit_class.rb"

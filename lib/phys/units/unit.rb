@@ -524,8 +524,11 @@ module Phys
 
     # @visibility private
     def self.func(fn, x)
-      fn = 'log' if fn == 'ln'
       m = Unit.new(x).to_numeric
+      if fn == 'log2' && RUBY_VERSION<'1.9.0'
+        return Unit.new( Math.log(m)/Math.log(2) )
+      end
+      fn = 'log' if fn == 'ln'
       Unit.new( Math.send(fn,m) )
     end
 
