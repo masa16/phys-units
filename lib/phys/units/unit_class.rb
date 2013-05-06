@@ -21,8 +21,8 @@ module Phys
       # Define a new Unit. Expression is parsed lazily, i.e., parsed
       # not when this method is called, but when @factor and @dim is used.
       # Note that the result of unit calculation depends on the timing of unit definition.
-      # @param [String,Symbol] name Name of this unit.
-      # @param [String] expr Expression.
+      # @param [String,Symbol] name  Name of the unit.
+      # @param [String] expr  Expression of the unit.
       def define(name,expr)
         case name
         when String

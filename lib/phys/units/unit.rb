@@ -59,12 +59,12 @@ module Phys
     #   @param [Numeric] factor  Unit scale factor.
     #   @param [Hash] dimension  Dimension hash.
     # @overload initialize(expr,name=nil)
-    #   @param [String] expr  Unit expression. It is parsed lazily, i.e.,
+    #   @param [String] expr  Expression of the unit. It is parsed lazily, i.e.,
     #     parsed not when this instance is created, but when @factor and @dim is used.
-    #   @param [String] name  Name of this unit.
+    #   @param [String] name  Name of the unit.
     # @overload initialize(unit,name=nil)
     #   @param [Phys::Unit] unit  Its contents is used for new unit.
-    #   @param [String] name  Name of this unit.
+    #   @param [String] name  Name of the unit.
     # @raise  [TypeError] if invalid arg types.
     #
     def initialize(a1,a2=nil)
@@ -85,7 +85,7 @@ module Phys
       end
     end
 
-    # Unit expression to be parsed.
+    # Expression of the unit.
     # @return [String, NilClass]
     attr_reader :expr
 
@@ -229,7 +229,7 @@ module Phys
     end
 
     # Returns true if scalar unit.
-    # *Scalar* means the unit does not have any dimension
+    # *Scalar* means this unit does not have any dimension
     # including dimensionless-units, and its factor is one.
     # @return [Boolean]
     def scalar?

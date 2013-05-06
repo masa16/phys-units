@@ -69,12 +69,12 @@ module Phys
     # @overload initialize(value,expr,unit=nil)
     #   @param [Object]     value  Value of quantity.
     #   @param [String,Symbol] expr  Unit expression.
-    #   @param [Phys::Unit] unit   If exists, This unit is used as the unit of new quantity.
+    #   @param [Phys::Unit] unit   If exists, this parameter is used as the unit of new quantity.
     # @overload initialize(value,unit)
     #   @param [Object]     value  Value of quantity.
-    #   @param [Phys::Unit] unit   This unit is used as the unit of new quantity.
+    #   @param [Phys::Unit] unit   This parameter is used as the unit of new quantity.
     # @overload initialize(value)
-    #   @param [Object]     value  Value of dimensionless quantity.
+    #   @param [Object]     value  Value of a dimensionless quantity.
     # @raise [TypeError] if invalid arg types.
     # @raise [Phys::UnitError] if unit conversion is failed.
     #
@@ -290,8 +290,8 @@ module Phys
       @value > @unit.convert(other)
     end
 
-    # Closeness. Returns +true+ if difference between +self+ and +other+ is
-    # smaller than +epsilon+ times sum of their absolute values.
+    # Closeness. Returns +true+ if
+    #   (self-other).abs <= (self.abs+other.abs) * epsilon
     # Before the comparison, it converts +other+ to the unit of +self+.
     # @param  [Phys::Quantity] other
     # @param  [Numeric] epsilon
@@ -300,7 +300,7 @@ module Phys
     def close_to(other,epsilon=Float::EPSILON)
       other_value = @unit.convert(other)
       abs_sum = @value.abs+other_value.abs
-      abs_sum==0 || (@value-other_value).abs/abs_sum <= epsilon
+      (@value-other_value).abs <= abs_sum*epsilon
     end
 
     # Exponentiation.
@@ -557,7 +557,7 @@ module Phys
       self.class.to_s+"["+Unit::Utils.num_inspect(@value)+expr+"]"+sufx
     end
 
-    # Comformability of quantity. Returns true if unit conversion between +self+ and +x+ is possible.
+    # Conformability of quantity. Returns true if unit conversion between +self+ and +x+ is possible.
     # @param [Object] x  other object (Unit or Quantity or Numeric or something else)
     # @return [Boolean]
     def ===(x)
