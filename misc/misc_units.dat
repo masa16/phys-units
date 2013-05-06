@@ -1,0 +1,7 @@
+# http://www.tokyo-dome.co.jp/dome/facilities/
+tokyodome_area          46755 m^2
+tokyodome_volume        124 m^2
+
+# http://www.tokyo-skytree.jp/archive/spec/
+skytree_height          634 m
+skytree                 skytree_height
