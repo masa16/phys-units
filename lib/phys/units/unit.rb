@@ -314,7 +314,13 @@ module Phys
     # @return [Phys::Quantity]
     # @raise [UnitError] if unit conversion is failed.
     def convert_scale(quantity)
-      convert(quantity)
+      if Quantity===quantity
+        assert_same_dimension(quantity.unit)
+        v = quantity.value * quantity.unit.conversion_factor
+        v = v / self.conversion_factor
+      else
+        quantity / to_numeric
+      end
     end
 
     # Convert from a value in this unit to a value in base unit.
@@ -467,7 +473,7 @@ module Phys
       if scalar?
         return x
       elsif x.scalar?
-        return self
+        return self.dup
       end
       check_operable2(x)
       dims = dimension_binop(x){|a,b| a+b}
@@ -485,7 +491,7 @@ module Phys
       if scalar?
         return x.inverse
       elsif x.scalar?
-        return self
+        return self.dup
       end
       check_operable2(x)
       dims = dimension_binop(x){|a,b| a-b}
@@ -502,11 +508,6 @@ module Phys
       check_operable
       dims = dimension_uop{|a| -a}
       Unit.new(Rational(1,self.factor), dims)
-    end
-
-    # @visibility private
-    def self.inverse(x)
-      Unit.cast(x).inverse
     end
 
     # Exponentiation of units.
@@ -615,10 +616,13 @@ module Phys
   #  require 'phys/units'
   #
   #  Phys::Quantity[20,:tempC].want(:tempF)                #=> Phys::Quantity[68,'tempF']
-  #  Phys::Quantity[3,:tempC] * 2                          #=> Phys::Quantity[6,"tempC"]
-  #  Phys::Quantity[3,:tempC] + Phys::Quantity[10,:tempF]  #=> Phys::Quantity[(77/9),"tempC"]
+  #  Phys::Quantity[3,:tempC] + Phys::Quantity[10,:degF]   #=> Phys::Quantity[(77/9),"tempC"]
   #  Phys::Quantity[3,:tempC] * Phys::Quantity[3,:m]       #=> UnitError
   #  Phys::Quantity[3,:tempC] ** 2                         #=> UnitError
+  #
+  #  # Next examples are currently valid, but I suggest the use of degC and degF.
+  #  Phys::Quantity[3,:tempC] + Phys::Quantity[10,:tempF]  #=> Phys::Quantity[(77/9),"tempC"]
+  #  Phys::Quantity[3,:tempC] * 2                          #=> Phys::Quantity[6,"tempC"]
   class OffsetUnit < Unit
 
     def self.define(name,unit,offset=nil)
@@ -631,20 +635,6 @@ module Phys
       end
       super(arg,name)
       @offset = offset
-    end
-
-    # Convert a quantity to this unit only in scale.
-    # @param [Phys::Quantity] quantity to be converted.
-    # @return [Phys::Quantity]
-    # @raise [UnitError] if unit conversion is failed.
-    def convert_scale(quantity)
-      if Quantity===quantity
-        assert_same_dimension(quantity.unit)
-        v = quantity.value * quantity.unit.conversion_factor
-        v = v / self.conversion_factor
-      else
-        raise UnitError,"not Quantity: #{quantity.inspect}"
-      end
     end
 
     # Convert from a value in this unit to a value in base unit.

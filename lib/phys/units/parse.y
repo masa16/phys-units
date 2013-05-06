@@ -21,7 +21,7 @@ class Parse
 rule
 
  target:  expr
-       |  DIV list { result = Unit.inverse(val[1]) }
+       |  DIV list { result = Unit.cast(val[1]).inverse }
        ;
 
  expr: list

@@ -40,7 +40,7 @@ module Phys
   #   Q[123,'mile'] / Q[2,'hr']     #=> Phys::Quantity[61,'mile/hr']
   #   Q[61,'miles/hr'].want('m/s')  #=> Phys::Quantity[27.26944,'m/s']
   #   Q[1.0,'are'] == Q[10,'m']**2  #=> true
-  #   Q[70,'tempF'] + Q[10,'tempC'] #=> Phys::Quantity[88,'tempF']
+  #   Q[70,'tempF'] + Q[10,'degC']  #=> Phys::Quantity[88,'tempF']
   #   Q[20,'tempC'].want('tempF')   #=> Phys::Quantity[68,'tempF']
   #   Math.cos(Q[60,'degree'].to_f) #=> 0.5
   #

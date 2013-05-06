@@ -677,7 +677,7 @@ Racc_debug_parser = false
 
 module_eval(<<'.,.,', 'parse.y', 23)
   def _reduce_2(val, _values, result)
-     result = Unit.inverse(val[1]) 
+     result = Unit.cast(val[1]).inverse 
     result
   end
 .,.,

@@ -126,10 +126,10 @@ describe "Phys::Quantity" do
   end
 
   context "Temperature" do
-    describe Q[1,"tempC"] - Q[1,"tempC"] do
+    describe Q[1,"tempC"] - Q[1,"degC"] do
       it {should == Q[0,"tempC"]}
     end
-    describe Q[50,"tempF"] + Q[10,"tempC"] do
+    describe Q[50,"tempF"] + Q[10,"degC"] do
       it {should == Q[68,"tempF"]}
     end
     describe Q[0,"tempC"].want("tempF") do
