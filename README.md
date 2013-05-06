@@ -18,6 +18,10 @@ Or install from source tree:
 
     $ ruby setup.rb
 
+Load Phys-Units library in your Ruby script:
+
+      require 'phys/units'
+
 ## Overview
 
 ### Phys::Quantity

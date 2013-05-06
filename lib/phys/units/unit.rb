@@ -612,6 +612,8 @@ module Phys
   # Allows Fahrenheit/Celsius temperature.
   # Unit operations are not allowed.
   # @example
+  #  require 'phys/units'
+  #
   #  Phys::Quantity[20,:tempC].want(:tempF)                #=> Phys::Quantity[68,'tempF']
   #  Phys::Quantity[3,:tempC] * 2                          #=> Phys::Quantity[6,"tempC"]
   #  Phys::Quantity[3,:tempC] + Phys::Quantity[10,:tempF]  #=> Phys::Quantity[(77/9),"tempC"]
