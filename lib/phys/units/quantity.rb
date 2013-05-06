@@ -18,8 +18,8 @@ module Phys
   # intended to be manipulated by users.
   # This class represents Physical Quantities with a Unit of measurement.
   # It contains *Value* and *Unit*.
-  # * *Value* of the quantity is provided as the first parameter of
-  #   Quantity constructor (alias is +Quantity.[]+).
+  # * *Value* of the quantity is given as the first parameter of
+  #   Quantity constructor (alias is +Quantity[]+).
   #   It must be a class instance having arithmetic methods,
   #   but it is not necessary to be a Numeric.
   #   This is a duck typing way.
@@ -28,7 +28,7 @@ module Phys
   #        #=> NArray.float(5):
   #            [ 0.0, 1609.34, 3218.69, 4828.03, 6437.38 ]
   # * *Unit* is an instance of Phys::Unit class.
-  #   It is obtained by parsing the second argument of Quantity constructor.
+  #   It is created from the second argument of Quantity constructor.
   #   see document of Phys::Unit.
   #        Phys::Quantity[2.5,"miles"].unit #=> #<Phys::Unit 1609.344,{"m"=>1},@expr="5280 ft">
   #
@@ -52,29 +52,27 @@ module Phys
 
     class << self
       # Alias to Phys::Quantity.new.
-      #   @param [Object]      value  Value of quantity.
-      #   @param [String,Symbol] expr  Unit string to be parsed later.
-      # @overload initialize(value,unit)
-      #   @param [Object]      value  Value of quantity.
-      #   @param [Phys::Unit]  unit   This unit is copyed if exists.
-      # @overload initialize(value)
-      #   @param [Object]      value  Value of dimensionless quantity.
+      # @param [Object]  value  Value of quantity.
+      # @param [String,Symbol,Phys::Unit]  unit
+      #  * If +unit+ String or Symbol, it is regarded as a unit expression (to be parsed later).
+      #  * If +unit+ is Phys::Unit, it is used for new quantity.
+      #  * If +unit+ is not provided, the quantity is regarded as dimensionless.
       # @return [Phys::Quantity]
       # @raise [TypeError] if invalid arg types.
       # @raise [Phys::UnitError] if unit conversion is failed.
-      def [](value,expr=nil)
-        self.new(value,expr)
+      def [](value,unit=nil)
+        self.new(value,unit)
       end
     end
 
     # Initialize a new quantity.
     # @overload initialize(value,expr,unit=nil)
     #   @param [Object]     value  Value of quantity.
-    #   @param [String,Symbol] expr  Unit string to be parsed later.
-    #   @param [Phys::Unit] unit   This unit is copyed if exists.
+    #   @param [String,Symbol] expr  Unit expression.
+    #   @param [Phys::Unit] unit   If exists, This unit is used for new quantity.
     # @overload initialize(value,unit)
     #   @param [Object]     value  Value of quantity.
-    #   @param [Phys::Unit] unit   This unit is copyed if exists.
+    #   @param [Phys::Unit] unit   This unit is used for new quantity.
     # @overload initialize(value)
     #   @param [Object]     value  Value of dimensionless quantity.
     # @raise [TypeError] if invalid arg types.
@@ -366,6 +364,9 @@ module Phys
     # If the +other+ param is *not* Phys::Quantity,
     # +other+ is regarded as a dimensionless value.
     # The values and units are divided respectively.
+    # Note that the method of the value's class is used.
+    # @example
+    #   Phys::Quantity[3,:m]/2 #=> Phys::Quantity[1,"m"]
     # @param  [Object] other
     # @return [Phys::Quantity] a quantity
     # @raise  [Phys::UnitError] if unit is not operable.

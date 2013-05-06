@@ -58,10 +58,11 @@ module Phys
     #   @param [Numeric] factor  Unit scale factor.
     #   @param [Hash] dimension  Dimension hash.
     # @overload initialize(expr,name=nil)
-    #   @param [String] expr  Unit string to be parsed later.
+    #   @param [String] expr  Unit expression. It is parsed lazily, i.e.,
+    #     parsed not when this instance is created, but when @factor and @dim is used.
     #   @param [String] name  Name of this unit.
     # @overload initialize(unit,name=nil)
-    #   @param [Phys::Unit] unit  Copy contents from the argument.
+    #   @param [Phys::Unit] unit  Its contents is used for new unit.
     #   @param [String] name  Name of this unit.
     # @raise  [TypeError] if invalid arg types.
     #
@@ -198,6 +199,12 @@ module Phys
       a.join(" ")
     end
     alias string_form unit_string
+
+    # Returns self name or unit_string
+    # @return [String]
+    def to_s
+      @name || unit_string
+    end
 
     # Conversion Factor to base unit, including dimension-value.
     # @return [Numeric]
@@ -547,7 +554,7 @@ module Phys
 
   # BaseUnit is a class to represent units defined by "!"
   # in the data form of GNU units.
-  # It includes SI units and dimensinless units such as radian.
+  # It includes SI units and dimensionless units such as radian.
   class BaseUnit < Unit
 
     def self.define(name,expr,dimval=nil)
@@ -601,7 +608,14 @@ module Phys
 
 
   # OffsetUnit is a class to represent units with offset value.
-  # Allows Farenheight/Celsius temperature.
+  # Allows Fahrenheit/Celsius temperature.
+  # Unit operations are not allowed.
+  # @example
+  #  Phys::Quantity[20,:tempC].want(:tempF)                #=> Phys::Quantity[68,'tempF']
+  #  Phys::Quantity[3,:tempC] * 2                          #=> Phys::Quantity[6,"tempC"]
+  #  Phys::Quantity[3,:tempC] + Phys::Quantity[10,:tempF]  #=> Phys::Quantity[(77/9),"tempC"]
+  #  Phys::Quantity[3,:tempC] * Phys::Quantity[3,:m]       #=> UnitError
+  #  Phys::Quantity[3,:tempC] ** 2                         #=> UnitError
   class OffsetUnit < Unit
 
     def self.define(name,unit,offset=nil)
@@ -644,6 +658,7 @@ module Phys
       (value - @offset) / conversion_factor
     end
 
+    # Returns false
     def operable?
       false
     end

@@ -18,7 +18,8 @@ module Phys
         false
       end
 
-      # Define a new Unit. Expression is not parsed at the time of this method.
+      # Define a new Unit. Expression is parsed lazily, i.e.,
+      # parsed not when this method is called, but when @factor and @dim is used.
       # @param [String,Symbol] name Name of this unit.
       # @param [String] expr Expression.
       def define(name,expr)

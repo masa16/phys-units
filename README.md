@@ -25,8 +25,8 @@ is the primary class of Phys-Units library, intended to be manipulated by users.
 This class represents Physical Quantities with a Unit of measurement.
 It contains *Value* and *Unit*.
 
-* *Value* of the quantity is provided as the first parameter of
-  Quantity constructor (alias is `Quantity.[]`).
+* *Value* of the quantity is given as the first parameter of
+  Quantity constructor (alias is `Quantity[]`).
   It must be a class instance having arithmetic methods,
   but it is not necessary to be a Numeric.
   This is a duck typing way.
@@ -34,7 +34,7 @@ It contains *Value* and *Unit*.
         Phys::Quantity[2.5,"miles"].value  #=> 2.5
 
 * *Unit* is an instance of Phys::Unit class.
-  It is obtained by parsing the second argument of Quantity constructor.
+  It is created from the second argument of Quantity constructor.
 
         Phys::Quantity[2.5,"miles"].unit   #=> #<Phys::Unit 1609.344,{"m"=>1},@expr="5280 ft">
 
