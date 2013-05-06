@@ -55,7 +55,7 @@ module Phys
       # @param [Object]  value  Value of quantity.
       # @param [String,Symbol,Phys::Unit]  unit
       #  * If +unit+ String or Symbol, it is regarded as a unit expression (to be parsed later).
-      #  * If +unit+ is Phys::Unit, it is used for new quantity.
+      #  * If +unit+ is Phys::Unit, it is used as the unit of new quantity.
       #  * If +unit+ is not provided, the quantity is regarded as dimensionless.
       # @return [Phys::Quantity]
       # @raise [TypeError] if invalid arg types.
@@ -69,10 +69,10 @@ module Phys
     # @overload initialize(value,expr,unit=nil)
     #   @param [Object]     value  Value of quantity.
     #   @param [String,Symbol] expr  Unit expression.
-    #   @param [Phys::Unit] unit   If exists, This unit is used for new quantity.
+    #   @param [Phys::Unit] unit   If exists, This unit is used as the unit of new quantity.
     # @overload initialize(value,unit)
     #   @param [Object]     value  Value of quantity.
-    #   @param [Phys::Unit] unit   This unit is used for new quantity.
+    #   @param [Phys::Unit] unit   This unit is used as the unit of new quantity.
     # @overload initialize(value)
     #   @param [Object]     value  Value of dimensionless quantity.
     # @raise [TypeError] if invalid arg types.
