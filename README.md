@@ -1,6 +1,8 @@
 # Phys-Units
 
-[GNU Units](http://www.gnu.org/software/units/)-compatible library for Ruby.
+[GNU Units](http://www.gnu.org/software/units/) -compatible library for Ruby.
+Features: (1) Using rich database of GNU Units.
+(2) Normal class APIs without modifying built-in classes.
 Former name is [Quanty](http://narray.rubyforge.org/quanty/quanty-en.html),
 the first Ruby units library released in 2001.
 
@@ -20,7 +22,7 @@ Or install from source tree:
 
 Load Phys-Units library in your Ruby script:
 
-      require 'phys/units'
+    require 'phys/units'
 
 ## Overview
 
@@ -106,10 +108,10 @@ by the following features:
 
 ## Appendix Feature
 
-Mix-in feature provides simple calculator of units.
-Caution: The use of Mix-in may cause conflicts with other library.
+Mix-in feature provides a simple unit calculator.
+Note that this usage involves global changes on a build-in class and will cause conflicts with other libraries.
 
-    $ irb -rphys/units/mixin
+    $ irb -r phys/units/mixin
 
     irb> (2.5.miles/hr).want m/s
     => Phys::Quantity[1.1176,"m/s"]
