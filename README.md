@@ -2,7 +2,7 @@
 
 [GNU Units](http://www.gnu.org/software/units/) -compatible library for Ruby.
 Features: (1) Using rich database of GNU Units.
-(2) Normal class APIs without modifying built-in classes.
+(2) Normal design of API without modifying built-in classes.
 Former name is [Quanty](http://narray.rubyforge.org/quanty/quanty-en.html),
 the first Ruby units library released in 2001.
 

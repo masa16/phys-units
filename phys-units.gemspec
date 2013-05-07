@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Masahiro TANAKA"]
   spec.email         = ["masa16.tanaka@gmail.com"]
   spec.summary       = %q{Physical Quantity and Unit classes using GNU Units data. Formerly 'Quanty'.}
-  spec.description   = %q{GNU Units-compatible library for Ruby. Features: (1) Using rich database of GNU Units. (2) Normal class design without modifying built-in classes. Former name is 'Quanty'.}
+  spec.description   = %q{Ruby classes for Physical Quantity and Units of measurement. Features: (1) Using rich database of GNU Units. (2) Normal design of API without modifying built-in classes. Former name is 'Quanty'.}
   spec.homepage      = "https://github.com/masa16/phys-units"
   spec.license       = "GPL"
 
