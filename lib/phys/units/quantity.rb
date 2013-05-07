@@ -29,7 +29,7 @@ module Phys
   #            [ 0.0, 1609.34, 3218.69, 4828.03, 6437.38 ]
   # * *Unit* is an instance of Phys::Unit class.
   #   It is created from the second argument of Quantity constructor.
-  #   see document of Phys::Unit.
+  #   See document of Phys::Unit.
   #        Phys::Quantity[2.5,"miles"].unit #=> #<Phys::Unit 1609.344,{"m"=>1},@expr="5280 ft">
   #
   # @example

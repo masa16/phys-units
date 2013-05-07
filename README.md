@@ -94,7 +94,7 @@ by the following features:
 * Compatible with GNU Units except currency and nonlinear units.
 * Provides 2331 units, 85 prefixes, including UTF-8 unit names.
 * Defines Units by reading GNU Units text data
-  (see [load_units.rb](https://github.com/masa16/phys-units/blob/master/lib/phys/units/load_units.rb)),
+  (See [load_units.rb](https://github.com/masa16/phys-units/blob/master/lib/phys/units/load_units.rb)),
   unlike other libraries which define Units in Ruby code.
 * Provides orthodox design of class interface.
 * No addition or modification to Ruby standard classes in standard usage,
