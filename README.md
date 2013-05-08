@@ -1,8 +1,9 @@
 # Phys-Units
 
-[GNU Units](http://www.gnu.org/software/units/) -compatible library for Ruby.
-Features: (1) Using rich database of GNU Units.
-(2) Normal design of API without modifying built-in classes.
+[GNU Units](http://www.gnu.org/software/units/) -compatible Ruby library for
+unit conversion of physical quantities.
+Features: (1) It uses rich database of GNU Units.
+(2) It does not modify built-in classes in standard usage.
 Former name is [Quanty](http://narray.rubyforge.org/quanty/quanty-en.html),
 the first Ruby units library released in 2001.
 
@@ -27,7 +28,7 @@ Load Phys-Units library in your Ruby script:
 ## Overview
 
 ### Phys::Quantity
-is the primary class of Phys-Units library, intended to be manipulated by users.
+is the primary class of Phys-Units library.
 This class represents Physical Quantities with a Unit of measurement.
 It contains *Value* and *Unit*.
 
@@ -46,8 +47,7 @@ It contains *Value* and *Unit*.
 
 ### Phys::Unit
 is a class to represent Physical Units of measurement.
-This class is used in the Phys::Quantity for calculations with Units,
-and users do not always need to know its mechanism.
+This class is used in the Phys::Quantity for calculations with Units.
 It has *Factor* and *Dimension*:
 
 * *Factor* of the unit is a scale factor relative to its base unit.

@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Phys::Unit::VERSION
   spec.authors       = ["Masahiro TANAKA"]
   spec.email         = ["masa16.tanaka@gmail.com"]
-  spec.summary       = %q{Physical Quantity and Unit classes using GNU Units data. Formerly 'Quanty'.}
-  spec.description   = %q{Ruby classes for Physical Quantity and Units of measurement. Features: (1) Using rich database of GNU Units. (2) Normal design of API without modifying built-in classes. Former name is 'Quanty'.}
+  spec.summary       = %q{Library for Unit conversion of Physical Quantities using GNU Units data. Formerly 'Quanty'.}
+  spec.description   = %q{Library for Unit conversion of Physical Quantities. Features: (1) It uses rich database of GNU Units. (2) It does not modify built-in classes. Former name is 'Quanty'.}
   spec.homepage      = "https://github.com/masa16/phys-units"
   spec.license       = "GPL"
 
