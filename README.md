@@ -2,8 +2,8 @@
 
 [GNU Units](http://www.gnu.org/software/units/) -compatible Ruby library for
 unit conversion of physical quantities.
-Features: (1) It uses rich database of GNU Units.
-(2) It does not modify built-in classes in standard usage.
+Major features: (1) It uses rich database of GNU Units.
+(2) It provides normal class interface without modifying built-in classes.
 Former name is [Quanty](http://narray.rubyforge.org/quanty/quanty-en.html),
 the first Ruby units library released in 2001.
 
