@@ -144,6 +144,7 @@ module Phys
       self.class.new( val, expr, unit )
     end
     alias convert want
+    alias >> want
 
     # Addition.
     # Before the operation, it converts +other+ to the unit of +self+.

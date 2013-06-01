@@ -45,6 +45,9 @@ describe "Phys::Quantity" do
       it {@q.expr.should == "km"}
       it {@q.unit.should == Phys::Unit["km"]}
       it {@q.want("cm").value.should == 125000}
+      it {(@q >> "cm").value.should == 125000}
+      it {(@q >> U["cm"]).value.should == 125000}
+      it {(@q >> Q[1,"cm"]).value.should == 125000}
       it {(@q + @r).should == Q[1.75,"km"]}
       it {(@q - @r).should == Q[0.75,"km"]}
       it {@q.abs.should == Q[1.25,"km"]}

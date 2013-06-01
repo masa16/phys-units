@@ -18,7 +18,7 @@ module Phys
   #
   #   Phys::UnitsMixin.module_eval do
   #     puts 123.4*km
-  #     puts (23*mile/hr).want(m/s)
+  #     puts 23*mile/hr >> m/s
   #     puts h.to_si
   #     case mile/hr
   #     when m
@@ -32,7 +32,7 @@ module Phys
   #
   #   include Phys::UnitsMixin
   #
-  #   (1*miles/hr).want m/s    #=> Phys::Quantity[0.44704,"m/s"]
+  #   1*miles/hr >> m/s    #=> Phys::Quantity[0.44704,"m/s"]
   #
   module UnitsMixin
     include UnitMeasures
@@ -68,7 +68,7 @@ module Phys
   #     include Phys::UnitsNumericMixin
   #   end
   #
-  #   (1.miles/1.hr).want 'm/s'  #=> Phys::Quantity[0.44704,"m/s"]
+  #   1.miles/1.hr >> 'm/s'  #=> Phys::Quantity[0.44704,"m/s"]
   module UnitsNumericMixin
     alias method_missing_units_alias method_missing
     def method_missing(method, *args, &block)

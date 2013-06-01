@@ -113,10 +113,10 @@ Note that this usage involves global changes on a build-in class and will cause 
 
     $ irb -r phys/units/mixin
 
-    irb> (2.5.miles/hr).want m/s
+    irb> 2.5.miles/hr >> m/s
     => Phys::Quantity[1.1176,"m/s"]
 
-    irb> 23.tempC.want tempF
+    irb> 23.tempC >> tempF
     => Phys::Quantity[73.4,"tempF"]
 
     irb> print_units LENGTH
