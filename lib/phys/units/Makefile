@@ -1,7 +1,7 @@
 SHELL = /bin/sh
 RUBY = ruby
 RACC = racc
-RACCFLAGS = -E
+RACCFLAGS =
 INSTALL = $(RUBY) -r ftools -e 'File::install(ARGV[0], ARGV[1], 0644, true)'
 MKDIR   = $(RUBY) -r ftools -e 'File::makedirs(*ARGV)'
 RM      = $(RUBY) -r ftools -e 'File::rm_f(*Dir[ARGV.join(" ")])'
@@ -11,7 +11,7 @@ sitedir = $(DESTDIR)
 parse = parse.rb
 dump = lib/quanty/units.dump
 
-all: $(parse) 
+all: $(parse)
 
 $(parse): parse.y
 	$(RACC) $(RACCFLAGS) -o $(parse) parse.y
