@@ -133,9 +133,7 @@ Note that this usage involves global changes on a build-in class and will cause 
 
 ## Platforms tested
 
-* ruby 2.0.0p0 (2013-02-24 revision 39474) [x86_64-linux]
-* ruby 1.9.3p392 (2013-02-22 revision 39386) [x86_64-linux]
-* ruby 1.8.7 (2012-10-12 patchlevel 371) [x86_64-linux]
+* ruby 2.1.0p0 (2013-12-25 revision 44422) [x86_64-linux]
 
 ## Copying License
 
