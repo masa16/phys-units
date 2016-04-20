@@ -151,19 +151,19 @@ describe "Phys::Quantity" do
       its(:value){is_expected.to eq 2.5}
     end
     describe "tempC*tempC" do
-      it {expect{Q[1,"tempC"]*Q[2,"tempC"]}.to raise_error}
+      it {expect{Q[1,"tempC"]*Q[2,"tempC"]}.to raise_error(Phys::UnitError)}
     end
     describe "tempC*K" do
-      it {expect{Q[1,"tempC"]*Q[2,"K"]}.to raise_error}
+      it {expect{Q[1,"tempC"]*Q[2,"K"]}.to raise_error(Phys::UnitError)}
     end
     describe "K*tempC" do
-      it {expect{Q[1,"K"]*Q[2,"tempC"]}.to raise_error}
+      it {expect{Q[1,"K"]*Q[2,"tempC"]}.to raise_error(Phys::UnitError)}
     end
     describe "tempC**2" do
-      it {expect{Q[2,"tempC"]**2}.to raise_error}
+      it {expect{Q[2,"tempC"]**2}.to raise_error(Phys::UnitError)}
     end
     describe "tempC/tempC" do
-      it {expect{Q[2,"tempC"]/Q[1,"tempC"]}.to raise_error}
+      it {expect{Q[2,"tempC"]/Q[1,"tempC"]}.to raise_error(Phys::UnitError)}
     end
   end
 
@@ -192,4 +192,3 @@ describe "Phys::Quantity" do
   end
 
 end
-
