@@ -75,6 +75,8 @@ module Phys
       # @return [Phys::Unit]
       def parse(x)
         find_unit(x) || Unit.cast(Parse.new.parse(x))
+      rescue UnitError,Racc::ParseError => e
+        raise UnitError,e.to_s.sub(/^\s+/,"")
       end
       alias [] parse
 
