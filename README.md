@@ -139,7 +139,11 @@ Note that this usage involves global changes on a build-in class and will cause 
 
 ## History
 
-* version 1.0.0 - Unit data from GNU Units version 2.14 (includes 2014 CODATA recommended values)
+* 2017-10-24 ver 1.0.0
+    * Unit data from GNU Units version 2.14 (including 2014 CODATA recommended values)
+* 2013-04-27 ver 0.9.0
+    * Change module name from 'Quanty' to Phys-Units.
+    * Unit data from GNU Units version 2.04 (including 2010 CODATA recommended values)
 
 ## Copying License
 
