@@ -5,6 +5,7 @@ rvm:
   - 2.1
   - 2.2
   - 2.3
+  - 2.4
 
 matrix:
   fast_finish:
@@ -13,13 +14,8 @@ matrix:
 notifications:
   email: false
 
-install: true
-
 before_script:
   - bundle install
 
 script:
   - bundle exec rake spec
-
-gemfile:
-  - Gemfile

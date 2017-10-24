@@ -1,5 +1,7 @@
 # Phys-Units
 
+[![Build Status](https://travis-ci.org/masa16/phys-units.svg?branch=master)](https://travis-ci.org/masa16/phys-units)
+
 [GNU Units](http://www.gnu.org/software/units/) -compatible Ruby library for
 unit conversion of physical quantities.
 Major features: (1) It uses rich database of GNU Units.
@@ -133,7 +135,11 @@ Note that this usage involves global changes on a build-in class and will cause 
 
 ## Platforms tested
 
-* ruby 2.1.0p0 (2013-12-25 revision 44422) [x86_64-linux]
+* ruby 2.4.2p198 (2017-09-14 revision 59899) [x86_64-linux]
+
+## History
+
+* version 1.0.0 - Unit data from GNU Units version 2.14 (includes 2014 CODATA recommended values)
 
 ## Copying License
 
