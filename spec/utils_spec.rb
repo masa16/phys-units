@@ -1,4 +1,3 @@
-$LOAD_PATH.unshift File.dirname(__FILE__)
 require "helper"
 
 Utils = Phys::Unit::Utils

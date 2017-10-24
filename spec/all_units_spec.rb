@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-$LOAD_PATH.unshift File.dirname(__FILE__)
 require "helper"
 
 describe "Unit Conversion" do
@@ -167,6 +166,36 @@ describe "Unit Conversion" do
   end
   describe Q[1,"million"] do
     it {is_expected.to be_a_quantity_close_to Q[1000000] }
+  end
+  describe Q[1,"twoscore"] do
+    it {is_expected.to be_a_quantity_close_to Q[40] }
+  end
+  describe Q[1,"threescore"] do
+    it {is_expected.to be_a_quantity_close_to Q[60] }
+  end
+  describe Q[1,"fourscore"] do
+    it {is_expected.to be_a_quantity_close_to Q[80] }
+  end
+  describe Q[1,"fivescore"] do
+    it {is_expected.to be_a_quantity_close_to Q[100] }
+  end
+  describe Q[1,"sixscore"] do
+    it {is_expected.to be_a_quantity_close_to Q[120] }
+  end
+  describe Q[1,"sevenscore"] do
+    it {is_expected.to be_a_quantity_close_to Q[140] }
+  end
+  describe Q[1,"eightscore"] do
+    it {is_expected.to be_a_quantity_close_to Q[160] }
+  end
+  describe Q[1,"ninescore"] do
+    it {is_expected.to be_a_quantity_close_to Q[180] }
+  end
+  describe Q[1,"tenscore"] do
+    it {is_expected.to be_a_quantity_close_to Q[200] }
+  end
+  describe Q[1,"twelvescore"] do
+    it {is_expected.to be_a_quantity_close_to Q[240] }
   end
   describe Q[1,"shortbillion"] do
     it {is_expected.to be_a_quantity_close_to Q[1e+09] }
@@ -419,6 +448,27 @@ describe "Unit Conversion" do
   end
   describe Q[1,"vigintillion"] do
     it {is_expected.to be_a_quantity_close_to Q[1e+63] }
+  end
+  describe Q[1,"lakh"] do
+    it {is_expected.to be_a_quantity_close_to Q[100000] }
+  end
+  describe Q[1,"crore"] do
+    it {is_expected.to be_a_quantity_close_to Q[10000000] }
+  end
+  describe Q[1,"arab"] do
+    it {is_expected.to be_a_quantity_close_to Q[1e+09] }
+  end
+  describe Q[1,"kharab"] do
+    it {is_expected.to be_a_quantity_close_to Q[1e+11] }
+  end
+  describe Q[1,"neel"] do
+    it {is_expected.to be_a_quantity_close_to Q[1e+13] }
+  end
+  describe Q[1,"padm"] do
+    it {is_expected.to be_a_quantity_close_to Q[1e+15] }
+  end
+  describe Q[1,"shankh"] do
+    it {is_expected.to be_a_quantity_close_to Q[1e+17] }
   end
   describe Q[1,"newton"] do
     it {is_expected.to be_a_quantity_close_to Q[1,"kg m s^-2"] }
@@ -804,6 +854,18 @@ describe "Unit Conversion" do
   describe Q[1,"bell"] do
     it {is_expected.to be_a_quantity_close_to Q[1800,"s"] }
   end
+  describe Q[1,"decimalhour"] do
+    it {is_expected.to be_a_quantity_close_to Q[8640,"s"] }
+  end
+  describe Q[1,"decimalminute"] do
+    it {is_expected.to be_a_quantity_close_to Q[86.4,"s"] }
+  end
+  describe Q[1,"decimalsecond"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.864,"s"] }
+  end
+  describe Q[1,"beat"] do
+    it {is_expected.to be_a_quantity_close_to Q[86.4,"s"] }
+  end
   describe Q[1,"circle"] do
     it {is_expected.to be_a_quantity_close_to Q[6.2831853] }
   end
@@ -1021,28 +1083,28 @@ describe "Unit Conversion" do
     it {is_expected.to be_a_quantity_close_to Q[1.6021766e-19,"A s"] }
   end
   describe Q[1,"h"] do
-    it {is_expected.to be_a_quantity_close_to Q[6.6260696e-34,"s^-1 kg m^2"] }
+    it {is_expected.to be_a_quantity_close_to Q[6.62607e-34,"s^-1 kg m^2"] }
   end
   describe Q[1,"hbar"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.0545717e-34,"s^-1 kg m^2"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.0545718e-34,"s^-1 kg m^2"] }
   end
   describe Q[1,"spin"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.0545717e-34,"s^-1 kg m^2"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.0545718e-34,"s^-1 kg m^2"] }
   end
   describe Q[1,"G"] do
-    it {is_expected.to be_a_quantity_close_to Q[6.67384e-11,"kg^-1 m^3 s^-2"] }
+    it {is_expected.to be_a_quantity_close_to Q[6.67408e-11,"kg^-1 m^3 s^-2"] }
   end
   describe Q[1,"coulombconst"] do
     it {is_expected.to be_a_quantity_close_to Q[8.9875518e+09,"kg m^3 s^-4 A^-2"] }
   end
   describe Q[1,"atomicmassunit"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.6605389e-27,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.660539e-27,"kg"] }
   end
   describe Q[1,"u"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.6605389e-27,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.660539e-27,"kg"] }
   end
   describe Q[1,"amu"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.6605389e-27,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.660539e-27,"kg"] }
   end
   describe Q[1,"amu_chem"] do
     it {is_expected.to be_a_quantity_close_to Q[1.66026e-27,"kg"] }
@@ -1051,46 +1113,52 @@ describe "Unit Conversion" do
     it {is_expected.to be_a_quantity_close_to Q[1.65981e-27,"kg"] }
   end
   describe Q[1,"dalton"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.6605389e-27,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.660539e-27,"kg"] }
   end
   describe Q[1,"avogadro"] do
-    it {is_expected.to be_a_quantity_close_to Q[6.0221413e+23,"mol^-1"] }
+    it {is_expected.to be_a_quantity_close_to Q[6.0221409e+23,"mol^-1"] }
   end
   describe Q[1,"N_A"] do
-    it {is_expected.to be_a_quantity_close_to Q[6.0221413e+23,"mol^-1"] }
+    it {is_expected.to be_a_quantity_close_to Q[6.0221409e+23,"mol^-1"] }
   end
   describe Q[1,"gasconstant"] do
-    it {is_expected.to be_a_quantity_close_to Q[8.3144621,"kg m^2 s^-2 mol^-1 K^-1"] }
+    it {is_expected.to be_a_quantity_close_to Q[8.3144599,"kg m^2 s^-2 K^-1 mol^-1"] }
   end
   describe Q[1,"R"] do
-    it {is_expected.to be_a_quantity_close_to Q[8.3144621,"kg m^2 s^-2 mol^-1 K^-1"] }
+    it {is_expected.to be_a_quantity_close_to Q[8.3144599,"kg m^2 s^-2 K^-1 mol^-1"] }
   end
   describe Q[1,"boltzmann"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.3806488e-23,"kg m^2 s^-2 K^-1"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.3806485e-23,"kg m^2 s^-2 K^-1"] }
   end
   describe Q[1,"k"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.3806488e-23,"kg m^2 s^-2 K^-1"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.3806485e-23,"kg m^2 s^-2 K^-1"] }
   end
   describe Q[1,"kboltzmann"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.3806488e-23,"kg m^2 s^-2 K^-1"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.3806485e-23,"kg m^2 s^-2 K^-1"] }
   end
   describe Q[1,"molarvolume"] do
-    it {is_expected.to be_a_quantity_close_to Q[0.022413968,"m^3"] }
+    it {is_expected.to be_a_quantity_close_to Q[0.022413962,"m^3"] }
   end
   describe Q[1,"loschmidt"] do
-    it {is_expected.to be_a_quantity_close_to Q[2.6867805e+25,"m^-3"] }
+    it {is_expected.to be_a_quantity_close_to Q[2.686781e+25,"m^-3"] }
   end
   describe Q[1,"stefanboltzmann"] do
-    it {is_expected.to be_a_quantity_close_to Q[5.6703725e-08,"kg s^-3 K^-4"] }
+    it {is_expected.to be_a_quantity_close_to Q[5.6703668e-08,"kg s^-3 K^-4"] }
   end
   describe Q[1,"sigma"] do
-    it {is_expected.to be_a_quantity_close_to Q[5.6703725e-08,"kg s^-3 K^-4"] }
+    it {is_expected.to be_a_quantity_close_to Q[5.6703668e-08,"kg s^-3 K^-4"] }
   end
   describe Q[1,"wiendisplacement"] do
-    it {is_expected.to be_a_quantity_close_to Q[0.0028977721,"m K"] }
+    it {is_expected.to be_a_quantity_close_to Q[0.0028977729,"m K"] }
+  end
+  describe Q[1,"K_J90"] do
+    it {is_expected.to be_a_quantity_close_to Q[4.835979e+14,"s^2 kg^-1 m^-2 A"] }
   end
   describe Q[1,"K_J"] do
-    it {is_expected.to be_a_quantity_close_to Q[4.8359787e+14,"s^2 kg^-1 m^-2 A"] }
+    it {is_expected.to be_a_quantity_close_to Q[4.8359785e+14,"s^2 kg^-1 m^-2 A"] }
+  end
+  describe Q[1,"R_K90"] do
+    it {is_expected.to be_a_quantity_close_to Q[25812.807,"kg m^2 s^-3 A^-2"] }
   end
   describe Q[1,"R_K"] do
     it {is_expected.to be_a_quantity_close_to Q[25812.807,"kg m^2 s^-3 A^-2"] }
@@ -1189,88 +1257,88 @@ describe "Unit Conversion" do
     it {is_expected.to be_a_quantity_close_to Q[5.2917721e-11,"m"] }
   end
   describe Q[1,"prout"] do
-    it {is_expected.to be_a_quantity_close_to Q[2.9720375e-14,"s^-2 kg m^2"] }
+    it {is_expected.to be_a_quantity_close_to Q[2.9720376e-14,"s^-2 kg m^2"] }
   end
   describe Q[1,"planckmass"] do
-    it {is_expected.to be_a_quantity_close_to Q[2.17644e-08,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[2.17651e-08,"kg"] }
   end
   describe Q[1,"m_P"] do
-    it {is_expected.to be_a_quantity_close_to Q[2.17644e-08,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[2.17651e-08,"kg"] }
   end
   describe Q[1,"plancktime"] do
-    it {is_expected.to be_a_quantity_close_to Q[5.391232e-44,"s"] }
+    it {is_expected.to be_a_quantity_close_to Q[5.391059e-44,"s"] }
   end
   describe Q[1,"t_P"] do
-    it {is_expected.to be_a_quantity_close_to Q[5.391232e-44,"s"] }
+    it {is_expected.to be_a_quantity_close_to Q[5.391059e-44,"s"] }
   end
   describe Q[1,"plancklength"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.6162507e-35,"m"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.6161988e-35,"m"] }
   end
   describe Q[1,"l_P"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.6162507e-35,"m"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.6161988e-35,"m"] }
   end
   describe Q[1,"electronradius"] do
     it {is_expected.to be_a_quantity_close_to Q[2.8179403e-15,"m"] }
   end
   describe Q[1,"deuteronchargeradius"] do
-    it {is_expected.to be_a_quantity_close_to Q[2.1424e-15,"m"] }
+    it {is_expected.to be_a_quantity_close_to Q[2.1413e-15,"m"] }
   end
   describe Q[1,"protonchargeradius"] do
-    it {is_expected.to be_a_quantity_close_to Q[8.775e-16] }
+    it {is_expected.to be_a_quantity_close_to Q[8.751e-16,"m"] }
   end
   describe Q[1,"electronmass"] do
-    it {is_expected.to be_a_quantity_close_to Q[9.1093829e-31,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[9.1093836e-31,"kg"] }
   end
   describe Q[1,"m_e"] do
-    it {is_expected.to be_a_quantity_close_to Q[9.1093829e-31,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[9.1093836e-31,"kg"] }
   end
   describe Q[1,"protonmass"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.6726218e-27,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.6726219e-27,"kg"] }
   end
   describe Q[1,"m_p"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.6726218e-27,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.6726219e-27,"kg"] }
   end
   describe Q[1,"neutronmass"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.6749274e-27,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.6749275e-27,"kg"] }
   end
   describe Q[1,"m_n"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.6749274e-27,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.6749275e-27,"kg"] }
   end
   describe Q[1,"muonmass"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.8835315e-28,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.8835316e-28,"kg"] }
   end
   describe Q[1,"m_mu"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.8835315e-28,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.8835316e-28,"kg"] }
   end
   describe Q[1,"deuteronmass"] do
-    it {is_expected.to be_a_quantity_close_to Q[3.3435835e-27,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[3.3435837e-27,"kg"] }
   end
   describe Q[1,"m_d"] do
-    it {is_expected.to be_a_quantity_close_to Q[3.3435835e-27,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[3.3435837e-27,"kg"] }
   end
   describe Q[1,"alphaparticlemass"] do
-    it {is_expected.to be_a_quantity_close_to Q[6.6446568e-27,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[6.6446572e-27,"kg"] }
   end
   describe Q[1,"m_alpha"] do
-    it {is_expected.to be_a_quantity_close_to Q[6.6446568e-27,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[6.6446572e-27,"kg"] }
   end
   describe Q[1,"taumass"] do
-    it {is_expected.to be_a_quantity_close_to Q[3.1674614e-27,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[3.1674616e-27,"kg"] }
   end
   describe Q[1,"m_tau"] do
-    it {is_expected.to be_a_quantity_close_to Q[3.1674614e-27,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[3.1674616e-27,"kg"] }
   end
   describe Q[1,"tritonmass"] do
-    it {is_expected.to be_a_quantity_close_to Q[5.0073563e-27,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[5.0073567e-27,"kg"] }
   end
   describe Q[1,"m_t"] do
-    it {is_expected.to be_a_quantity_close_to Q[5.0073563e-27,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[5.0073567e-27,"kg"] }
   end
   describe Q[1,"helionmass"] do
-    it {is_expected.to be_a_quantity_close_to Q[5.0064123e-27,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[5.0064127e-27,"kg"] }
   end
   describe Q[1,"m_h"] do
-    it {is_expected.to be_a_quantity_close_to Q[5.0064123e-27,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[5.0064127e-27,"kg"] }
   end
   describe Q[1,"electronwavelength"] do
     it {is_expected.to be_a_quantity_close_to Q[2.4263102e-12,"m"] }
@@ -1291,34 +1359,34 @@ describe "Unit Conversion" do
     it {is_expected.to be_a_quantity_close_to Q[1.3195909e-15,"m"] }
   end
   describe Q[1,"bohrmagneton"] do
-    it {is_expected.to be_a_quantity_close_to Q[9.2740097e-24,"A m^2"] }
+    it {is_expected.to be_a_quantity_close_to Q[9.27401e-24,"A m^2"] }
   end
   describe Q[1,"mu_B"] do
-    it {is_expected.to be_a_quantity_close_to Q[9.2740097e-24,"A m^2"] }
+    it {is_expected.to be_a_quantity_close_to Q[9.27401e-24,"A m^2"] }
   end
   describe Q[1,"nuclearmagneton"] do
-    it {is_expected.to be_a_quantity_close_to Q[5.0507835e-27,"A m^2"] }
+    it {is_expected.to be_a_quantity_close_to Q[5.0507837e-27,"A m^2"] }
   end
   describe Q[1,"mu_N"] do
-    it {is_expected.to be_a_quantity_close_to Q[5.0507835e-27,"A m^2"] }
+    it {is_expected.to be_a_quantity_close_to Q[5.0507837e-27,"A m^2"] }
   end
   describe Q[1,"mu_mu"] do
-    it {is_expected.to be_a_quantity_close_to Q[-4.4904481e-26,"m^2 A"] }
+    it {is_expected.to be_a_quantity_close_to Q[-4.4904483e-26,"m^2 A"] }
   end
   describe Q[1,"mu_p"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.4106067e-26,"m^2 A"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.4106068e-26,"m^2 A"] }
   end
   describe Q[1,"mu_e"] do
-    it {is_expected.to be_a_quantity_close_to Q[-9.2847643e-24,"m^2 A"] }
+    it {is_expected.to be_a_quantity_close_to Q[-9.2847646e-24,"m^2 A"] }
   end
   describe Q[1,"mu_n"] do
-    it {is_expected.to be_a_quantity_close_to Q[-9.6623647e-27] }
+    it {is_expected.to be_a_quantity_close_to Q[-9.662365e-27,"m^2 A"] }
   end
   describe Q[1,"mu_d"] do
-    it {is_expected.to be_a_quantity_close_to Q[4.3307349e-27,"m^2 A"] }
+    it {is_expected.to be_a_quantity_close_to Q[4.330735e-27,"m^2 A"] }
   end
   describe Q[1,"mu_t"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.5046094e-26,"m^2 A"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.5046095e-26,"m^2 A"] }
   end
   describe Q[1,"mu_h"] do
     it {is_expected.to be_a_quantity_close_to Q[-1.0746175e-26,"m^2 A"] }
@@ -1339,7 +1407,7 @@ describe "Unit Conversion" do
     it {is_expected.to be_a_quantity_close_to Q[133.32239,"m^-1 kg s^-2"] }
   end
   describe Q[1,"torr"] do
-    it {is_expected.to be_a_quantity_close_to Q[133.32239,"m^-1 kg s^-2"] }
+    it {is_expected.to be_a_quantity_close_to Q[133.32237,"kg m^-1 s^-2"] }
   end
   describe Q[1,"tor"] do
     it {is_expected.to be_a_quantity_close_to Q[1,"kg m^-1 s^-2"] }
@@ -1378,31 +1446,31 @@ describe "Unit Conversion" do
     it {is_expected.to be_a_quantity_close_to Q[3.0856776e+16,"m"] }
   end
   describe Q[1,"rydberg"] do
-    it {is_expected.to be_a_quantity_close_to Q[2.1798722e-18,"s^-2 kg m^2"] }
+    it {is_expected.to be_a_quantity_close_to Q[2.1798723e-18,"s^-2 kg m^2"] }
   end
   describe Q[1,"crith"] do
     it {is_expected.to be_a_quantity_close_to Q[8.9885e-05,"kg"] }
   end
   describe Q[1,"amagatvolume"] do
-    it {is_expected.to be_a_quantity_close_to Q[0.022413968,"m^3"] }
+    it {is_expected.to be_a_quantity_close_to Q[0.022413962,"m^3"] }
   end
   describe Q[1,"amagat"] do
-    it {is_expected.to be_a_quantity_close_to Q[44.615036,"mol m^-3"] }
+    it {is_expected.to be_a_quantity_close_to Q[44.615048,"mol m^-3"] }
   end
   describe Q[1,"lorentz"] do
-    it {is_expected.to be_a_quantity_close_to Q[46.68645,"A m^-1 s^2 kg^-1"] }
+    it {is_expected.to be_a_quantity_close_to Q[46.686448,"A m^-1 s^2 kg^-1"] }
   end
   describe Q[1,"cminv"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.9864457e-23,"s^-2 kg m^2"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.9864458e-23,"s^-2 kg m^2"] }
   end
   describe Q[1,"invcm"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.9864457e-23,"s^-2 kg m^2"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.9864458e-23,"s^-2 kg m^2"] }
   end
   describe Q[1,"wavenumber"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.9864457e-23,"s^-2 kg m^2"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.9864458e-23,"s^-2 kg m^2"] }
   end
   describe Q[1,"kcal_mol"] do
-    it {is_expected.to be_a_quantity_close_to Q[6.9476948e-21,"kg m^2 s^-2"] }
+    it {is_expected.to be_a_quantity_close_to Q[6.9476953e-21,"kg m^2 s^-2"] }
   end
   describe Q[1,"dyne"] do
     it {is_expected.to be_a_quantity_close_to Q[1e-05,"m kg s^-2"] }
@@ -1621,7 +1689,7 @@ describe "Unit Conversion" do
     it {is_expected.to be_a_quantity_close_to Q[1.042,"kg m^2 s^-3 A^-1"] }
   end
   describe Q[1,"faraday"] do
-    it {is_expected.to be_a_quantity_close_to Q[96485.336,"A s"] }
+    it {is_expected.to be_a_quantity_close_to Q[96485.333,"A s"] }
   end
   describe Q[1,"faraday_phys"] do
     it {is_expected.to be_a_quantity_close_to Q[96521.9,"A s"] }
@@ -1634,6 +1702,21 @@ describe "Unit Conversion" do
   end
   describe Q[1,"siemensunit"] do
     it {is_expected.to be_a_quantity_close_to Q[0.9534,"kg m^2 s^-3 A^-2"] }
+  end
+  describe Q[1,"copperconductivity"] do
+    it {is_expected.to be_a_quantity_close_to Q[58000000,"A^2 kg^-1 m^-3 s^3"] }
+  end
+  describe Q[1,"IACS"] do
+    it {is_expected.to be_a_quantity_close_to Q[58000000,"A^2 kg^-1 m^-3 s^3"] }
+  end
+  describe Q[1,"copperdensity"] do
+    it {is_expected.to be_a_quantity_close_to Q[8890,"kg m^-3"] }
+  end
+  describe Q[1,"ouncecopper"] do
+    it {is_expected.to be_a_quantity_close_to Q[3.4325279e-05,"m"] }
+  end
+  describe Q[1,"ozcu"] do
+    it {is_expected.to be_a_quantity_close_to Q[3.4325279e-05,"m"] }
   end
   describe Q[1,"LUMINOUS_INTENSITY"] do
     it {is_expected.to be_a_quantity_close_to Q[1,"cd"] }
@@ -1772,6 +1855,30 @@ describe "Unit Conversion" do
   end
   describe Q[1,"c250"] do
     it {is_expected.to be_a_quantity_close_to Q[250,"s^-1"] }
+  end
+  describe Q[1,"N_exif"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.32,"cd m^-2 s"] }
+  end
+  describe Q[1,"K_apex1961"] do
+    it {is_expected.to be_a_quantity_close_to Q[11.4,"s^-1"] }
+  end
+  describe Q[1,"K_apex1971"] do
+    it {is_expected.to be_a_quantity_close_to Q[12.5,"s^-1"] }
+  end
+  describe Q[1,"C_apex1961"] do
+    it {is_expected.to be_a_quantity_close_to Q[224,"s^-1"] }
+  end
+  describe Q[1,"C_apex1971"] do
+    it {is_expected.to be_a_quantity_close_to Q[322,"s^-1"] }
+  end
+  describe Q[1,"N_speed"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.32,"cd m^-2 s"] }
+  end
+  describe Q[1,"K_lum"] do
+    it {is_expected.to be_a_quantity_close_to Q[12.5,"s^-1"] }
+  end
+  describe Q[1,"C_illum"] do
+    it {is_expected.to be_a_quantity_close_to Q[224,"s^-1"] }
   end
   describe Q[1,"TIME"] do
     it {is_expected.to be_a_quantity_close_to Q[1,"s"] }
@@ -2086,13 +2193,13 @@ describe "Unit Conversion" do
     it {is_expected.to be_a_quantity_close_to Q[1.62,"m s^-2"] }
   end
   describe Q[1,"atomicmass"] do
-    it {is_expected.to be_a_quantity_close_to Q[9.1093829e-31,"kg"] }
+    it {is_expected.to be_a_quantity_close_to Q[9.1093836e-31,"kg"] }
   end
   describe Q[1,"atomiccharge"] do
     it {is_expected.to be_a_quantity_close_to Q[1.6021766e-19,"A s"] }
   end
   describe Q[1,"atomicaction"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.0545717e-34,"s^-1 kg m^2"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.0545718e-34,"s^-1 kg m^2"] }
   end
   describe Q[1,"atomiclength"] do
     it {is_expected.to be_a_quantity_close_to Q[5.2917721e-11,"m"] }
@@ -2104,10 +2211,10 @@ describe "Unit Conversion" do
     it {is_expected.to be_a_quantity_close_to Q[2187691.3,"m s^-1"] }
   end
   describe Q[1,"atomicenergy"] do
-    it {is_expected.to be_a_quantity_close_to Q[4.3597443e-18,"s^-2 kg m^2"] }
+    it {is_expected.to be_a_quantity_close_to Q[4.3597446e-18,"s^-2 kg m^2"] }
   end
   describe Q[1,"hartree"] do
-    it {is_expected.to be_a_quantity_close_to Q[4.3597443e-18,"s^-2 kg m^2"] }
+    it {is_expected.to be_a_quantity_close_to Q[4.3597446e-18,"s^-2 kg m^2"] }
   end
   describe Q[1,"thermalcoulomb"] do
     it {is_expected.to be_a_quantity_close_to Q[1,"kg m^2 s^-2 K^-1"] }
@@ -2565,9 +2672,6 @@ describe "Unit Conversion" do
   describe Q[1,"winesplit"] do
     it {is_expected.to be_a_quantity_close_to Q[0.0001875,"m^3"] }
   end
-  describe Q[1,"wineglass"] do
-    it {is_expected.to be_a_quantity_close_to Q[0.00011829412,"m^3"] }
-  end
   describe Q[1,"magnum"] do
     it {is_expected.to be_a_quantity_close_to Q[0.0015,"m^3"] }
   end
@@ -2609,6 +2713,24 @@ describe "Unit Conversion" do
   end
   describe Q[1,"nebuchadnezzar"] do
     it {is_expected.to be_a_quantity_close_to Q[0.015,"m^3"] }
+  end
+  describe Q[1,"wineglass"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.00015,"m^3"] }
+  end
+  describe Q[1,"alcoholunitus"] do
+    it {is_expected.to be_a_quantity_close_to Q[1.7737236e-05,"m^3"] }
+  end
+  describe Q[1,"alcoholunitca"] do
+    it {is_expected.to be_a_quantity_close_to Q[1.7230457e-05,"m^3"] }
+  end
+  describe Q[1,"alcoholunituk"] do
+    it {is_expected.to be_a_quantity_close_to Q[1.0135563e-05,"m^3"] }
+  end
+  describe Q[1,"alcoholunitau"] do
+    it {is_expected.to be_a_quantity_close_to Q[1.2669454e-05,"m^3"] }
+  end
+  describe Q[1,"coffeeratio"] do
+    it {is_expected.to be_a_quantity_close_to Q[55,"kg m^-3"] }
   end
   describe Q[1,"clarkdegree"] do
     it {is_expected.to be_a_quantity_close_to Q[0.014253768,"kg m^-3"] }
@@ -3321,6 +3443,12 @@ describe "Unit Conversion" do
   describe Q[1,"eggyolkvolume"] do
     it {is_expected.to be_a_quantity_close_to Q[1.7251226e-05,"m^3"] }
   end
+  describe Q[1,"ethanoldensity"] do
+    it {is_expected.to be_a_quantity_close_to Q[789.3,"kg m^-3"] }
+  end
+  describe Q[1,"alcoholdensity"] do
+    it {is_expected.to be_a_quantity_close_to Q[789.3,"kg m^-3"] }
+  end
   describe Q[1,"baumeconst"] do
     it {is_expected.to be_a_quantity_close_to Q[145] }
   end
@@ -3474,38 +3602,50 @@ describe "Unit Conversion" do
   describe Q[1,"WORK"] do
     it {is_expected.to be_a_quantity_close_to Q[1,"kg m^2 s^-2"] }
   end
-  describe Q[1,"cal_IT"] do
-    it {is_expected.to be_a_quantity_close_to Q[4.1868,"kg m^2 s^-2"] }
-  end
-  describe Q[1,"cal_th"] do
+  describe Q[1,"calorie"] do
     it {is_expected.to be_a_quantity_close_to Q[4.184,"kg m^2 s^-2"] }
   end
-  describe Q[1,"cal_fifteen"] do
-    it {is_expected.to be_a_quantity_close_to Q[4.1858,"kg m^2 s^-2"] }
-  end
-  describe Q[1,"cal_twenty"] do
-    it {is_expected.to be_a_quantity_close_to Q[4.1819,"kg m^2 s^-2"] }
-  end
-  describe Q[1,"cal_mean"] do
-    it {is_expected.to be_a_quantity_close_to Q[4.19002,"kg m^2 s^-2"] }
-  end
-  describe Q[1,"calorie"] do
-    it {is_expected.to be_a_quantity_close_to Q[4.1868,"kg m^2 s^-2"] }
-  end
   describe Q[1,"cal"] do
-    it {is_expected.to be_a_quantity_close_to Q[4.1868,"kg m^2 s^-2"] }
-  end
-  describe Q[1,"calorie_IT"] do
-    it {is_expected.to be_a_quantity_close_to Q[4.1868,"kg m^2 s^-2"] }
-  end
-  describe Q[1,"thermcalorie"] do
     it {is_expected.to be_a_quantity_close_to Q[4.184,"kg m^2 s^-2"] }
   end
   describe Q[1,"calorie_th"] do
     it {is_expected.to be_a_quantity_close_to Q[4.184,"kg m^2 s^-2"] }
   end
+  describe Q[1,"thermcalorie"] do
+    it {is_expected.to be_a_quantity_close_to Q[4.184,"kg m^2 s^-2"] }
+  end
+  describe Q[1,"cal_th"] do
+    it {is_expected.to be_a_quantity_close_to Q[4.184,"kg m^2 s^-2"] }
+  end
+  describe Q[1,"calorie_IT"] do
+    it {is_expected.to be_a_quantity_close_to Q[4.1868,"kg m^2 s^-2"] }
+  end
+  describe Q[1,"cal_IT"] do
+    it {is_expected.to be_a_quantity_close_to Q[4.1868,"kg m^2 s^-2"] }
+  end
+  describe Q[1,"calorie_15"] do
+    it {is_expected.to be_a_quantity_close_to Q[4.1858,"kg m^2 s^-2"] }
+  end
+  describe Q[1,"cal_15"] do
+    it {is_expected.to be_a_quantity_close_to Q[4.1858,"kg m^2 s^-2"] }
+  end
+  describe Q[1,"calorie_fifteen"] do
+    it {is_expected.to be_a_quantity_close_to Q[4.1858,"kg m^2 s^-2"] }
+  end
+  describe Q[1,"calorie_20"] do
+    it {is_expected.to be_a_quantity_close_to Q[4.1819,"kg m^2 s^-2"] }
+  end
+  describe Q[1,"cal_20"] do
+    it {is_expected.to be_a_quantity_close_to Q[4.1819,"kg m^2 s^-2"] }
+  end
+  describe Q[1,"calorie_twenty"] do
+    it {is_expected.to be_a_quantity_close_to Q[4.1819,"kg m^2 s^-2"] }
+  end
+  describe Q[1,"cal_mean"] do
+    it {is_expected.to be_a_quantity_close_to Q[4.19002,"kg m^2 s^-2"] }
+  end
   describe Q[1,"Calorie"] do
-    it {is_expected.to be_a_quantity_close_to Q[4186.8,"kg m^2 s^-2"] }
+    it {is_expected.to be_a_quantity_close_to Q[4184,"kg m^2 s^-2"] }
   end
   describe Q[1,"thermie"] do
     it {is_expected.to be_a_quantity_close_to Q[4185800,"kg m^2 s^-2"] }
@@ -3536,6 +3676,252 @@ describe "Unit Conversion" do
   end
   describe Q[1,"therm"] do
     it {is_expected.to be_a_quantity_close_to Q[1.054804e+08,"kg m^2 s^-2"] }
+  end
+  describe Q[1,"water_fusion_heat"] do
+    it {is_expected.to be_a_quantity_close_to Q[333610.88,"m^2 s^-2"] }
+  end
+  describe Q[1,"water_vaporization_heat"] do
+    it {is_expected.to be_a_quantity_close_to Q[2256400,"m^2 s^-2"] }
+  end
+  describe Q[1,"specificheat_water"] do
+    it {is_expected.to be_a_quantity_close_to Q[4184,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"water_specificheat"] do
+    it {is_expected.to be_a_quantity_close_to Q[4184,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_aluminum"] do
+    it {is_expected.to be_a_quantity_close_to Q[910,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_antimony"] do
+    it {is_expected.to be_a_quantity_close_to Q[210,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_barium"] do
+    it {is_expected.to be_a_quantity_close_to Q[200,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_beryllium"] do
+    it {is_expected.to be_a_quantity_close_to Q[1830,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_bismuth"] do
+    it {is_expected.to be_a_quantity_close_to Q[130,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_cadmium"] do
+    it {is_expected.to be_a_quantity_close_to Q[230,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_cesium"] do
+    it {is_expected.to be_a_quantity_close_to Q[240,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_chromium"] do
+    it {is_expected.to be_a_quantity_close_to Q[460,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_cobalt"] do
+    it {is_expected.to be_a_quantity_close_to Q[420,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_copper"] do
+    it {is_expected.to be_a_quantity_close_to Q[390,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_gallium"] do
+    it {is_expected.to be_a_quantity_close_to Q[370,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_germanium"] do
+    it {is_expected.to be_a_quantity_close_to Q[320,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_gold"] do
+    it {is_expected.to be_a_quantity_close_to Q[130,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_hafnium"] do
+    it {is_expected.to be_a_quantity_close_to Q[140,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_indium"] do
+    it {is_expected.to be_a_quantity_close_to Q[240,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_iridium"] do
+    it {is_expected.to be_a_quantity_close_to Q[130,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_iron"] do
+    it {is_expected.to be_a_quantity_close_to Q[450,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_lanthanum"] do
+    it {is_expected.to be_a_quantity_close_to Q[195,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_lead"] do
+    it {is_expected.to be_a_quantity_close_to Q[130,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_lithium"] do
+    it {is_expected.to be_a_quantity_close_to Q[3570,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_lutetium"] do
+    it {is_expected.to be_a_quantity_close_to Q[150,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_magnesium"] do
+    it {is_expected.to be_a_quantity_close_to Q[1050,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_manganese"] do
+    it {is_expected.to be_a_quantity_close_to Q[480,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_mercury"] do
+    it {is_expected.to be_a_quantity_close_to Q[140,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_molybdenum"] do
+    it {is_expected.to be_a_quantity_close_to Q[250,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_nickel"] do
+    it {is_expected.to be_a_quantity_close_to Q[440,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_osmium"] do
+    it {is_expected.to be_a_quantity_close_to Q[130,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_palladium"] do
+    it {is_expected.to be_a_quantity_close_to Q[240,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_platinum"] do
+    it {is_expected.to be_a_quantity_close_to Q[130,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_plutonum"] do
+    it {is_expected.to be_a_quantity_close_to Q[130,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_potassium"] do
+    it {is_expected.to be_a_quantity_close_to Q[750,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_rhenium"] do
+    it {is_expected.to be_a_quantity_close_to Q[140,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_rhodium"] do
+    it {is_expected.to be_a_quantity_close_to Q[240,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_rubidium"] do
+    it {is_expected.to be_a_quantity_close_to Q[360,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_ruthenium"] do
+    it {is_expected.to be_a_quantity_close_to Q[240,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_scandium"] do
+    it {is_expected.to be_a_quantity_close_to Q[570,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_selenium"] do
+    it {is_expected.to be_a_quantity_close_to Q[320,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_silicon"] do
+    it {is_expected.to be_a_quantity_close_to Q[710,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_silver"] do
+    it {is_expected.to be_a_quantity_close_to Q[230,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_sodium"] do
+    it {is_expected.to be_a_quantity_close_to Q[1210,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_strontium"] do
+    it {is_expected.to be_a_quantity_close_to Q[300,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_tantalum"] do
+    it {is_expected.to be_a_quantity_close_to Q[140,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_thallium"] do
+    it {is_expected.to be_a_quantity_close_to Q[130,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_thorium"] do
+    it {is_expected.to be_a_quantity_close_to Q[130,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_tin"] do
+    it {is_expected.to be_a_quantity_close_to Q[210,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_titanium"] do
+    it {is_expected.to be_a_quantity_close_to Q[540,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_tungsten"] do
+    it {is_expected.to be_a_quantity_close_to Q[130,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_uranium"] do
+    it {is_expected.to be_a_quantity_close_to Q[120,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_vanadium"] do
+    it {is_expected.to be_a_quantity_close_to Q[390,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_yttrium"] do
+    it {is_expected.to be_a_quantity_close_to Q[300,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_zinc"] do
+    it {is_expected.to be_a_quantity_close_to Q[390,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_zirconium"] do
+    it {is_expected.to be_a_quantity_close_to Q[270,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_ethanol"] do
+    it {is_expected.to be_a_quantity_close_to Q[2300,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_ammonia"] do
+    it {is_expected.to be_a_quantity_close_to Q[4600,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_freon"] do
+    it {is_expected.to be_a_quantity_close_to Q[910,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_gasoline"] do
+    it {is_expected.to be_a_quantity_close_to Q[2220,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_iodine"] do
+    it {is_expected.to be_a_quantity_close_to Q[2150,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_oliveoil"] do
+    it {is_expected.to be_a_quantity_close_to Q[1970,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_hydrogen"] do
+    it {is_expected.to be_a_quantity_close_to Q[14300,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_helium"] do
+    it {is_expected.to be_a_quantity_close_to Q[5193.2,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_argon"] do
+    it {is_expected.to be_a_quantity_close_to Q[520.3,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_tissue"] do
+    it {is_expected.to be_a_quantity_close_to Q[3500,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_diamond"] do
+    it {is_expected.to be_a_quantity_close_to Q[509.1,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_granite"] do
+    it {is_expected.to be_a_quantity_close_to Q[790,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_graphite"] do
+    it {is_expected.to be_a_quantity_close_to Q[710,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_ice"] do
+    it {is_expected.to be_a_quantity_close_to Q[2110,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_asphalt"] do
+    it {is_expected.to be_a_quantity_close_to Q[920,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_brick"] do
+    it {is_expected.to be_a_quantity_close_to Q[840,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_concrete"] do
+    it {is_expected.to be_a_quantity_close_to Q[880,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_glass_silica"] do
+    it {is_expected.to be_a_quantity_close_to Q[840,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_glass_flint"] do
+    it {is_expected.to be_a_quantity_close_to Q[503,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_glass_pyrex"] do
+    it {is_expected.to be_a_quantity_close_to Q[753,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_gypsum"] do
+    it {is_expected.to be_a_quantity_close_to Q[1090,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_marble"] do
+    it {is_expected.to be_a_quantity_close_to Q[880,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_sand"] do
+    it {is_expected.to be_a_quantity_close_to Q[835,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_soil"] do
+    it {is_expected.to be_a_quantity_close_to Q[835,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_wood"] do
+    it {is_expected.to be_a_quantity_close_to Q[1700,"m^2 s^-2 K^-1"] }
+  end
+  describe Q[1,"specificheat_sucrose"] do
+    it {is_expected.to be_a_quantity_close_to Q[1244,"m^2 s^-2 K^-1"] }
   end
   describe Q[1,"tonoil"] do
     it {is_expected.to be_a_quantity_close_to Q[4.1868e+10,"kg m^2 s^-2"] }
@@ -3607,19 +3993,25 @@ describe "Unit Conversion" do
     it {is_expected.to be_a_quantity_close_to Q[1.24e+08,"kg m^-1 s^-2"] }
   end
   describe Q[1,"uranium_pure"] do
-    it {is_expected.to be_a_quantity_close_to Q[8.2099833e+13,"s^-2 m^2"] }
+    it {is_expected.to be_a_quantity_close_to Q[8.209983e+13,"s^-2 m^2"] }
   end
   describe Q[1,"uranium_natural"] do
-    it {is_expected.to be_a_quantity_close_to Q[5.7469883e+11,"s^-2 m^2"] }
+    it {is_expected.to be_a_quantity_close_to Q[5.7469881e+11,"s^-2 m^2"] }
   end
   describe Q[1,"celsiusheatunit"] do
-    it {is_expected.to be_a_quantity_close_to Q[1899.1005,"kg m^2 s^-2"] }
+    it {is_expected.to be_a_quantity_close_to Q[1897.8305,"kg m^2 s^-2"] }
   end
   describe Q[1,"chu"] do
-    it {is_expected.to be_a_quantity_close_to Q[1899.1005,"kg m^2 s^-2"] }
+    it {is_expected.to be_a_quantity_close_to Q[1897.8305,"kg m^2 s^-2"] }
   end
   describe Q[1,"POWER"] do
     it {is_expected.to be_a_quantity_close_to Q[1,"kg m^2 s^-3"] }
+  end
+  describe Q[1,"VA"] do
+    it {is_expected.to be_a_quantity_close_to Q[1,"kg m^2 s^-3"] }
+  end
+  describe Q[1,"kWh"] do
+    it {is_expected.to be_a_quantity_close_to Q[3600000,"kg m^2 s^-2"] }
   end
   describe Q[1,"horsepower"] do
     it {is_expected.to be_a_quantity_close_to Q[745.69987,"m^2 kg s^-3"] }
@@ -3694,7 +4086,7 @@ describe "Unit Conversion" do
     it {is_expected.to be_a_quantity_close_to Q[1,"kg m^2 s^-2 K^-1"] }
   end
   describe Q[1,"clausius"] do
-    it {is_expected.to be_a_quantity_close_to Q[4186.8,"kg m^2 s^-2 K^-1"] }
+    it {is_expected.to be_a_quantity_close_to Q[4184,"kg m^2 s^-2 K^-1"] }
   end
   describe Q[1,"langley"] do
     it {is_expected.to be_a_quantity_close_to Q[41840,"kg s^-2"] }
@@ -3719,6 +4111,36 @@ describe "Unit Conversion" do
   end
   describe Q[1,"airwatt"] do
     it {is_expected.to be_a_quantity_close_to Q[0.99923343,"m^2 s^-3 kg"] }
+  end
+  describe Q[1,"davycrocket"] do
+    it {is_expected.to be_a_quantity_close_to Q[4.184e+10,"kg m^2 s^-2"] }
+  end
+  describe Q[1,"hiroshima"] do
+    it {is_expected.to be_a_quantity_close_to Q[6.4852e+13,"kg m^2 s^-2"] }
+  end
+  describe Q[1,"nagasaki"] do
+    it {is_expected.to be_a_quantity_close_to Q[8.7864e+13,"kg m^2 s^-2"] }
+  end
+  describe Q[1,"fatman"] do
+    it {is_expected.to be_a_quantity_close_to Q[8.7864e+13,"kg m^2 s^-2"] }
+  end
+  describe Q[1,"littleboy"] do
+    it {is_expected.to be_a_quantity_close_to Q[6.4852e+13,"kg m^2 s^-2"] }
+  end
+  describe Q[1,"ivyking"] do
+    it {is_expected.to be_a_quantity_close_to Q[2.092e+15,"kg m^2 s^-2"] }
+  end
+  describe Q[1,"castlebravo"] do
+    it {is_expected.to be_a_quantity_close_to Q[6.276e+16,"kg m^2 s^-2"] }
+  end
+  describe Q[1,"b53bomb"] do
+    it {is_expected.to be_a_quantity_close_to Q[3.7656e+16,"kg m^2 s^-2"] }
+  end
+  describe Q[1,"trinity"] do
+    it {is_expected.to be_a_quantity_close_to Q[7.5312e+13,"kg m^2 s^-2"] }
+  end
+  describe Q[1,"gadget"] do
+    it {is_expected.to be_a_quantity_close_to Q[7.5312e+13,"kg m^2 s^-2"] }
   end
   describe Q[1,"perm_0C"] do
     it {is_expected.to be_a_quantity_close_to Q[5.7213495e-11,"s m^-1"] }
@@ -3834,8 +4256,98 @@ describe "Unit Conversion" do
   describe Q[1,"Epaper"] do
     it {is_expected.to be_a_quantity_close_to Q[0.96515936,"m^2"] }
   end
-  describe Q[1,"pointthickness"] do
-    it {is_expected.to be_a_quantity_close_to Q[2.54e-05,"m"] }
+  describe Q[1,"envelope6_25size"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.01354836,"m^2"] }
+  end
+  describe Q[1,"envelope6_75size"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.015201583,"m^2"] }
+  end
+  describe Q[1,"envelope7size"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.016330613,"m^2"] }
+  end
+  describe Q[1,"envelope7_75size"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.018749962,"m^2"] }
+  end
+  describe Q[1,"envelope8_625size"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.020171331,"m^2"] }
+  end
+  describe Q[1,"envelope9size"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.022187456,"m^2"] }
+  end
+  describe Q[1,"envelope10size"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.025282208,"m^2"] }
+  end
+  describe Q[1,"envelope11size"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.030120908,"m^2"] }
+  end
+  describe Q[1,"envelope12size"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.03370961,"m^2"] }
+  end
+  describe Q[1,"envelope14size"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0370967,"m^2"] }
+  end
+  describe Q[1,"envelope16size"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.04645152,"m^2"] }
+  end
+  describe Q[1,"envelopeA1size"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.011985863,"m^2"] }
+  end
+  describe Q[1,"envelopeA2size"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.016229806,"m^2"] }
+  end
+  describe Q[1,"envelopeA6size"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.019919315,"m^2"] }
+  end
+  describe Q[1,"envelopeA7size"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.024556403,"m^2"] }
+  end
+  describe Q[1,"envelopeA8size"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.028830588,"m^2"] }
+  end
+  describe Q[1,"envelopeA9size"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.032459612,"m^2"] }
+  end
+  describe Q[1,"envelopeA10size"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.03677412,"m^2"] }
+  end
+  describe Q[1,"envelope4bar"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.011985863,"m^2"] }
+  end
+  describe Q[1,"envelope5_5bar"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.016229806,"m^2"] }
+  end
+  describe Q[1,"envelope6bar"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.019919315,"m^2"] }
+  end
+  describe Q[1,"envelope1baby"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.005080635,"m^2"] }
+  end
+  describe Q[1,"envelope00coin"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0029939456,"m^2"] }
+  end
+  describe Q[1,"envelope1coin"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.005080635,"m^2"] }
+  end
+  describe Q[1,"envelope3coin"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.006854825,"m^2"] }
+  end
+  describe Q[1,"envelope4coin"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.00870966,"m^2"] }
+  end
+  describe Q[1,"envelope4_5coin"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.009435465,"m^2"] }
+  end
+  describe Q[1,"envelope5coin"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0097378838,"m^2"] }
+  end
+  describe Q[1,"envelope5_5coin"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.011088688,"m^2"] }
+  end
+  describe Q[1,"envelope6coin"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.01306449,"m^2"] }
+  end
+  describe Q[1,"envelope7coin"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.01467739,"m^2"] }
   end
   describe Q[1,"A0paper"] do
     it {is_expected.to be_a_quantity_close_to Q[0.999949,"m^2"] }
@@ -4098,6 +4610,9 @@ describe "Unit Conversion" do
   describe Q[1,"paperM"] do
     it {is_expected.to be_a_quantity_close_to Q[0.00045359237,"kg"] }
   end
+  describe Q[1,"pointthickness"] do
+    it {is_expected.to be_a_quantity_close_to Q[2.54e-05,"m"] }
+  end
   describe Q[1,"paperdensity"] do
     it {is_expected.to be_a_quantity_close_to Q[800,"kg m^-3"] }
   end
@@ -4303,9 +4818,15 @@ describe "Unit Conversion" do
     it {is_expected.to be_a_quantity_close_to Q[1,"bit"] }
   end
   describe Q[1,"nat"] do
-    it {is_expected.to be_a_quantity_close_to Q[0.69314718,"bit"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.442695,"bit"] }
   end
   describe Q[1,"hartley"] do
+    it {is_expected.to be_a_quantity_close_to Q[3.3219281,"bit"] }
+  end
+  describe Q[1,"ban"] do
+    it {is_expected.to be_a_quantity_close_to Q[3.3219281,"bit"] }
+  end
+  describe Q[1,"dit"] do
     it {is_expected.to be_a_quantity_close_to Q[3.3219281,"bit"] }
   end
   describe Q[1,"bps"] do
@@ -4545,6 +5066,9 @@ describe "Unit Conversion" do
   describe Q[1,"frenchcathetersize"] do
     it {is_expected.to be_a_quantity_close_to Q[0.00033333333,"m"] }
   end
+  describe Q[1,"charriere"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.00033333333,"m"] }
+  end
   describe Q[1,"hectare"] do
     it {is_expected.to be_a_quantity_close_to Q[10000,"m^2"] }
   end
@@ -4561,6 +5085,9 @@ describe "Unit Conversion" do
     it {is_expected.to be_a_quantity_close_to Q[0.1,"m^2 kg s^-2"] }
   end
   describe Q[1,"unitedstatesdollar"] do
+    it {is_expected.to be_a_quantity_close_to Q[1,"US$"] }
+  end
+  describe Q[1,"usdollar"] do
     it {is_expected.to be_a_quantity_close_to Q[1,"US$"] }
   end
   describe Q[1,"$"] do
@@ -4640,6 +5167,12 @@ describe "Unit Conversion" do
   end
   describe Q[1,"splitdeal"] do
     it {is_expected.to be_a_quantity_close_to Q[0.016223193,"m^3"] }
+  end
+  describe Q[1,"poundcut"] do
+    it {is_expected.to be_a_quantity_close_to Q[119.82643,"kg m^-3"] }
+  end
+  describe Q[1,"lbcut"] do
+    it {is_expected.to be_a_quantity_close_to Q[119.82643,"kg m^-3"] }
   end
   describe Q[1,"FLUID_FLOW"] do
     it {is_expected.to be_a_quantity_close_to Q[1,"m^3 s^-1"] }
@@ -4746,6 +5279,36 @@ describe "Unit Conversion" do
   describe Q[1,"lusec"] do
     it {is_expected.to be_a_quantity_close_to Q[0.00013332239,"m^2 kg s^-3"] }
   end
+  describe Q[1,"lapserate"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0065,"K m^-1"] }
+  end
+  describe Q[1,"air_1976"] do
+    it {is_expected.to be_a_quantity_close_to Q[28.964425] }
+  end
+  describe Q[1,"R_1976"] do
+    it {is_expected.to be_a_quantity_close_to Q[8.31432,"kg m^2 s^-2 mol^-1 K^-1"] }
+  end
+  describe Q[1,"polyndx_1976"] do
+    it {is_expected.to be_a_quantity_close_to Q[4.2558807] }
+  end
+  describe Q[1,"polyndx"] do
+    it {is_expected.to be_a_quantity_close_to Q[4.2558807] }
+  end
+  describe Q[1,"polyexpnt"] do
+    it {is_expected.to be_a_quantity_close_to Q[1.234969] }
+  end
+  describe Q[1,"stdatmT0"] do
+    it {is_expected.to be_a_quantity_close_to Q[288.15,"K"] }
+  end
+  describe Q[1,"stdatmP0"] do
+    it {is_expected.to be_a_quantity_close_to Q[101325,"kg m^-1 s^-2"] }
+  end
+  describe Q[1,"earthradUSAtm"] do
+    it {is_expected.to be_a_quantity_close_to Q[6356766,"m"] }
+  end
+  describe Q[1,"Patm"] do
+    it {is_expected.to be_a_quantity_close_to Q[101325,"kg m^-1 s^-2"] }
+  end
   describe Q[1,"g00"] do
     it {is_expected.to be_a_quantity_close_to Q[-1] }
   end
@@ -4763,6 +5326,84 @@ describe "Unit Conversion" do
   end
   describe Q[1,"g0000000"] do
     it {is_expected.to be_a_quantity_close_to Q[-6] }
+  end
+  describe Q[1,"drillA"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0059436,"m"] }
+  end
+  describe Q[1,"drillB"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0060452,"m"] }
+  end
+  describe Q[1,"drillC"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0061468,"m"] }
+  end
+  describe Q[1,"drillD"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0062484,"m"] }
+  end
+  describe Q[1,"drillE"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.00635,"m"] }
+  end
+  describe Q[1,"drillF"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0065278,"m"] }
+  end
+  describe Q[1,"drillG"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0066294,"m"] }
+  end
+  describe Q[1,"drillH"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0067564,"m"] }
+  end
+  describe Q[1,"drillI"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0069088,"m"] }
+  end
+  describe Q[1,"drillJ"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0070358,"m"] }
+  end
+  describe Q[1,"drillK"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0071374,"m"] }
+  end
+  describe Q[1,"drillL"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.007366,"m"] }
+  end
+  describe Q[1,"drillM"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.007493,"m"] }
+  end
+  describe Q[1,"drillN"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0076708,"m"] }
+  end
+  describe Q[1,"drillO"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0080264,"m"] }
+  end
+  describe Q[1,"drillP"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0082042,"m"] }
+  end
+  describe Q[1,"drillQ"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0084328,"m"] }
+  end
+  describe Q[1,"drillR"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0086106,"m"] }
+  end
+  describe Q[1,"drillS"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0088392,"m"] }
+  end
+  describe Q[1,"drillT"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0090932,"m"] }
+  end
+  describe Q[1,"drillU"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0093472,"m"] }
+  end
+  describe Q[1,"drillV"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0095758,"m"] }
+  end
+  describe Q[1,"drillW"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0098044,"m"] }
+  end
+  describe Q[1,"drillX"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0100838,"m"] }
+  end
+  describe Q[1,"drillY"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0102616,"m"] }
+  end
+  describe Q[1,"drillZ"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.0104902,"m"] }
   end
   describe Q[1,"dmtxxcoarse"] do
     it {is_expected.to be_a_quantity_close_to Q[0.00012,"m"] }
@@ -5091,6 +5732,9 @@ describe "Unit Conversion" do
   describe Q[1,"rem"] do
     it {is_expected.to be_a_quantity_close_to Q[0.01,"m^2 s^-2"] }
   end
+  describe Q[1,"banana_dose"] do
+    it {is_expected.to be_a_quantity_close_to Q[1e-07,"m^2 s^-2"] }
+  end
   describe Q[1,"roentgen"] do
     it {is_expected.to be_a_quantity_close_to Q[0.000258,"A s kg^-1"] }
   end
@@ -5177,6 +5821,9 @@ describe "Unit Conversion" do
   end
   describe Q[1,"curium"] do
     it {is_expected.to be_a_quantity_close_to Q[247.0703] }
+  end
+  describe Q[1,"deuterium"] do
+    it {is_expected.to be_a_quantity_close_to Q[2.0141018] }
   end
   describe Q[1,"dysprosium"] do
     it {is_expected.to be_a_quantity_close_to Q[162.5] }
@@ -5416,7 +6063,7 @@ describe "Unit Conversion" do
     it {is_expected.to be_a_quantity_close_to Q[91.224] }
   end
   describe Q[1,"air"] do
-    it {is_expected.to be_a_quantity_close_to Q[28.967] }
+    it {is_expected.to be_a_quantity_close_to Q[28.967904] }
   end
   describe Q[1,"people"] do
     it {is_expected.to be_a_quantity_close_to Q[1] }
@@ -5432,6 +6079,51 @@ describe "Unit Conversion" do
   end
   describe Q[1,"percapita"] do
     it {is_expected.to be_a_quantity_close_to Q[1] }
+  end
+  describe Q[1,"Tim"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.17361111,"s"] }
+  end
+  describe Q[1,"Grafut"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.29558045,"m"] }
+  end
+  describe Q[1,"Surf"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.087367804,"m^2"] }
+  end
+  describe Q[1,"Volm"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.025824215,"m^3"] }
+  end
+  describe Q[1,"Vlos"] do
+    it {is_expected.to be_a_quantity_close_to Q[1.7025434,"m s^-1"] }
+  end
+  describe Q[1,"Denz"] do
+    it {is_expected.to be_a_quantity_close_to Q[999.972,"kg m^-3"] }
+  end
+  describe Q[1,"Mag"] do
+    it {is_expected.to be_a_quantity_close_to Q[253.24195,"kg m s^-2"] }
+  end
+  describe Q[1,"Maz"] do
+    it {is_expected.to be_a_quantity_close_to Q[25.823492,"kg"] }
+  end
+  describe Q[1,"Tm"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.17361111,"s"] }
+  end
+  describe Q[1,"Gf"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.29558045,"m"] }
+  end
+  describe Q[1,"Sf"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.087367804,"m^2"] }
+  end
+  describe Q[1,"Vm"] do
+    it {is_expected.to be_a_quantity_close_to Q[0.025824215,"m^3"] }
+  end
+  describe Q[1,"Vl"] do
+    it {is_expected.to be_a_quantity_close_to Q[1.7025434,"m s^-1"] }
+  end
+  describe Q[1,"Mz"] do
+    it {is_expected.to be_a_quantity_close_to Q[25.823492,"kg"] }
+  end
+  describe Q[1,"Dz"] do
+    it {is_expected.to be_a_quantity_close_to Q[999.972,"kg m^-3"] }
   end
   describe Q[1,"wari_proportion"] do
     it {is_expected.to be_a_quantity_close_to Q[0.1] }
@@ -6685,10 +7377,10 @@ describe "Unit Conversion" do
     it {is_expected.to be_a_quantity_close_to Q[0.45359237,"kg"] }
   end
   describe Q[1,"ℎ"] do
-    it {is_expected.to be_a_quantity_close_to Q[6.6260696e-34,"s^-1 kg m^2"] }
+    it {is_expected.to be_a_quantity_close_to Q[6.62607e-34,"s^-1 kg m^2"] }
   end
   describe Q[1,"ℏ"] do
-    it {is_expected.to be_a_quantity_close_to Q[1.0545717e-34,"s^-1 kg m^2"] }
+    it {is_expected.to be_a_quantity_close_to Q[1.0545718e-34,"s^-1 kg m^2"] }
   end
   describe Q[1,"‰"] do
     it {is_expected.to be_a_quantity_close_to Q[0.001] }
@@ -6717,15 +7409,6 @@ describe "Unit Conversion" do
   describe Q[1,"㍶"] do
     it {is_expected.to be_a_quantity_close_to Q[3.0856776e+16,"m"] }
   end
-  describe Q[1,"㍷"] do
-    it {is_expected.to be_a_quantity_close_to Q[0.1,"m"] }
-  end
-  describe Q[1,"㍸"] do
-    it {is_expected.to be_a_quantity_close_to Q[0.01,"m^2"] }
-  end
-  describe Q[1,"㍹"] do
-    it {is_expected.to be_a_quantity_close_to Q[0.001,"m^3"] }
-  end
   describe Q[1,"㎀"] do
     it {is_expected.to be_a_quantity_close_to Q[1e-12,"A"] }
   end
@@ -6751,10 +7434,10 @@ describe "Unit Conversion" do
     it {is_expected.to be_a_quantity_close_to Q[8e+09,"bit"] }
   end
   describe Q[1,"㎈"] do
-    it {is_expected.to be_a_quantity_close_to Q[4.1868,"kg m^2 s^-2"] }
+    it {is_expected.to be_a_quantity_close_to Q[4.184,"kg m^2 s^-2"] }
   end
   describe Q[1,"㎉"] do
-    it {is_expected.to be_a_quantity_close_to Q[4186.8,"kg m^2 s^-2"] }
+    it {is_expected.to be_a_quantity_close_to Q[4184,"kg m^2 s^-2"] }
   end
   describe Q[1,"㎊"] do
     it {is_expected.to be_a_quantity_close_to Q[1e-12,"A^2 s^4 kg^-1 m^-2"] }
@@ -6876,6 +7559,9 @@ describe "Unit Conversion" do
   describe Q[1,"㎱"] do
     it {is_expected.to be_a_quantity_close_to Q[1e-09,"s"] }
   end
+  describe Q[1,"㎲"] do
+    it {is_expected.to be_a_quantity_close_to Q[1e-06,"s"] }
+  end
   describe Q[1,"㎳"] do
     it {is_expected.to be_a_quantity_close_to Q[0.001,"s"] }
   end
@@ -6971,14 +7657,5 @@ describe "Unit Conversion" do
   end
   describe Q[1,"㏝"] do
     it {is_expected.to be_a_quantity_close_to Q[1,"kg m^2 s^-2 A^-1"] }
-  end
-  describe Q[1,"㏞"] do
-    it {is_expected.to be_a_quantity_close_to Q[1,"kg m s^-3 A^-1"] }
-  end
-  describe Q[1,"㏟"] do
-    it {is_expected.to be_a_quantity_close_to Q[1,"A m^-1"] }
-  end
-  describe Q[1,"㏿"] do
-    it {is_expected.to be_a_quantity_close_to Q[0.0037854118,"m^3"] }
   end
 end
