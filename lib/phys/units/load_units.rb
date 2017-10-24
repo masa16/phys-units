@@ -5,10 +5,9 @@ Phys::Unit.import_units <<EOL
 # This file is the units database for use with GNU units, a units conversion
 # program by Adrian Mariano adrianm@gnu.org
 #
-# October 2012 Version 2.04
+# March 2017 Version 2.16
 #
-# Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2004, 2005, 2006
-#               2007, 2008, 2009, 2010, 2011, 2012
+# Copyright (C) 1996-2002, 2004-2017
 # Free Software Foundation, Inc
 #
 # This program is free software; you can redistribute it and/or modify
@@ -30,7 +29,7 @@ Phys::Unit.import_units <<EOL
 #
 # Improvements and corrections are welcome.
 #
-# Fundamental constants in this file are the 2010 CODATA recommended values.
+# Fundamental constants in this file are the 2014 CODATA recommended values.
 #
 # Most units data was drawn from
 #            1. NIST Special Publication 811, Guide for the
@@ -68,6 +67,9 @@ Phys::Unit.import_units <<EOL
 #           22. NIST Special Publication 447, Weights and Measures Standards
 #                 of the the United States: a brief history. Lewis V. Judson.
 #                 1963; rev. 1976
+#           23. CRC Handbook of Chemistry and Physics, 96th edition
+#           24. Dictionary of Scientific Units, 6th ed.  H.G.  Jerrard and D.B.
+#                 McNeill. 1992
 #
 # Thanks to Jeff Conrad for assistance in ferreting out unit definitions.
 #
@@ -315,6 +317,17 @@ hundred                 100
 thousand                1000
 million                 1e6
 
+twoscore                two score
+threescore              three score
+fourscore               four score
+fivescore               five score
+sixscore                six score
+sevenscore              seven score
+eightscore              eight score
+ninescore               nine score
+tenscore                ten score
+twelvescore             twelve score
+
 # These number terms were described by N. Chuquet and De la Roche in the 16th
 # century as being successive powers of a million.  These definitions are still
 # used in most European countries.  The current US definitions for these
@@ -423,7 +436,17 @@ octodecillion           shortoctodecillion
 novemdecillion          shortnovemdecillion
 vigintillion            shortvigintillion
 
+#
+# Numbers used in India
+#
 
+lakh                    1e5
+crore                   1e7
+arab                    1e9
+kharab                  1e11
+neel                    1e13
+padm                    1e15
+shankh                  1e17
 
 #############################################################################
 #                                                                           #
@@ -614,7 +637,15 @@ watch                   4 hours    # time a sentry stands watch or a ship's
                                    # crew is on duty.
 bell                    1|8 watch  # Bell would be sounded every 30 minutes.
 
+# French Revolutionary Time or Decimal Time.  It was Proposed during
+# the French Revolution.  A few clocks were made, but it never caught
+# on.  In 1998 Swatch defined a time measurement called ".beat" and
+# sold some watches that displayed time in this unit.
 
+decimalhour             1|10 day
+decimalminute           1|100 decimalhour
+decimalsecond           1|100 decimalminute
+beat                    decimalminute          # Swatch Internet Time
 
 #
 # angular measure
@@ -659,10 +690,11 @@ seclongitude            circle (seconds/day) # Astronomers measure longitude
 # Some geometric formulas
 #
 
-circlearea(r)   units=[m;m^2] range=[0,] pi r^2 ; sqrt(circlearea/pi)
-spherevolume(r) units=[m;m^3] 4|3 pi r^3 ; cuberoot(spherevolume/4|3 pi)
-spherevol(r)    units=[m;m^3] spherevolume(r) ; ~spherevolume(spherevol)
-square(x)     range=[0,]          x^2 ; sqrt(square)
+circlearea(r)   units=[m;m^2] range=[0,) pi r^2 ; sqrt(circlearea/pi)
+spherevolume(r) units=[m;m^3] range=[0,) 4|3 pi r^3 ; \
+                                         cuberoot(spherevolume/4|3 pi)
+spherevol()     spherevolume
+square(x)       range=[0,)          x^2 ; sqrt(square)
 
 #
 # Solid angle measure
@@ -709,7 +741,7 @@ fine                    1|1000    # Measure of gold purity
 # a solution.  A neutral solution has a pH of 7 as a result of dissociated
 # water molecules.
 
-pH(x) units=[;mol/liter] range=[0,] 10^(-x) mol/liter ; (-log(pH liters/mol))
+pH(x) units=[1;mol/liter] range=(0,) 10^(-x) mol/liter ; (-log(pH liters/mol))
 
 
 #
@@ -734,8 +766,9 @@ TEMPERATURE_DIFFERENCE  kelvin
 # centigrade definition, but the Kelvin scale depends on the triple point of
 # water rather than a melting point, so it can be measured accurately.
 
-tempC(x) units=[;K] x K + stdtemp ; (tempC +(-stdtemp))/K
-tempcelsius(x) units=[;K] tempC(x); ~tempC(tempcelsius)
+tempC(x) units=[1;K] domain=[-273.15,) range=[0,) \
+                             x K + stdtemp ; (tempC +(-stdtemp))/K
+tempcelsius() tempC
 degcelsius              K
 degC                    K
 
@@ -751,8 +784,9 @@ degC                    K
 #    is placed in the mouth so as to acquire the heat of a healthy
 #    man."  (D. G. Fahrenheit, Phil. Trans. (London) 33, 78, 1724)
 
-tempF(x) units=[;K] (x+(-32)) degF + stdtemp ; (tempF+(-stdtemp))/degF + 32
-tempfahrenheit(x) units=[;K] tempF(x) ; ~tempF(tempfahrenheit)
+tempF(x) units=[1;K] domain=[-459.67,) range=[0,) \
+                (x+(-32)) degF + stdtemp ; (tempF+(-stdtemp))/degF + 32
+tempfahrenheit() tempF
 degfahrenheit           5|9 degC
 degF                    5|9 degC
 
@@ -764,8 +798,8 @@ degR                    degrankine
 tempR                   degrankine
 temprankine             degrankine
 
-tempreaumur(x) units=[;K] x degreaumur+stdtemp ; \
-                              (tempreaumur+(-stdtemp))/degreaumur
+tempreaumur(x)    units=[1;K] domain=[-218.52,) range=[0,) \
+                  x degreaumur+stdtemp ; (tempreaumur+(-stdtemp))/degreaumur
 degreaumur              10|8 degC # The Reaumur scale was used in Europe and
                                   # particularly in France.  It is defined
                                   # to be 0 at the freezing point of water
@@ -837,11 +871,11 @@ light                   c
 mu0                     4 pi 1e-7 H/m    # permeability of vacuum (exact)
 epsilon0                1/mu0 c^2        # permittivity of vacuum (exact)
 energy                  c^2              # convert mass to energy
-e                      1.602176565e-19 C # electron charge
-h                   4.135667516e-15 eV s # Planck constant
+e                     1.6021766208e-19 C # electron charge
+h                   4.135667662e-15 eV s # Planck constant
 hbar                    h / 2 pi
 spin                    hbar
-G               6.67384e-11 N m^2 / kg^2 # Newtonian gravitational constant
+G               6.67408e-11 N m^2 / kg^2 # Newtonian gravitational constant
                                          #    This is the NIST 2006 value.
                                          #    The relative uncertainty on this
                                          #    is 1e-4.
@@ -849,7 +883,7 @@ coulombconst            1/4 pi epsilon0  # listed as "k" sometimes
 
 # Physico-chemical constants
 
-atomicmassunit        1.660538921e-27 kg # atomic mass unit (defined to be
+atomicmassunit        1.660539040e-27 kg # atomic mass unit (defined to be
 u                       atomicmassunit   #   1|12 of the mass of carbon 12)
 amu                     atomicmassunit
 amu_chem                1.66026e-27 kg   # 1|16 of the weighted average mass of
@@ -860,9 +894,9 @@ amu_phys                1.65981e-27 kg   # 1|16 of the mass of a neutral
 dalton                  u                # Maybe this should be amu_chem?
 avogadro                grams/amu mol    # size of a mole
 N_A                     avogadro
-gasconstant          8.3144621 J / mol K # molar gas constant
+gasconstant             k N_A            # molar gas constant
 R                       gasconstant
-boltzmann               R / N_A          # Boltzmann constant
+boltzmann             1.38064852e-23 J/K # Boltzmann constant
 k                       boltzmann
 kboltzmann              boltzmann
 molarvolume         mol R stdtemp / atm  # Volume occupied by one mole of an
@@ -873,7 +907,7 @@ loschmidt     avogadro mol / molarvolume # Molecules per cubic meter of an
 stefanboltzmann pi^2 k^4 / 60 hbar^3 c^2 # The power per area radiated by a
 sigma                   stefanboltzmann  #   blackbody at temperature T is
                                          #   given by sigma T^4.
-wiendisplacement        2.8977721e-3 m K # Wien's Displacement Law gives the
+wiendisplacement        2.8977729e-3 m K # Wien's Displacement Law gives the
                                          #   frequency at which the the Planck
                                          #   spectrum has maximum intensity.
                                          #   The relation is lambda T = b where
@@ -882,8 +916,8 @@ wiendisplacement        2.8977721e-3 m K # Wien's Displacement Law gives the
                                          #   displacement.  This relation is
                                          #   used to determine the temperature
                                          #   of stars.
-K_J    483597.870 GHz/V # Direct measurement of the volt is difficult.  Until
-                        #   recently, laboratories kept Weston cadmium cells as
+K_J90 483597.9 GHz/V    # Direct measurement of the volt is difficult.  Until
+K_J   483597.8525 GHz/V #   recently, laboratories kept Weston cadmium cells as
                         #   a reference, but they could drift.  In 1987 the
                         #   CGPM officially recommended the use of the
                         #   Josephson effect as a laboratory representation of
@@ -894,12 +928,11 @@ K_J    483597.870 GHz/V # Direct measurement of the volt is difficult.  Until
                         #   applied across the superconductors.  This frequency
                         #   can be very accurately measured.  The Josephson
                         #   constant K_J, which is equal to 2e/h, relates the
-                        #   measured frequency to the potential.  The value
-                        #   given here is the officially specified value for
-                        #   use beginning in 1990.  The 2006 recommended value
-                        #   of the constant is 483597.891 GHz/V.
-R_K   25812.8074434 ohm # Measurement of the ohm also presents difficulties.
-                        #   The old approach involved maintaining resistances
+                        #   measured frequency to the potential.  Two values
+                        #   given, the conventional (exact) value from 1990 and
+                        #   the current CODATA measured value.
+R_K90 25812.807 ohm     # Measurement of the ohm also presents difficulties.
+R_K   25812.8074555 ohm #   The old approach involved maintaining resistances
                         #   that were subject to drift.  The new standard is
                         #   based on the Hall effect.  When a current carrying
                         #   ribbon is placed in a magnetic field, a potential
@@ -910,8 +943,9 @@ R_K   25812.8074434 ohm # Measurement of the ohm also presents difficulties.
                         #   in discrete jumps when the magnetic field is very
                         #   large and the temperature very low.  This enables
                         #   accurate realization of the resistance h/e^2 in the
-                        #   lab.  The value given here is the officially
-                        #   specified value for use beginning in 1990.
+                        #   lab.  Two values given, the conventional (exact)
+                        #   value from 1990 and the current CODATA measured
+                        #   value.
 
 # Various conventional values
 
@@ -951,7 +985,7 @@ H2O100C       0.95838 force gram / cm^3
 
 # Atomic constants
 
-Rinfinity            10973731.568527 /m  # The wavelengths of a spectral series
+Rinfinity            10973731.568539 /m  # The wavelengths of a spectral series
 R_H                     10967760 /m      #   can be expressed as
                                          #     1/lambda = R (1/m^2 - 1/n^2).
                                          #   where R is a number that various
@@ -961,9 +995,9 @@ R_H                     10967760 /m      #   can be expressed as
                                          #   approaches Rinfinity, which can be
                                          #   computed from
                                          #        m_e c alpha^2 / 2 h
-                                         #   with a loss of 5 digits
+                                         #   with a loss of 4 digits
                                          #   of precision.
-alpha                   7.2973525698e-3  # The fine structure constant was
+alpha                   7.2973525664e-3  # The fine structure constant was
                                          #   introduced to explain fine
                                          #   structure visible in spectral
                                          #   lines.  It can be computed from
@@ -976,7 +1010,7 @@ prout                   185.5 keV        # nuclear binding energy equal to 1|12
                                          #   binding energy of the deuteron
 # Planck constants
 
-planckmass              2.17644e-8 kg     # sqrt(hbar c / G)
+planckmass              2.17651e-8 kg     # sqrt(hbar c / G)
 m_P                     planckmass
 plancktime              hbar / planckmass c^2
 t_P                     plancktime
@@ -986,28 +1020,28 @@ l_P                     plancklength
 # Particle radius
 
 electronradius    (1/4 pi epsilon0) e^2 / electronmass c^2   # Classical
-deuteronchargeradius    2.1424e-15 m
-protonchargeradius      0.8775e-15
+deuteronchargeradius    2.1413e-15 m
+protonchargeradius      0.8751e-15 m
 
 # Masses of elementary particles
 
-electronmass            5.4857990946e-4 u
+electronmass            5.48579909070e-4 u
 m_e                     electronmass
-protonmass              1.007276466812 u
+protonmass              1.007276466879 u
 m_p                     protonmass
-neutronmass             1.00866491600 u
+neutronmass             1.00866491588 u
 m_n                     neutronmass
-muonmass                0.1134289267 u
+muonmass                0.1134289257 u
 m_mu                    muonmass
-deuteronmass            2.013553212712 u
+deuteronmass            2.013553212745 u
 m_d                     deuteronmass
-alphaparticlemass       4.001506179125 u
+alphaparticlemass       4.001506179127 u
 m_alpha                 alphaparticlemass
 taumass                 1.90749 u
 m_tau                   taumass
-tritonmass              3.0155007134 u
+tritonmass              3.01550071632 u
 m_t                     tritonmass
-helionmass              3.0149322468 u
+helionmass              3.01493224673 u
 m_h                     helionmass
 
 
@@ -1028,13 +1062,13 @@ bohrmagneton            e hbar / 2 electronmass
 mu_B                    bohrmagneton
 nuclearmagneton         e hbar /  2 protonmass
 mu_N                    nuclearmagneton
-mu_mu                  -4.49044807e-26 J/T  # Muon magnetic moment
-mu_p                    1.410606743e-26 J/T # Proton magnetic moment
-mu_e                   -928.476430e-26 J/T  # Electron magnetic moment
-mu_n                   -0.96623647e-26      # Neutron magnetic moment
-mu_d                    0.433073489e-26 J/T # Deuteron magnetic moment
-mu_t                    1.504609447e-26 J/T # Triton magnetic moment
-mu_h                   -1.074617486e-26 J/T # Helion magnetic moment
+mu_mu                  -4.49044826e-26 J/T   # Muon magnetic moment
+mu_p                    1.4106067873e-26 J/T # Proton magnetic moment
+mu_e                   -928.4764620e-26 J/T  # Electron magnetic moment
+mu_n                   -0.96623650e-26 J/T   # Neutron magnetic moment
+mu_d                    0.4330735040e-26 J/T # Deuteron magnetic moment
+mu_t                    1.504609503e-26 J/T  # Triton magnetic moment
+mu_h                   -1.074617522e-26 J/T  # Helion magnetic moment
 
 
 #
@@ -1046,10 +1080,11 @@ technicalatmosphere     kgf / cm^2
 at                      technicalatmosphere
 hyl                     kgf s^2 / m   # Also gram-force s^2/m according to [15]
 mmHg                    mm Hg
-torr                    mmHg     # These units, both named after Evangelista
-tor                     Pa       # Torricelli, should not be confused.
-                                 # Acording to [15] the torr is actually
-                                 # atm/760 which is slightly different.
+torr                    atm / 760  # The torr, named after Evangelista
+                                   # Torricelli, and is very close to the mm Hg
+tor                     Pa         # Suggested in 1913 but seldom used [24].
+                                   # Eventually renamed the Pascal.  Don't
+                                   # confuse the tor with the torr.
 inHg                    inch Hg
 inH2O                   inch water
 mmH2O                   mm water
@@ -1214,6 +1249,21 @@ faraday_chem            96495.7 C     #   element.  (The chemical and physical
 kappline                6000 maxwell  # Named by and for Gisbert Kapp
 siemensunit             0.9534 ohm    # Resistance of a meter long column of
                                       #   mercury with a 1 mm cross section.
+#
+# Printed circuit board units.
+#
+# http://www.ndt-ed.org/GeneralResources/IACS/IACS.htm.
+#
+# Conductivity is often expressed as a percentage of IACS.  A copper wire a
+# meter long with a 1 mm^2 cross section has a resistance of 1|58 ohm at
+# 20 deg C.  Copper density is also standarized at that temperature.
+#
+
+copperconductivity      58 siemens m / mm^2     # A wire a meter long with
+IACS                    copperconductivity      #   a 1 mm^2 cross section
+copperdensity           8.89 g/cm^3             # The "ounce" measures the
+ouncecopper             oz / ft^2 copperdensity #   thickness of copper used
+ozcu                    ouncecopper             #   in circuitboard fabrication
 
 #
 # Photometric units
@@ -1285,7 +1335,7 @@ footlambert             cd / pi ft^2
 # bril means doubling the luminance.  A luminance of 1 lambert is defined to
 # have a brilliance of 1 bril.
 
-bril(x) units=[;lambert]  2^(x+-100) lamberts ;log2(bril/lambert)+100
+bril(x) units=[1;lambert]  2^(x+-100) lamberts ;log2(bril/lambert)+100
 
 # Some luminance data from the IES Lighting Handbook, 8th ed, 1993
 
@@ -1297,69 +1347,222 @@ skylum                  8000 cd/m^2   # average, clear sky
 skylum_o                2000 cd/m^2   # average, overcast sky
 moonlum                 2500 cd/m^2
 
-# Photographic Exposure Value
 #
-# The Additive Photographic EXposure (APEX) system proposed in ASA PH2.5-1960
-# was an attempt to simplify exposure determination for people who relied on
-# exposure tables rather than exposure meters.  Shortly thereafter, nearly all
-# cameras incorporated exposure meters, so the APEX system never caught on,
-# but the concept of Exposure Value (EV) given by
+# Photographic Exposure Value
+# This section by Jeff Conrad (jeff_conrad@msn.com)
+#
+# The Additive system of Photographic EXposure (APEX) proposed in ASA
+# PH2.5-1960 was an attempt to simplify exposure determination for people who
+# relied on exposure tables rather than exposure meters.  Shortly thereafter,
+# nearly all cameras incorporated exposure meters, so the APEX system never
+# caught on, but the concept of exposure value remains in use.  Though given as
+# 'Ev' in ASA PH2.5-1960, it is now more commonly indicated by 'EV'.  EV is
+# related to exposure parameters by
 #
 #            A^2   LS   ES
 #     2^EV = --- = -- = --
-#             T    K    C
+#             t    K    C
 #
 # Where
 #     A = Relative aperture (f-number)
-#     T = Shutter time in seconds
+#     t = Exposure time in seconds
 #     L = Scene luminance in cd/m2
 #     E = Scene illuminance in lux
-#     S = Arithmetic ISO film speed
+#     S = Arithmetic ISO speed
 #     K = Reflected-light meter calibration constant
 #     C = Incident-light meter calibration constant
 #
-# remains in use.  Strictly speaking, an Exposure Value is a combination
-# of aperture and shutter time, but it's also commonly used to indicate
-# luminance (or illuminance).  Conversion to luminance or illuminance
-# units depends on the ISO film speed and the meter calibration constant.
-# Common practice is to use an ISO film speed of 100 (because film speeds
-# are in even 1/3-step increments, the exact value is 64 * 2^(2|3)).
+# Strictly, an exposure value is a combination of aperture and exposure time,
+# but it's also commonly used to indicate luminance (or illuminance).
+# Conversion to luminance or illuminance units depends on the ISO speed and the
+# meter calibration constant.  Common practice is to use an ISO speed of 100.
 # Calibration constants vary among camera and meter manufacturers: Canon,
 # Nikon, and Sekonic use a value of 12.5 for reflected-light meters, while
-# Kenko (formerly Minolta) and Pentax use a value of 14.  Kenko and
-# Sekonic use a value of 250 for incident-light meters with flat
-# receptors.
+# Kenko (formerly Minolta) and Pentax use a value of 14.  Kenko and Sekonic use
+# a value of 250 for incident-light meters with flat receptors.
+#
+# The values for in-camera meters apply only averaging, weighted-averaging, or
+# spot metering--the multi-segment metering incorporated in most current
+# cameras uses proprietary algorithms that evaluate many factors related to the
+# luminance distribution of what is being metered; they are not amenable to
+# simple conversions, and are usually not disclosed by the manufacturers.
 
-# This was stated in ASA PH2.5-1960, but it assumed APEX, which never
-# found widespread acceptance.
-
-#s100                    64 * 2^(2|3) / lx s    # exact speed for ISO 100 film
-
-# ISO speed standards (e.g., ISO 6:1993) do not discuss "exact" values;
-# this value assumes ISO 100 is exact.
-
-s100                    100 / lx s              # ISO 100 speed
+s100                    100 / lx s            # ISO 100 speed
 iso100                  s100
 
 # Reflected-light meter calibration constant with ISO 100 speed
 
-k1250                   12.5 (cd/m2) / lx s     # For Canon, Nikon, and Sekonic
-k1400                   14   (cd/m2) / lx s     # For Kenko (Minolta) and Pentax
+k1250                   12.5 (cd/m2) / lx s   # For Canon, Nikon, and Sekonic
+k1400                   14   (cd/m2) / lx s   # For Kenko (Minolta) and Pentax
 
 # Incident-light meter calibration constant with ISO 100 film
 
-c250                    250 lx / lx s           # flat-disc receptor
+c250                    250 lx / lx s         # flat-disc receptor
 
-# Exposure value to scene luminance with ISO 100 film
+# Exposure value to scene luminance with ISO 100 imaging media
 
 # For Kenko (Minolta) or Pentax
-#ev100(x) units=[;cd/m^2] 2^x k1400 / s100; log2(ev100 s100 / k1400)
+#ev100(x) units=[;cd/m^2] range=(0,) 2^x k1400 / s100; log2(ev100 s100/k1400)
 # For Canon, Nikon, or Sekonic
-ev100(x) units=[;cd/m^2] 2^x k1250 / s100; log2(ev100 s100 / k1250)
+ev100(x) units=[1;cd/m^2] range=(0,) 2^x k1250 / s100; log2(ev100 s100/k1250)
+EV100()  ev100
 
-# Exposure value to scene illuminance with ISO 100 film
+# Exposure value to scene illuminance with ISO 100 imaging media
 
-iv100(x) units=[1;lx] 2^x c250 / s100; log2(iv100 s100 / c250)
+iv100(x) units=[1;lx] range=(0,) 2^x c250 / s100; log2(iv100 s100 / c250)
+
+# Other Photographic Exposure Conversions
+#
+# As part of APEX, ASA PH2.5-1960 proposed several logarithmic quantities
+# related by
+#
+#    Ev = Av + Tv = Bv + Sv
+#
+# where
+#  Av = log2(A^2)       Aperture value
+#  Tv = log2(1/t)       Time value
+#  Sv = log2(N Sx)      Speed value
+#  Bv = log2(B S / K)   Luminance ("brightness") value
+#  Iv = log2(I S / C)   Illuminance value
+#
+# and
+#  A  = Relative aperture (f-number)
+#  t  = Exposure time in seconds
+#  Sx = Arithmetic ISO speed in 1/lux s
+#  B  = luminance in cd/m2
+#  I  = luminance in lux
+
+# The constant N derives from the arcane relationship between arithmetic
+# and logarithmic speed given in ASA PH2.5-1960.  That relationship
+# apparently was not obvious--so much so that it was thought necessary
+# to explain it in PH2.12-1961.  The constant has had several values
+# over the years, usually without explanation for the changes.  Although
+# APEX had little impact on consumer cameras, it has seen a partial
+# resurrection in the Exif standards published by the Camera & Imaging
+# Products Association of Japan.
+
+#N_apex         2^-1.75 lx s    # precise value implied in ASA PH2.12-1961,
+                                # derived from ASA PH2.5-1960.
+#N_apex         0.30 lx s       # rounded value in ASA PH2.5-1960,
+                                # ASA PH2.12-1961, and ANSI PH2.7-1986
+#N_apex         0.3162 lx s     # value in ANSI PH2.7-1973
+N_exif          1|3.125 lx s    # value in Exif 2.3 (2010), making Sv(5) = 100
+K_apex1961      11.4 (cd/m2) / lx s    # value in ASA PH2.12-1961
+K_apex1971      12.5 (cd/m2) / lx s    # value in ANSI PH3.49-1971; more common
+C_apex1961      224 lx / lx s   # value in PH2.12-1961 (20.83 for I in
+                                #   footcandles; flat sensor?)
+C_apex1971      322 lx / lx s   # mean value in PH3.49-1971 (30 +/- 5 for I in
+                                # footcandles; hemispherical sensor?)
+N_speed         N_exif
+K_lum           K_apex1971
+C_illum         C_apex1961
+
+# Units for Photographic Exposure Variables
+#
+# Practical photography sometimes pays scant attention to units for exposure
+# variables.  In particular, the "speed" of the imaging medium is treated as if
+# it were dimensionless when it should have units of reciprocal lux seconds;
+# this practice works only because "speed" is almost invariably given in
+# accordance with international standards (or similar ones used by camera
+# manufacturers)--so the assumed units are invariant.  In calculating
+# logarithmic quantities--especially the time value Tv and the exposure value
+# EV--the units for exposure time ("shutter speed") are often ignored; this
+# practice works only because the units of exposure time are assumed to be in
+# seconds, and the missing units that make the argument to the logarithmic
+# function dimensionless are silently provided.
+#
+# In keeping with common practice, the definitions that follow treat "speeds"
+# as dimensionless, so ISO 100 speed is given simply as '100'.  When
+# calculating the logarithmic APEX quantities Av and Tv, the definitions
+# provide the missing units, so the times can be given with any appropriate
+# units.  For example, giving an exposure time of 1 minute as either '1 min' or
+# '60 s' will result in Tv of -5.9068906.
+#
+# Exposure Value from f-number and Exposure Time
+#
+# Because nonlinear unit conversions only accept a single quantity,
+# there is no direct conversion from f-number and exposure time to
+# exposure value EV.  But the EV can be obtained from a combination of
+# Av and Tv.  For example, the "sunny 16" rule states that correct
+# exposure for a sunlit scene can achieved by using f/16 and an exposure
+# time equal to the reciprocal of the ISO speed in seconds; this can be
+# calculated as
+#
+#    ~Av(16) + ~Tv(1|100 s),
+#
+# which gives 14.643856.  These conversions may be combined with the
+# ev100 conversion:
+#
+#    ev100(~Av(16) + ~Tv(1|100 s))
+#
+# to yield the assumed average scene luminance of 3200 cd/m^2.
+
+# convert relative aperture (f-number) to aperture value
+Av(A)           units=[1;1] domain=[-2,) range=[0.5,)  2^(A/2); 2 log2(Av)
+# convert exposure time to time value
+Tv(t)           units=[1;s] range=(0,)  2^(-t) s; log2(s / Tv)
+# convert logarithmic speed Sv in ASA PH2.5-1960 to ASA/ISO arithmetic speed;
+# make arithmetic speed dimensionless
+# 'Sv' conflicts with the symbol for sievert; you can uncomment this function
+# definition if you don't need that symbol
+#Sv(S)    units=[1;1] range=(0,) 2^S / (N_speed/lx s); log2((N_speed/lx s) Sv)
+Sval(S)   units=[1;1] range=(0,) 2^S / (N_speed/lx s); log2((N_speed/lx s) Sval)
+
+# convert luminance value Bv in ASA PH2.12-1961 to luminance
+Bv(x)           units=[1;cd/m^2] range=(0,) \
+                2^x K_lum N_speed ; log2(Bv / (K_lum N_speed))
+
+# convert illuminance value Iv in ASA PH2.12-1961 to illuminance
+Iv(x)           units=[1;lx] range=(0,) \
+                2^x C_illum N_speed ; log2(Iv / (C_illum N_speed))
+
+# convert ASA/ISO arithmetic speed Sx to ASA logarithmic speed in
+# ASA PH2.5-1960; make arithmetic speed dimensionless
+Sx(S)           units=[1;1] domain=(0,) \
+                log2((N_speed/lx s) S); 2^Sx / (N_speed/lx s)
+
+# convert DIN speed/ISO logarithmic speed in ISO 6:1993 to arithmetic speed
+# for convenience, speed is treated here as if it were dimensionless
+Sdeg(S)         units=[1;1] range=(0,) 10^((S - 1) / 10) ; (1 + 10 log(Sdeg))
+Sdin()          Sdeg
+
+# Numerical Aperture and f-Number of a Lens
+#
+# The numerical aperture (NA) is given by
+#
+#   NA = n sin(theta)
+#
+# where n is the index of refraction of the medium and theta is half
+# of the angle subtended by the aperture stop from a point in the image
+# or object plane. For a lens in air, n = 1, and
+#
+#   NA = 0.5 / f-number
+#
+# convert NA to f-number
+numericalaperture(x) units=[1;1] domain=(0,1] range=[0.5,) \
+                     0.5 / x ; 0.5 / numericalaperture
+NA()            numericalaperture
+#
+# convert f-number to itself; restrict values to those possible
+fnumber(x)      units=[1;1] domain=[0.5,) range=[0.5,) x ; fnumber
+
+# Referenced Photographic Standards
+#
+# ASA PH-2.5-1960. USA Standard, Method for Determining (Monochrome,
+#    Continuous-Tone) Speed of Photographic Negative Materials.
+# ASA PH2.12-1961. American Standard, General-Purpose Photographic
+#    Exposure Meters (photoelectric type).
+# ANSI PH3.49-1971. American National Standard for general-purpose
+#    photographic exposure meters (photoelectric type).
+# ANSI PH2.7-1973. American National Standard Photographic Exposure Guide.
+# ANSI PH2.7-1986. American National Standard for Photography --
+#    Photographic Exposure Guide.
+# CIPA DC-008-2010. Exchangeable image file format for digital still
+#    cameras: Exif Version 2.3
+# ISO 6:1993.  International Standard, Photography -- Black-and-white
+#    pictorial still camera negative film/process systems --
+#    Determination of ISO Speed.
+
 
 #
 # Astronomical time measurements
@@ -1948,7 +2151,6 @@ eushot                  25 ml      # EU standard spirits measure
 fifth                   1|5 usgallon
 winebottle              750 ml     # US industry standard, 1979
 winesplit               1|4 winebottle
-wineglass               4 usfloz
 magnum                  1.5 liter  # Standardized in 1979, but given
                                    # as 2 qt in some references
 metrictenth             375 ml
@@ -1970,6 +2172,44 @@ methuselah              4 magnum
 salmanazar              6 magnum
 balthazar               8 magnum
 nebuchadnezzar          10 magnum
+
+# The wine glass doesn't seem to have an official standard, but the same value
+# is suggested by several organization.
+
+# https://www.rethinkingdrinking.niaaa.nih.gov/
+# http://www.rethinkyourdrinking.ca/what-is-a-standard-drink/
+# https://www.drinkaware.co.uk/
+# https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/545937/UK_CMOs__report.pdf
+# http://www.alcohol.gov.au/internet/alcohol/publishing.nsf/content/drinksguide-cnt
+
+wineglass               150 mL     # the size of a "typical" serving
+
+# A unit of alcohol is a specified mass of pure ethyl alcohol.
+# The term is used officially in the UK, but other countries use the same
+# concept but with different values.  For example, the UK value of 8 g is
+# nominally the amount of alcohol that a typical adult can metabolize in
+# one hour.  Values for several countries, converted to a volumetric basis:
+
+alcoholunitus           14 g   / ethanoldensity
+alcoholunitca           13.6 g / ethanoldensity
+alcoholunituk            8 g   / ethanoldensity
+alcoholunitau           10 g   / ethanoldensity
+
+# Example: for 12% ABV (alcohol by volume)
+# alcoholunitus / 12% = 147.8 mL, close to the “standard” serving of 150 mL.
+
+
+# Coffee
+#
+# The recommended ratio of coffee to water. Values vary considerably;
+# one is from the  Specialty Coffee Association of America
+# http://scaa.org/?page=resources&d=brewing-best-practices
+
+coffeeratio             55 g/L  # ± 10%
+
+# other recommendations are more loose, e.g.,
+# http://www.ncausa.org/About-Coffee/How-to-Brew-Coffee
+
 
 #
 # Water is "hard" if it contains various minerals, expecially calcium
@@ -2000,13 +2240,13 @@ shoe_women0             (7+11|12) inch
 shoe_boys0              (3+11|12) inch
 shoe_girls0             (3+7|12) inch
 
-shoesize_men(n) units=[;inch]   shoe_men0 + n shoesize_delta ; \
+shoesize_men(n) units=[1;inch]   shoe_men0 + n shoesize_delta ; \
                                 (shoesize_men+(-shoe_men0))/shoesize_delta
-shoesize_women(n) units=[;inch] shoe_women0 + n shoesize_delta ; \
+shoesize_women(n) units=[1;inch] shoe_women0 + n shoesize_delta ; \
                                 (shoesize_women+(-shoe_women0))/shoesize_delta
-shoesize_boys(n) units=[;inch]  shoe_boys0 + n shoesize_delta ; \
+shoesize_boys(n) units=[1;inch]  shoe_boys0 + n shoesize_delta ; \
                                 (shoesize_boys+(-shoe_boys0))/shoesize_delta
-shoesize_girls(n) units=[;inch] shoe_girls0 + n shoesize_delta ; \
+shoesize_girls(n) units=[1;inch] shoe_girls0 + n shoesize_delta ; \
                                 (shoesize_girls+(-shoe_girls0))/shoesize_delta
 
 # European shoe size.  According to
@@ -2264,12 +2504,12 @@ shaftment               6 inch # Distance from tip of outstretched thumb to the
 smoot              5 ft + 7 in # Created as part of an MIT fraternity prank.
                                #   In 1958 Oliver Smoot was used to measure
                                #   the length of the Harvard Bridge, which was
-                               #   marked off in smooth lengths.  These
+                               #   marked off in Smoot lengths.  These
                                #   markings have been maintained on the bridge
                                #   since then and repainted by subsequent
                                #   incoming fraternity members.  During a
-                               #   bridge rennovation the new sidewalk was
-                               #   scored every smooth rather than at the
+                               #   bridge renovation the new sidewalk was
+                               #   scored every Smoot rather than at the
                                #   customary 6 ft spacing.
 #
 # Cooking measures
@@ -2427,6 +2667,11 @@ eggvolume               3 ustablespoons + 1|2 ustsp
 eggwhitevolume          2 ustablespoons
 eggyolkvolume           3.5 ustsp
 
+# Alcohol density
+
+ethanoldensity          0.7893 g/cm^3   # From CRC Handbook, 91st Edition
+alcoholdensity          ethanoldensity
+
 #
 # Density measures.  Density has traditionally been measured on a variety of
 # bizarre nonlinear scales.
@@ -2557,18 +2802,18 @@ sugar_bpC(T) units=[1;g/cm^3] domain=[100,139.1636] range=[0.99717,1.5144619]\
 # Holland had a value of 144, and the new scale or Gerlach scale used 146.78.
 
 baumeconst 145      # US value
-baume(d) units=[1;g/cm^3] domain=[0,] range=[1,] \
+baume(d) units=[1;g/cm^3] domain=[0,145) range=[1,) \
                           (baumeconst/(baumeconst+-d)) g/cm^3 ; \
                           (baume+((-g)/cm^3)) baumeconst / baume
 
 # It's not clear if this value was ever used with negative degrees.
-twaddell(x) units=[1;g/cm^3] domain=[-200,] range=[0,] \
+twaddell(x) units=[1;g/cm^3] domain=[-200,) range=[0,) \
                              (1 + 0.005 x) g / cm^3 ; \
                              200 (twaddell / (g/cm^3) +- 1)
 
 # The degree quevenne is a unit for measuring the density of milk.
 # Similarly it's unclear if negative values were allowed here.
-quevenne(x) units=[1;g/cm^3] domain=[-1000,] range=[0,] \
+quevenne(x) units=[1;g/cm^3] domain=[-1000,) range=[0,) \
                              (1 + 0.001 x) g / cm^3 ; \
                              1000 (quevenne / (g/cm^3) +- 1)
 
@@ -2606,7 +2851,7 @@ brix[0.99717g/cm^3]\
 #
 # The intervals of range and domain should be open rather than closed.
 #
-apidegree(x) units=[1;g/cm^3] domain=[-131.5,] range=[0,] \
+apidegree(x) units=[1;g/cm^3] domain=[-131.5,) range=[0,) \
                               141.5 g/cm^3 / (x+131.5) ; \
                               141.5 (g/cm^3) / apidegree + (-131.5)
 
@@ -2622,6 +2867,9 @@ pdl                     poundal
 osi                     ounce force / inch^2   # used in aviation
 psi                     pound force / inch^2
 psia                    psi             # absolute pressure
+                                        #   Note that gauge pressure can be given
+                                        #   using the gaugepressure() and
+                                        #   psig() nonlinear unit definitions
 tsi                     ton force / inch^2
 reyn                    psi sec
 slug                    lbf s^2 / ft
@@ -2700,28 +2948,46 @@ count                  per pound     # For measuring the size of shrimp
 ENERGY                  joule
 WORK                    joule
 
-# Calories: energy to raise a gram of water one degree celsius
+# Calorie: approximate energy to raise a gram of water one degree celsius
 
-cal_IT                  4.1868 J     # International Table calorie
-cal_th                  4.184 J      # Thermochemical calorie
-cal_fifteen             4.18580 J    # Energy to go from 14.5 to 15.5 degC
-cal_twenty              4.18190 J    # Energy to go from 19.5 to 20.5 degC
-cal_mean                4.19002 J    # 1|100 energy to go from 0 to 100 degC
-calorie                 cal_IT
+calorie                 cal_th       # Default is the thermochemical calorie
 cal                     calorie
-calorie_IT              cal_IT
-thermcalorie            cal_th
-calorie_th              thermcalorie
+calorie_th              4.184 J      # Thermochemical calorie, defined in 1930
+thermcalorie            calorie_th   #   by Frederick Rossini as 4.1833 J to
+cal_th                  calorie_th   #   avoid difficulties associated with the
+                                     #   uncertainty in the heat capacity of
+                                     #   water.  In 1948 the value of the joule
+                                     #   was changed, so the thermochemical
+                                     #   calorie was redefined to 4.184 J.
+                                     #   This kept the energy measured by this
+                                     #   unit the same.
+calorie_IT              4.1868 J     # International (Steam) Table calorie,
+cal_IT                  calorie_IT   #   defined in 1929 as watt-hour/860 or
+                                     #   equivalently 180|43 joules.  At this
+                                     #   time the international joule had a
+                                     #   different value than the modern joule,
+                                     #   and the values were different in the
+                                     #   USA and in Europe.  In 1956 at the
+                                     #   Fifth International Conference on
+                                     #   Properties of Steam the exact
+                                     #   definition given here was adopted.
+calorie_15              4.18580 J    # Energy to go from 14.5 to 15.5 degC
+cal_15                  calorie_15
+calorie_fifteen         cal_15
+calorie_20              4.18190 J    # Energy to go from 19.5 to 20.5 degC
+cal_20                  calorie_20
+calorie_twenty          calorie_20
+cal_mean                4.19002 J    # 1|100 energy to go from 0 to 100 degC
 Calorie                 kilocalorie  # the food Calorie
-thermie              1e6 cal_fifteen # Heat required to raise the
+thermie              1e6 cal_15      # Heat required to raise the
                                      # temperature of a tonne of
                                      # water from 14.5 to 15.5 degC.
 
 # btu definitions: energy to raise a pound of water 1 degF
 
-btu                     cal lb degF / gram K # international table BTU
+btu                     btu_IT       # International Table BTU is the default
 britishthermalunit      btu
-btu_IT                  btu
+btu_IT                  cal_IT lb degF / gram K
 btu_th                  cal_th lb degF / gram K
 btu_mean                cal_mean lb degF / gram K
 quad                    quadrillion btu
@@ -2729,6 +2995,99 @@ quad                    quadrillion btu
 ECtherm                 1.05506e8 J    # Exact definition, close to 1e5 btu
 UStherm                 1.054804e8 J   # Exact definition
 therm                   UStherm
+
+# Water latent heat from [23]
+
+water_fusion_heat       6.01 kJ/mol / (18.015 g/mol) # At 0 deg C
+water_vaporization_heat 2256.4 J/g  # At saturation, 100 deg C, 101.42 kPa
+
+# Specific heat capacities of various substances
+
+specificheat_water      calorie / g K
+water_specificheat      specificheat_water
+     # Values from www.engineeringtoolbox.com/specific-heat-metals-d_152.html
+specificheat_aluminum   0.91 J/g K
+specificheat_antimony   0.21 J/g K
+specificheat_barium     0.20 J/g K
+specificheat_beryllium  1.83 J/g K
+specificheat_bismuth    0.13 J/g K
+specificheat_cadmium    0.23 J/g K
+specificheat_cesium     0.24 J/g K
+specificheat_chromium   0.46 J/g K
+specificheat_cobalt     0.42 J/g K
+specificheat_copper     0.39 J/g K
+specificheat_gallium    0.37 J/g K
+specificheat_germanium  0.32 J/g K
+specificheat_gold       0.13 J/g K
+specificheat_hafnium    0.14 J/g K
+specificheat_indium     0.24 J/g K
+specificheat_iridium    0.13 J/g K
+specificheat_iron       0.45 J/g K
+specificheat_lanthanum  0.195 J/g K
+specificheat_lead       0.13 J/g K
+specificheat_lithium    3.57 J/g K
+specificheat_lutetium   0.15 J/g K
+specificheat_magnesium  1.05 J/g K
+specificheat_manganese  0.48 J/g K
+specificheat_mercury    0.14 J/g K
+specificheat_molybdenum 0.25 J/g K
+specificheat_nickel     0.44 J/g K
+specificheat_osmium     0.13 J/g K
+specificheat_palladium  0.24 J/g K
+specificheat_platinum   0.13 J/g K
+specificheat_plutonum   0.13 J/g K
+specificheat_potassium  0.75 J/g K
+specificheat_rhenium    0.14 J/g K
+specificheat_rhodium    0.24 J/g K
+specificheat_rubidium   0.36 J/g K
+specificheat_ruthenium  0.24 J/g K
+specificheat_scandium   0.57  J/g K
+specificheat_selenium   0.32 J/g K
+specificheat_silicon    0.71 J/g K
+specificheat_silver     0.23 J/g K
+specificheat_sodium     1.21 J/g K
+specificheat_strontium  0.30 J/g K
+specificheat_tantalum   0.14 J/g K
+specificheat_thallium   0.13 J/g K
+specificheat_thorium    0.13 J/g K
+specificheat_tin        0.21 J/g K
+specificheat_titanium   0.54 J/g K
+specificheat_tungsten   0.13 J/g K
+specificheat_uranium    0.12 J/g K
+specificheat_vanadium   0.39 J/g K
+specificheat_yttrium    0.30 J/g K
+specificheat_zinc       0.39 J/g K
+specificheat_zirconium  0.27 J/g K
+specificheat_ethanol    2.3  J/g K
+specificheat_ammonia    4.6 J/g K
+specificheat_freon      0.91 J/g K   # R-12 at 0 degrees Fahrenheit
+specificheat_gasoline   2.22 J/g K
+specificheat_iodine     2.15 J/g K
+specificheat_oliveoil   1.97 J/g K
+
+#  en.wikipedia.org/wiki/Heat_capacity#Table_of_specific_heat_capacities
+specificheat_hydrogen   14.3 J/g K
+specificheat_helium     5.1932 J/g K
+specificheat_argon      0.5203 J/g K
+specificheat_tissue     3.5 J/g K
+specificheat_diamond    0.5091 J/g K
+specificheat_granite    0.79 J/g K
+specificheat_graphite   0.71 J/g K
+specificheat_ice        2.11 J/g K
+specificheat_asphalt    0.92 J/g K
+specificheat_brick      0.84 J/g K
+specificheat_concrete   0.88 J/g K
+specificheat_glass_silica 0.84 J/g K
+specificheat_glass_flint  0.503 J/g K
+specificheat_glass_pyrex  0.753 J/g K
+specificheat_gypsum     1.09 J/g K
+specificheat_marble     0.88 J/g K
+specificheat_sand       0.835 J/g K
+specificheat_soil       0.835 J/g K
+specificheat_wood       1.7 J/g K
+
+specificheat_sucrose    1.244 J/g K #www.sugartech.co.za/heatcapacity/index.php
+
 
 # Energy densities of various fuels
 #
@@ -2796,6 +3155,14 @@ chu                     celsiusheatunit
 
 POWER                   watt
 
+# "Apparent" average power in an AC circuit, the product of rms voltage
+# and rms current, equal to the true power in watts when voltage and
+# current are in phase.  In a DC circuit, always equal to the true power.
+
+VA                      volt ampere
+
+kWh                     kilowatt hour
+
 # The horsepower is supposedly the power of one horse pulling.   Obviously
 # different people had different horses.
 
@@ -2860,15 +3227,15 @@ tog                     0.1 degC m^2 / W   # Also used for clothing.
 # ratio, but it is used in various contexts to report a signal's power
 # relative to some reference level.
 
-bel(x)     units=[1;1] range=[0,] 10^(x);    log(bel)    # Basic bel definition
-decibel(x) units=[1;1] range=[0,] 10^(x/10); 10 log(decibel) # Basic decibel
-dB(x)      units=[1;1] range=[0,] 10^(x/10); 10 log(dB)      # Abbreviation
-dBW(x)     units=[1;W] range=[0,] dB(x) W ;  ~dB(dBW/W)      # Reference = 1 W
-dBk(x)     units=[1;W] range=[0,] dB(x) kW ; ~dB(dBk/kW)     # Reference = 1 kW
-dBf(x)     units=[1;W] range=[0,] dB(x) fW ; ~dB(dBf/fW)     # Reference = 1 fW
-dBm(x)     units=[1;W] range=[0,] dB(x) mW ; ~dB(dBm/mW)     # Reference = 1 mW
-dBmW(x)    units=[1;W] range=[0,] dBm(x) ;   ~dBm(dBmW)      # Reference = 1 mW
-dBJ(x)     units=[1;J] range=[0,] dB(x) J; ~dB(dBJ/J)        # Energy relative
+bel(x)     units=[1;1] range=(0,) 10^(x);    log(bel)    # Basic bel definition
+decibel(x) units=[1;1] range=(0,) 10^(x/10); 10 log(decibel) # Basic decibel
+dB()       decibel                                           # Abbreviation
+dBW(x)     units=[1;W] range=(0,) dB(x) W ;  ~dB(dBW/W)      # Reference = 1 W
+dBk(x)     units=[1;W] range=(0,) dB(x) kW ; ~dB(dBk/kW)     # Reference = 1 kW
+dBf(x)     units=[1;W] range=(0,) dB(x) fW ; ~dB(dBf/fW)     # Reference = 1 fW
+dBm(x)     units=[1;W] range=(0,) dB(x) mW ; ~dB(dBm/mW)     # Reference = 1 mW
+dBmW(x)    units=[1;W] range=(0,) dBm(x) ;   ~dBm(dBmW)      # Reference = 1 mW
+dBJ(x)     units=[1;J] range=(0,) dB(x) J; ~dB(dBJ/J)        # Energy relative
                                      # to 1 joule.  Used for power spectral
                                      # density since W/Hz = J
 
@@ -2876,17 +3243,17 @@ dBJ(x)     units=[1;J] range=[0,] dB(x) J; ~dB(dBJ/J)        # Energy relative
 # because power is proportional to the square of these measures.  The root
 # mean square (RMS) voltage is typically used with these units.
 
-dBV(x)  units=[1;V] range=[0,] dB(0.5 x) V;~dB(dBV^2 / V^2) # Reference = 1 V
-dBmV(x) units=[1;V] range=[0,] dB(0.5 x) mV;~dB(dBmV^2/mV^2)# Reference = 1 mV
-dBuV(x) units=[1;V] range=[0,] dB(0.5 x) microV ; ~dB(dBuV^2 / microV^2)
+dBV(x)  units=[1;V] range=(0,) dB(0.5 x) V;~dB(dBV^2 / V^2) # Reference = 1 V
+dBmV(x) units=[1;V] range=(0,) dB(0.5 x) mV;~dB(dBmV^2/mV^2)# Reference = 1 mV
+dBuV(x) units=[1;V] range=(0,) dB(0.5 x) microV ; ~dB(dBuV^2 / microV^2)
                                    # Reference = 1 microvolt
 
 # Referenced to the voltage that causes 1 mW dissipation in a 600 ohm load.
 # Originally defined as dBv but changed to prevent confusion with dBV.
 # The "u" is for unloaded.
-dBu(x) units=[1;V] range=[0,] dB(0.5 x) sqrt(mW 600 ohm) ; \
+dBu(x) units=[1;V] range=(0,) dB(0.5 x) sqrt(mW 600 ohm) ; \
                               ~dB(dBu^2 / mW 600 ohm)
-dBv(x) units=[1;V] range=[0,] dBu(x) ; ~dBu(dBv)  # Synonym for dBu
+dBv(x) units=[1;V] range=(0,) dBu(x) ; ~dBu(dBv)  # Synonym for dBu
 
 
 # Measurements for sound in air, referenced to the threshold of human hearing
@@ -2894,11 +3261,11 @@ dBv(x) units=[1;V] range=[0,] dBu(x) ; ~dBu(dBv)  # Synonym for dBu
 # for sound pressure.  Units dBA, dBB, dBC, refer to different frequency
 # weightings meant to approximate the human ear's response.
 
-dBSPL(x) units=[1;Pa] range=[0,] dB(0.5 x) 20 microPa ;  \
+dBSPL(x) units=[1;Pa] range=(0,) dB(0.5 x) 20 microPa ;  \
                                  ~dB(dBSPL^2 / (20 microPa)^2) # pressure
-dBSIL(x) units=[1;W/m^2] range=[0,] dB(x) 1e-12 W/m^2; \
+dBSIL(x) units=[1;W/m^2] range=(0,) dB(x) 1e-12 W/m^2; \
                                     ~dB(dBSIL / (1e-12 W/m^2)) # intensity
-dBSWL(x) units=[1;W] range=[0,] dB(x) 1e-12 W; ~dB(dBSWL/1e-12 W)
+dBSWL(x) units=[1;W] range=(0,) dB(x) 1e-12 W; ~dB(dBSWL/1e-12 W)
 
 
 # Misc other measures
@@ -2914,11 +3281,25 @@ tonrefrigeration        uston 144 btu / lb day # One ton refrigeration is
                                         # latent heat of 144 btu/lb.
 tonref                  tonrefrigeration
 refrigeration           tonref / ton
-frigorie                1000 cal_fifteen# Used in refrigeration engineering.
-tnt                     1e9 cal_th / ton# So you can write tons-tnt. This
+frigorie                1000 cal_15     # Used in refrigeration engineering.
+tnt                     1e9 cal_th / ton# So you can write tons tnt. This
                                         # is a defined, not measured, value.
 airwatt                 8.5 (ft^3/min) inH2O # Measure of vacuum power as
                                              # pressure times air flow.
+
+# Nuclear weapon yields
+
+davycrocket             10 ton tnt         # lightest US tactical nuclear weapon
+hiroshima               15.5 kiloton tnt   # Uranium-235 fission bomb
+nagasaki                21 kiloton tnt     # Plutonium-239 fission bomb
+fatman                  nagasaki
+littleboy               hiroshima
+ivyking                 500 kiloton tnt    # most powerful fission bomb
+castlebravo             15 megaton tnt     # most powerful US test
+b53bomb                 9 megaton tnt
+                 # http://rarehistoricalphotos.com/gadget-first-atomic-bomb/
+trinity                 18 kiloton tnt     # July 16, 1945
+gadget                  trinity
 
 #
 # Permeability: The permeability or permeance, n, of a substance determines
@@ -2983,7 +3364,49 @@ Cpaper                  17 inch 22 inch
 Dpaper                  22 inch 34 inch
 Epaper                  34 inch 44 inch
 
-pointthickness          mil
+# Correspondence envelope sizes.  #10 is the standard business
+# envelope in the USA.
+
+envelope6_25size        3.5 inch 6 inch
+envelope6_75size        3.625 inch 6.5 inch
+envelope7size           3.75 inch 6.75 inch
+envelope7_75size        3.875 inch 7.5 inch
+envelope8_625size       3.625 inch 8.625 inch
+envelope9size           3.875 inch 8.875 inch
+envelope10size          4.125 inch 9.5 inch
+envelope11size          4.5 inch 10.375 inch
+envelope12size          4.75 inch 11 inch
+envelope14size          5 inch 11.5 inch
+envelope16size          6 inch 12 inch
+
+# Announcement envelope sizes (no relation to metric paper sizes like A4)
+
+envelopeA1size          3.625 inch 5.125 inch  # same as 4bar
+envelopeA2size          4.375 inch 5.75 inch
+envelopeA6size          4.75 inch 6.5 inch
+envelopeA7size          5.25 inch 7.25 inch
+envelopeA8size          5.5 inch 8.125 inch
+envelopeA9size          5.75 inch 8.75 inch
+envelopeA10size         6 inch 9.5 inch
+
+# Baronial envelopes
+
+envelope4bar            3.625 inch 5.125 inch  # same as A1
+envelope5_5bar          4.375 inch 5.75 inch
+envelope6bar            4.75 inch 6.5 inch
+
+# Coin envelopes
+
+envelope1baby           2.25 inch 3.5 inch     # same as #1 coin
+envelope00coin          1.6875 inch 2.75 inch
+envelope1coin           2.25 inch 3.5 inch
+envelope3coin           2.5 inch 4.25 inch
+envelope4coin           3 inch 4.5 inch
+envelope4_5coin         3 inch 4.875 inch
+envelope5coin           2.875 inch 5.25 inch
+envelope5_5coin         3.125 inch 5.5 inch
+envelope6coin           3.375 inch 6 inch
+envelope7coin           3.5 inch 6.5 inch
 
 # The metric paper sizes are defined so that if a sheet is cut in half
 # along the short direction, the result is two sheets which are
@@ -3108,9 +3531,10 @@ paperM                  lb / 1000
 # convert these units roughly (using an approximate density) into the standard
 # paper weight values.
 
+pointthickness          0.001 in
 paperdensity            0.8 g/cm^3        # approximate--paper densities vary!
 papercaliper            in paperdensity
-paperpoint              0.001 in paperdensity
+paperpoint              pointthickness paperdensity
 
 #
 # Printing
@@ -3223,10 +3647,12 @@ grobe_sabon             84 didotpoint
 
 INFORMATION             bit
 
-nat                     ln(2) bits           # Entropy measured base e
+nat                     (1/ln(2)) bits       # Entropy measured base e
 hartley                 log2(10) bits        # Entropy of a uniformly
-                                             #   distributed random variable
+ban                     hartley              #   distributed random variable
                                              #   over 10 symbols.
+dit                     hartley              # from Decimal digIT
+
 #
 # Computer
 #
@@ -3298,7 +3724,26 @@ dvdspeed                 1385 kB/s   # This is the "1x" speed of a DVD using
                                      # as they go from the inside to the
                                      # outside of the disc.
                        # See http://www.osta.org/technology/dvdqa/dvdqa4.htm
+#
+# The IP address space is divided into subnets.  The number of hosts
+# in a subnet depends on the length of the subnet prefix.  This is
+# often written as /N where N is the number of bits in the prefix.
+#
+# https://en.wikipedia.org/wiki/Subnetwork
+#
+# These definitions gives the number of hosts for a subnet whose
+# prefix has the specified length in bits.
+#
 
+ipv4subnetsize(prefix_len) units=[1;1]  domain=[0,32] range=[1,4294967296] \
+                         2^(32-prefix_len) ; 32-log2(ipv4subnetsize)
+#ipv4classA               ipv4subnetsize(8)
+#ipv4classB               ipv4subnetsize(16)
+#ipv4classC               ipv4subnetsize(24)
+
+ipv6subnetsize(prefix_len) units=[1;1] domain=[0,128] \
+                         range=[1,340282366920938463463374607431768211456] \
+                         2^(128-prefix_len) ; 128-log2(ipv6subnetsize)
 
 #
 # Musical measures.  Musical intervals expressed as ratios.  Multiply
@@ -3326,7 +3771,7 @@ pythagoreancomma        musicalfifth^12 / octave^7
 # Equal tempered definitions
 
 semitone                octave^(1|12)
-musicalcent(x) units=[1;1] range=[0,] semitone^(x/100) ; \
+musicalcent(x) units=[1;1] range=(0,) semitone^(x/100) ; \
                                       100 log(musicalcent)/log(semitone)
 
 #
@@ -3425,6 +3870,7 @@ bloodunit               450 ml           # For whole blood.  For blood
 
 frenchcathetersize      1|3 mm           # measure used for the outer diameter
                                          # of a catheter
+charriere               frenchcathetersize
 
 
 #
@@ -3445,7 +3891,72 @@ megalerg                megaerg    # 'L' added to make it pronounceable [18].
 #
 
 unitedstatesdollar      US$
+usdollar                US$
 $                       dollar
+#mark                    germanymark
+#bolivar                 venezuelabolivar
+#venezuelanbolivarfuerte venezuelabolivar
+#bolivarfuerte           bolivar        # The currency was revalued by
+#oldbolivar              1|1000 bolivar # a factor of 1000.
+#peseta                  spainpeseta
+#rand                    southafricarand
+#escudo                  portugalescudo
+#guilder                 netherlandsguilder
+#hollandguilder          netherlandsguilder
+#peso                    mexicopeso
+#yen                     japanyen
+#lira                    italylira
+#rupee                   indiarupee
+#drachma                 greecedrachma
+#franc                   francefranc
+#markka                  finlandmarkka
+#britainpound            unitedkingdompound
+#greatbritainpound       unitedkingdompound
+#unitedkingdompound      ukpound
+#poundsterling           britainpound
+#yuan                    chinayuan
+
+# Some European currencies have permanent fixed exchange rates with
+# the Euro.  These rates were taken from the EC's web site:
+# http://ec.europa.eu/economy_finance/euro/adoption/conversion/index_en.htm
+
+#austriaschilling        1|13.7603 euro
+#belgiumfranc            1|40.3399 euro
+#estoniakroon            1|15.6466 euro # Equal to 1|8 germanymark
+#finlandmarkka           1|5.94573 euro
+#francefranc             1|6.55957 euro
+#germanymark             1|1.95583 euro
+#greecedrachma           1|340.75 euro
+#irelandpunt             1|0.787564 euro
+#italylira               1|1936.27 euro
+#luxembourgfranc         1|40.3399 euro
+#netherlandsguilder      1|2.20371 euro
+#portugalescudo          1|200.482 euro
+#spainpeseta             1|166.386 euro
+#cypruspound             1|0.585274 euro
+#maltalira               1|0.429300 euro
+#sloveniatolar           1|239.640 euro
+#slovakiakoruna          1|30.1260 euro
+
+#UKP                     GBP        # Not an ISO code, but looks like one, and
+#                                   # sometimes used on usenet.
+#VEB                     1|1000 VEF # old venezuelan bolivar
+
+!include currency.units
+
+# Money on the gold standard, used in the late 19th century and early
+# 20th century.
+
+#olddollargold           23.22 grains goldprice  # Used until 1934
+#newdollargold           96|7 grains goldprice   # After Jan 31, 1934
+#dollargold              newdollargold
+#poundgold               113 grains goldprice
+#goldounce               goldprice troyounce
+#silverounce             silverprice troyounce
+#platinumounce           platinumprice troyounce
+#XAU                     goldounce
+#XPT                     platinumounce
+#XAG                     silverounce
 
 # Nominal masses of US coins.  Note that dimes, quarters and half dollars
 # have weight proportional to value.  Before 1965 it was $40 / kg.
@@ -3457,6 +3968,45 @@ USquarterweight         US$ 0.25 / (20 US$ / lb)   # Since 1965
 UShalfdollarweight      US$ 0.50 / (20 US$ / lb)   # Since 1971
 USdollarmass            8.1 grams
 
+# British currency
+
+#quid                    britainpound        # Slang names
+#fiver                   5 quid
+#tenner                  10 quid
+#monkey                  500 quid
+#brgrand                 1000 quid
+#bob                     shilling
+
+#shilling                1|20 britainpound   # Before decimalisation, there
+#oldpence                1|12 shilling       # were 20 shillings to a pound,
+#farthing                1|4 oldpence        # each of twelve old pence
+#guinea                  21 shilling         # Still used in horse racing
+#crown                   5 shilling
+#florin                  2 shilling
+#groat                   4 oldpence
+#tanner                  6 oldpence
+#brpenny                 0.01 britainpound
+#pence                   brpenny
+#tuppence                2 pence
+#tuppenny                tuppence
+#ha'penny                halfbrpenny
+#hapenny                 ha'penny
+#oldpenny                oldpence
+#oldtuppence             2 oldpence
+#oldtuppenny             oldtuppence
+#threepence              3 oldpence    # threepence never refers to new money
+#threepenny              threepence
+#oldthreepence           threepence
+#oldthreepenny           threepence
+#oldhalfpenny            halfoldpenny
+#oldha'penny             oldhalfpenny
+#oldhapenny              oldha'penny
+#brpony                  25 britainpound
+
+# Canadian currency
+
+#loony                   1 canadadollar    # This coin depicts a loon
+#toony                   2 canadadollar
 
 #
 # Units used for measuring volume of wood
@@ -3506,6 +4056,11 @@ wholedeal        12 ft 11 in 1.25 in # If it's half as thick as the standard
                                      #   deal it's called a "whole deal"!
 splitdeal         12 ft 11 in 5|8 in # And half again as thick is a split deal.
 
+
+# Used for shellac mixing rate
+
+poundcut            pound / gallon
+lbcut               poundcut
 
 #
 # Gas and Liquid flow units
@@ -3581,6 +4136,151 @@ slpm                    atm liter/min
 slph                    atm liter/hour
 lusec                   liter micron Hg / s  # Used in vacuum science
 
+# US Standard Atmosphere (1976)
+# Atmospheric temperature and pressure vs. geometric height above sea level
+# This definition covers only the troposphere (the lowest atmospheric
+# layer, up to 11 km), and assumes the layer is polytropic.
+# A polytropic process is one for which PV^k = const, where P is the
+# pressure, V is the volume, and k is the polytropic exponent.  The
+# polytropic index is n = 1 / (k - 1).  As noted in the Wikipedia article
+# https://en.wikipedia.org/wiki/Polytropic_process, some authors reverse
+# the definitions of "exponent" and "index."  The functions below assume
+# the following parameters:
+
+# temperature lapse rate, -dT/dz, in troposphere
+
+lapserate       6.5 K/km        # US Std Atm (1976)
+
+# air molecular weight, including constituent mol wt, given
+# in Table 3, p. 3
+
+air_1976        78.084   %    28.0134 \
+              + 20.9476  %    31.9988 \
+              + 9340     ppm  39.948 \
+              +  314     ppm  44.00995 \
+              +   18.18  ppm  20.183 \
+              +    5.24  ppm   4.0026 \
+              +    2     ppm  16.04303 \
+              +    1.14  ppm  83.80 \
+              +    0.55  ppm   2.01594 \
+              +    0.087 ppm 131.30
+
+# universal gas constant
+R_1976          8.31432e3 N m/(kmol K)
+
+# polytropic index n
+polyndx_1976    air_1976 (kg/kmol) gravity/(R_1976 lapserate) - 1
+
+# If desired, redefine using current values for air mol wt and R
+
+polyndx         polyndx_1976
+# polyndx       air (kg/kmol) gravity/(R lapserate) - 1
+
+# for comparison with various references
+
+polyexpnt       (polyndx + 1) / polyndx
+
+# The model assumes the following reference values:
+# sea-level temperature and pressure
+
+stdatmT0        288.15 K
+stdatmP0        atm
+
+# "effective radius" for relation of geometric to geopotential height,
+# at a latitude at which g = 9.80665 m/s (approximately 45.543 deg); no
+# relation to actual radius
+
+earthradUSAtm   6356766 m
+
+# Temperature vs. geopotential height h
+# Assumes 15 degC at sea level
+# Based on approx 45 deg latitude
+# Lower limits of domain and upper limits of range are those of the
+# tables in US Standard Atmosphere (NASA 1976)
+
+stdatmTH(h) units=[m;K] domain=[-5000,11e3] range=[217,321] \
+    stdatmT0+(-lapserate h) ; (stdatmT0+(-stdatmTH))/lapserate
+
+# Temperature vs. geometric height z; based on approx 45 deg latitude
+stdatmT(z) units=[m;K] domain=[-5000,11e3] range=[217,321] \
+    stdatmTH(geop_ht(z)) ; ~geop_ht(~stdatmTH(stdatmT))
+
+# Pressure vs. geopotential height h
+# Assumes 15 degC and 101325 Pa at sea level
+# Based on approx 45 deg latitude
+# Lower limits of domain and upper limits of range are those of the
+# tables in US Standard Atmosphere (NASA 1976)
+
+stdatmPH(h) units=[m;Pa] domain=[-5000,11e3] range=[22877,177764] \
+    atm (1 - (lapserate/stdatmT0) h)^(polyndx + 1) ; \
+    (stdatmT0/lapserate) (1+(-(stdatmPH/stdatmP0)^(1/(polyndx + 1))))
+
+# Pressure vs. geometric height z; based on approx 45 deg latitude
+stdatmP(z) units=[m;Pa] domain=[-5000,11e3] range=[22877,177764] \
+   stdatmPH(geop_ht(z)); ~geop_ht(~stdatmPH(stdatmP))
+
+# Geopotential height from geometric height
+# Based on approx 45 deg latitude
+# Lower limits of domain and range are somewhat arbitrary; they
+# correspond to the limits in the US Std Atm tables
+
+geop_ht(z) units=[m;m] domain=[-5000,) range=[-5004,) \
+    (earthradUSAtm z) / (earthradUSAtm + z) ; \
+    (earthradUSAtm geop_ht) / (earthradUSAtm + (-geop_ht))
+
+# The standard value for the sea-level acceleration due to gravity is
+# 9.80665 m/s^2, but the actual value varies with latitude (Harrison 1949)
+# R_eff = 2 g_phi / denom
+# g_phi = 978.0356e-2 (1+0.0052885 sin(lat)^2+(-0.0000059) sin(2 lat)^2)
+#   or
+# g_phi = 980.6160e-2 (1+(-0.0026373) cos(2 lat)+0.0000059 cos(2 lat)^2)
+# denom = 3.085462e-6+2.27e-9 cos(2 lat)+(-2e-12) cos(4 lat) (minutes?)
+# There is no inverse function; the standard value applies at a latitude
+# of about 45.543 deg
+
+g_phi(lat) units=[deg;m/s2] domain=[0,90] noerror  \
+    980.6160e-2 (1+(-0.0026373) cos(2 lat)+0.0000059 cos(2 lat)^2) m/s2
+
+# effective Earth radius for relation of geometric height to
+# geopotential height, as function of latitude (Harrison 1949)
+
+earthradius_eff(lat) units=[deg;m] domain=[0,90] noerror \
+    m 2 9.780356 (1+0.0052885 sin(lat)^2+(-0.0000059) sin(2 lat)^2) / \
+    (3.085462e-6 + 2.27e-9 cos(2 lat) + (-2e-12) cos(4 lat))
+
+# References
+# Harrison, L.P. 1949.  Relation Between Geopotential and Geometric
+#   Height.  In Smithsonian Meteorological Tables. List, Robert J., ed.
+#   6th ed., 4th reprint, 1968.  Washington, DC: Smithsonian Institution.
+# NASA.  US National Aeronautics and Space Administration. 1976.
+#   US Standard Atmosphere 1976.  Washington, DC: US Government Printing Office.
+
+# Gauge pressure functions
+#
+# Gauge pressure is measured relative to atmospheric pressure.  In the English
+# system, where pressure is often given in pounds per square inch, gauge
+# pressure is often indicated by 'psig' to distinguish it from absolute
+# pressure, often indicated by 'psia'.  At the standard atmospheric pressure
+# of 14.696 psia, a gauge pressure of 0 psig is an absolute pressure of 14.696
+# psia; an automobile tire inflated to 31 psig has an absolute pressure of
+# 45.696 psia.
+#
+# With gaugepressure(), the units must be specified (e.g., gaugepressure(1.5
+# bar)); with psig(), the units are taken as psi, so the example above of tire
+# pressure could be given as psig(31).
+#
+# If the normal elevation is significantly different from sea level, change
+# Patm appropriately, and adjust the lower domain limit on the gaugepressure
+# definition.
+
+Patm    atm
+
+gaugepressure(x) units=[Pa;Pa] domain=[-101325,) range=[0,) \
+                x + Patm ; gaugepressure+(-Patm)
+
+psig(x) units=[1;Pa] domain=[-14.6959487755135,) range=[0,) \
+    gaugepressure(x psi) ; ~gaugepressure(psig) / psi
+
 #
 # Wire Gauge
 #
@@ -3619,8 +4319,9 @@ g0000000                 (-6)
 # measure the thickness of sheets of aluminum, copper, and most metals other
 # than steel, iron and zinc.
 
-wiregauge(g) units=[;m] range=[0,] \
+wiregauge(g) units=[1;m] range=(0,) \
              1|200 92^((36+(-g))/39) in; 36+(-39)ln(200 wiregauge/in)/ln(92)
+awg()        wiregauge
 
 # Next we have the SWG, the Imperial or British Standard Wire Gauge.  This one
 # is piecewise linear.  It was used for aluminum sheets.
@@ -3704,13 +4405,114 @@ zincgauge[in]    \
        28 1
 
 #
+# Imperial drill bit sizes are reported in inches or in a numerical or
+# letter gauge.
+#
+
+drillgauge[in] \
+       1  0.2280 \
+       2  0.2210 \
+       3  0.2130 \
+       4  0.2090 \
+       5  0.2055 \
+       6  0.2040 \
+       7  0.2010 \
+       8  0.1990 \
+       9  0.1960 \
+      10  0.1935 \
+      11  0.1910 \
+      12  0.1890 \
+      13  0.1850 \
+      14  0.1820 \
+      15  0.1800 \
+      16  0.1770 \
+      17  0.1730 \
+      18  0.1695 \
+      19  0.1660 \
+      20  0.1610 \
+      22  0.1570 \
+      23  0.1540 \
+      24  0.1520 \
+      25  0.1495 \
+      26  0.1470 \
+      27  0.1440 \
+      28  0.1405 \
+      29  0.1360 \
+      30  0.1285 \
+      31  0.1200 \
+      32  0.1160 \
+      33  0.1130 \
+      34  0.1110 \
+      35  0.1100 \
+      36  0.1065 \
+      38  0.1015 \
+      39  0.0995 \
+      40  0.0980 \
+      41  0.0960 \
+      42  0.0935 \
+      43  0.0890 \
+      44  0.0860 \
+      45  0.0820 \
+      46  0.0810 \
+      48  0.0760 \
+      51  0.0670 \
+      52  0.0635 \
+      53  0.0595 \
+      54  0.0550 \
+      55  0.0520 \
+      56  0.0465 \
+      57  0.0430 \
+      65  0.0350 \
+      66  0.0330 \
+      68  0.0310 \
+      69  0.0292 \
+      70  0.0280 \
+      71  0.0260 \
+      73  0.0240 \
+      74  0.0225 \
+      75  0.0210 \
+      76  0.0200 \
+      78  0.0160 \
+      79  0.0145 \
+      80  0.0135 \
+      88  0.0095 \
+      104 0.0031
+
+drillA    0.234 in
+drillB    0.238 in
+drillC    0.242 in
+drillD    0.246 in
+drillE    0.250 in
+drillF    0.257 in
+drillG    0.261 in
+drillH    0.266 in
+drillI    0.272 in
+drillJ    0.277 in
+drillK    0.281 in
+drillL    0.290 in
+drillM    0.295 in
+drillN    0.302 in
+drillO    0.316 in
+drillP    0.323 in
+drillQ    0.332 in
+drillR    0.339 in
+drillS    0.348 in
+drillT    0.358 in
+drillU    0.368 in
+drillV    0.377 in
+drillW    0.386 in
+drillX    0.397 in
+drillY    0.404 in
+drillZ    0.413 in
+
+#
 # Screw sizes
 #
 # In the USA, screw diameters are reported using a gauge number.
 # Metric screws are reported as Mxx where xx is the diameter in mm.
 #
 
-screwgauge(g) units=[;m] range=[0,] \
+screwgauge(g) units=[1;m] range=[0,) \
               (.06 + .013 g) in ; (screwgauge/in + (-.06)) / .013
 
 #
@@ -3876,8 +4678,7 @@ ansibonded[micron] \
     1000 5.8 \
     1200 3.8
 
-grit_ansibonded(x) units=[1;micron] domain=[4,1200] range=[3.8,4890] \
-                   ansibonded(x); ~ansibonded(grit_ansibonded)
+grit_ansibonded() ansibonded
 
 # Like the bonded grit, the coated macrogrits below 240 are taken from the
 # FEPA F table.  Data above this is from the UAMA site.  Note that the coated
@@ -3890,7 +4691,7 @@ grit_ansibonded(x) units=[1;micron] domain=[4,1200] range=[3.8,4890] \
 # Because of this non-monotonicity from 600 grit to 800 grit this definition
 # produces a warning about the lack of a unique inverse.
 
-ansicoated[micron] \
+ansicoated[micron] noerror \
     4 4890 \
     5 4125 \
     6 3460 \
@@ -3933,8 +4734,7 @@ ansicoated[micron] \
     6000 2 \
     8000 1.2
 
-grit_ansicoated(x) units=[1;micron] domain=[4,8000] range=[1.2,4890] \
-                   ansicoated(x); ~ansicoated(grit_ansicoated)
+grit_ansicoated()  ansicoated
 
 
 #
@@ -4031,6 +4831,173 @@ hardwhitearkansas        11 micron
 washita                  35 micron
 
 #
+# Mesh systems for measuring particle sizes by sifting through a wire
+# mesh or sieve
+#
+
+# The Tyler system and US Sieve system are based on four steps for
+# each factor of 2 change in the size, so each size is 2^1|4 different
+# from the adjacent sizes.  Unfortunately, the mesh numbers are
+# arbitrary, so the sizes cannot be expressed with a functional form.
+# Various references round the values differently.  The mesh numbers
+# are supposed to correspond to the number of holes per inch, but this
+# correspondence is only approximate because it doesn't include the
+# wire size of the mesh.
+
+# The Tyler Mesh system was apparently introduced by the WS Tyler
+# company, but it appears that they no longer use it.  They follow the
+# ASTM E11 standard.
+
+meshtyler[micron] \
+          2.5 8000 \
+          3   6727 \
+          3.5 5657 \
+          4   4757 \
+          5   4000 \
+          6   3364 \
+          7   2828 \
+          8   2378 \
+          9   2000 \
+         10   1682 \
+         12   1414 \
+         14   1189 \
+         16   1000 \
+         20    841 \
+         24    707 \
+         28    595 \
+         32    500 \
+         35    420 \
+         42    354 \
+         48    297 \
+         60    250 \
+         65    210 \
+         80    177 \
+        100    149 \
+        115    125 \
+        150    105 \
+        170     88 \
+        200     74 \
+        250     63 \
+        270     53 \
+        325     44 \
+        400     37
+
+# US Sieve size, ASTM E11
+#
+# The WS Tyler company prints the list from ASTM E11 in their catalog,
+# http://wstyler.com/wp-content/uploads/2015/11/Product-Catalog-2.pdf
+
+sieve[micron] \
+          3.5   5600 \
+          4     4750 \
+          5     4000 \
+          6     3350 \
+          7     2800 \
+          8     2360 \
+         10     2000 \
+         12     1700 \
+         14     1400 \
+         16     1180 \
+         18     1000 \
+         20      850 \
+         25      710 \
+         30      600 \
+         35      500 \
+         40      425 \
+         45      355 \
+         50      300 \
+         60      250 \
+         70      212 \
+         80      180 \
+        100      150 \
+        120      125 \
+        140      106 \
+        170       90 \
+        200       75 \
+        230       63 \
+        270       53 \
+        325       45 \
+        400       38 \
+        450       32 \
+        500       25 \
+        625       20   # These last two values are not in the standard series
+                       # but were included in the ASTM standard because they
+meshUS()  sieve        # were in common usage.
+
+# British Mesh size, BS 410: 1986
+# This system appears to correspond to the Tyler and US system, but
+# with different mesh numbers.
+#
+# http://www.panadyne.com/technical/panadyne_international_sieve_chart.pdf
+#
+
+meshbritish[micron] \
+          3    5657 \
+          3.5  4757 \
+          4    4000 \
+          5    3364 \
+          6    2828 \
+          7    2378 \
+          8    2000 \
+         10    1682 \
+         12    1414 \
+         14    1189 \
+         16    1000 \
+         18     841 \
+         22     707 \
+         25     595 \
+         30     500 \
+         36     420 \
+         44     354 \
+         52     297 \
+         60     250 \
+         72     210 \
+         85     177 \
+        100     149 \
+        120     125 \
+        150     105 \
+        170      88 \
+        200      74 \
+        240      63 \
+        300      53 \
+        350      44 \
+        400      37
+
+# French system, AFNOR NFX11-501: 1970
+# The system appears to be based on size doubling every 3 mesh
+# numbers, though the values have been agressively rounded.
+# It's not clear if the unrounded values would be considered
+# incorrect, so this is given as a table rather than a function.
+# Functional form:
+#    meshtamis(mesh) units=[1;m] 5000 2^(1|3 (mesh-38)) micron
+#
+# http://www.panadyne.com/technical/panadyne_international_sieve_chart.pdf
+
+meshtamis[micron] \
+        17   40 \
+        18   50 \
+        19   63 \
+        20   80 \
+        21  100 \
+        22  125 \
+        23  160 \
+        24  200 \
+        25  250 \
+        26  315 \
+        27  400 \
+        28  500 \
+        29  630 \
+        30  800 \
+        31 1000 \
+        32 1250 \
+        33 1600 \
+        34 2000 \
+        35 2500 \
+        36 3150 \
+        37 4000 \
+        38 5000
+
+#
 # Ring size. All ring sizes are given as the circumference of the ring.
 #
 
@@ -4046,7 +5013,7 @@ washita                  35 micron
 # circumference, but that source doesn't have an explanation for the modern
 # system which is somewhat different.
 
-ringsize(n) units=[;in] domain=[2,] range=[1.6252,] \
+ringsize(n) units=[1;in] domain=[2,) range=[1.6252,) \
             (1.4216+.1018 n) in ; (ringsize/in + (-1.4216))/.1018
 
 # Old practice in the UK measured rings using the "Wheatsheaf gauge" with sizes
@@ -4088,12 +5055,12 @@ sizeZring               68.75 mm
 # 1|3 mm larger in diameter than the previous one.  They are multiplied by pi
 # to give circumference.
 
-jpringsize(n)  units=[;mm] domain=[1,] range=[0.040840704,] \
+jpringsize(n)  units=[1;mm] domain=[1,) range=[0.040840704,) \
                (38|3 + n/3) pi mm ; 3 jpringsize/ pi mm + (-38)
 
 # The European ring sizes are the length of the circumference in mm minus 40.
 
-euringsize(n)  units=[;mm] (n+40) mm ; euringsize/mm + (-40)
+euringsize(n)  units=[1;mm] (n+40) mm ; euringsize/mm + (-40)
 
 #
 # Abbreviations
@@ -4189,7 +5156,8 @@ rem                     1e-2 Sv      #   keV X-rays.  Different types of
                                      #
                                      # rem stands for Roentgen Equivalent
                                      # Mammal
-
+banana_dose           0.1e-6 sievert # Informal measure of the dose due to
+                                     #   eating one average sized banana
 roentgen              2.58e-4 C / kg # Ionizing radiation that produces
                                      #   1 statcoulomb of charge in 1 cc of
                                      #   dry air at stp.
@@ -4238,6 +5206,7 @@ chromium                51.9961
 cobalt                  58.93320
 copper                  63.546
 curium                  247.0703
+deuterium               2.0141017778
 dysprosium              162.50
 einsteinium             252.083      # Longest lived
 erbium                  167.26
@@ -4318,22 +5287,23 @@ yttrium                 88.90585
 zinc                    65.39
 zirconium               91.224
 
-# from NASA Earth Fact Sheet (accessed 4 November 2011)
+# Average molecular weight of air
+#
+# The atmospheric composition listed is from NASA Earth Fact Sheet (accessed
+# 28 August 2015)
 # http://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html
-# Atmospheric composition:
-#   Nitrogen (N2)       78.08%
-#   Oxygen (O2)         20.95%
-#   Argon (Ar)             9340 ppm
-#   Carbon Dioxide (CO2)    380 ppm
-#   Neon (Ne)                18.18 ppm
-#   Helium (He)               5.24 ppm
-#   Methane (CH4)             1.7 ppm
-#   Krypton (Kr)              1.14 ppm
-#   Hydrogen (H2)             0.55 ppm
+# Numbers do not add up to exactly 100% due to roundoff and uncertainty Water
+# is highly variable, typically makes up about 1%
 
-air                     28.967
-
-
+air            78.08% nitrogen 2 \
+              + 20.95% oxygen 2 \
+              + 9340 ppm argon \
+              +  400 ppm (carbon + oxygen 2) \
+              +   18.18 ppm neon \
+              +    5.24 ppm helium \
+              +    1.7  ppm (carbon + 4 hydrogen) \
+              +    1.14 ppm krypton \
+              +    0.55 ppm hydrogen 2
 #
 # population units
 #
@@ -4344,6 +5314,54 @@ death                   people
 capita                  people
 percapita               per capita
 
+# TGM dozen based unit system listed on the "dozenal" forum
+# http://www.dozenalsociety.org.uk/apps/tgm.htm.  These units are
+# proposed as an allegedly more rational alternative to the SI system.
+
+Tim                     12^-4 hour         # Time
+Grafut                  gravity Tim^2      # Length based on gravity
+Surf                    Grafut^2           # area
+Volm                    Grafut^3           # volume
+Vlos                    Grafut/Tim         # speed
+Denz                    Maz/Volm           # density
+Mag                     Maz gravity        # force
+Maz                     Volm kg / oldliter # mass based on water
+
+Tm                      Tim                # Abbreviations
+Gf                      Grafut
+Sf                      Surf
+Vm                      Volm
+Vl                      Vlos
+Mz                      Maz
+Dz                      Denz
+
+# Dozen based unit prefixes
+
+Zena-                   12
+Duna-                   12^2
+Trina-                  12^3
+Quedra-                 12^4
+Quena-                  12^5
+Hesa-                   12^6
+Seva-                   12^7
+Aka-                    12^8
+Neena-                  12^9
+Dexa-                   12^10
+Lefa-                   12^11
+Zennila-                12^12
+
+Zeni-                   12^-1
+Duni-                   12^-2
+Trini-                  12^-3
+Quedri-                 12^-4
+Queni-                  12^-5
+Hesi-                   12^-6
+Sevi-                   12^-7
+Aki-                    12^-8
+Neeni-                  12^-9
+Dexi-                   12^-10
+Lefi-                   12^-11
+Zennili-                12^-12
 
 #
 # Traditional Japanese units (shakkanhou)
@@ -5128,6 +6146,13 @@ röntgen                 roentgen
 K                       K          # Kelvin symbol, U+212A
 ℓ                       liter      # unofficial abbreviation used in some places
 ¢                       cent
+#£                       britainpound
+#¥                       japanyen
+#€                       euro
+#₩                       southkoreawon
+#₪                       israelnewshekel
+#₤                       lira
+#₨                       rupee
 
 Ω                       ohm       # Ohm symbol U+2126
 Ω                       ohm       # Greek capital omega U+03A9
@@ -5139,9 +6164,9 @@ röntgen                 roentgen
 ℎ                       h
 ℏ                       hbar
 ‰                       1|1000
-‱                      1|10000
-′                        '        # U+2032 '
-″                        "        # U+2033 "
+‱                       1|10000
+′                       '        # U+2032
+″                       "        # U+2033
 
 #
 # Square unicode symbols starting at U+3371
@@ -5153,9 +6178,9 @@ röntgen                 roentgen
 ㍴                      bar
 # ㍵                          oV???
 ㍶                      pc
-㍷                      dm
-㍸                      dm^2
-㍹                      dm^3
+#㍷                      dm      invalid on Mac
+#㍸                      dm^2    invalid on Mac
+#㍹                      dm^3    invalid on Mac
 ㎀                      pA
 ㎁                      nA
 ㎂                      µA
@@ -5226,7 +6251,7 @@ röntgen                 roentgen
 ㏄                      cc
 ㏅                      cd
 ㏆                      C/kg
-㏈(x)                   units=[1;1] range=[0,] dB(x); ~dB(㏈)
+㏈()                    dB
 ㏉                      Gy
 ㏊                      ha
 # ㏋  HP??
@@ -5241,15 +6266,15 @@ röntgen                 roentgen
 ㏔                      mb
 ㏕                      mil
 ㏖                      mol
-㏗(x)                   units=[;mol/liter] range=[0,] pH(x); ~pH(㏗)
+㏗()                    pH
 ㏙                      ppm
 #   ㏚     PR???
 ㏛                      sr
 ㏜                      Sv
 ㏝                      Wb
-㏞                      V/m
-㏟                      A/m
-㏿                      gal
+#㏞                      V/m     Invalid on Mac
+#㏟                      A/m     Invalid on Mac
+#㏿                      gal     Invalid on Mac
 
 !endutf8
 
@@ -5265,6 +6290,7 @@ röntgen                 roentgen
 !unitlist time year;day;hr;min;sec
 !unitlist dms deg;arcmin;arcsec
 !unitlist ftin ft;in;1|8 in
+!unitlist inchfine in;1|8 in;1|16 in;1|32 in;1|64 in
 !unitlist usvol cup;3|4 cup;2|3 cup;1|2 cup;1|3 cup;1|4 cup;\
                 tbsp;tsp;1|2 tsp;1|4 tsp;1|8 tsp
 
