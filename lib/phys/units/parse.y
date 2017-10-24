@@ -96,25 +96,30 @@ class Unit
         @q.push [:DIV, $&]
       when /\Aper\b/o
         @q.push [:DIV, $&]
-        when /\A([^#{c}0-9,.-]([^#{c}$-]*[^#{c}0-9,.])?)(\d)?/o
-        a = $&
-        x = $1
-        n = $3
-        if n && n.to_i >= 2
-            @q.push [:WORD, x]
-            @q.push [:POW, '']
-            @q.push [:NUMBER, n.to_i]
-        else
-          @q.push [:WORD, a]
-        end
-      when /\A[%'"]'?/o
+      when /\A[%'"$]'?/o
         @q.push [:WORD, $&]
       when /\A\^|\A\*\*/o
         @q.push [:POW, $&]
-      when /\A./o
+      when /\A[#{c}-]/o
         @q.push [$&,$&]
+      when /\AUS\$/o
+        @q.push [:WORD, $&]
+      when /\A\p{Word}+/o
+        a = $&
+        str = $'
+        case a
+        when /\A(.*[^\d])([2-9])$/
+          @q.push [:WORD, $1]
+          @q.push [:POW, '']
+          @q.push [:NUMBER, $2.to_i]
+        else
+          @q.push [:WORD, a]
+        end
+        next
+      else
+        raise Racc::ParseError,"fail to tokenize: #{str.inspect}"
       end
-      str = $' #'
+      str = $'
     end
     @q.push [false, '$end']
 
