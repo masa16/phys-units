@@ -17,41 +17,42 @@ EOL
 
 keys = Phys::Unit::LIST.keys
 keys.each do |k,u|
-  puts k  if $debug
+  $stderr.puts k  if $debug
   u = Phys::Unit::LIST[k]
+  $stderr.puts u  if $debug
   f = u.conversion_factor
   s = u.base_unit.string_form
   #s = '1' if s==''
-  puts "#{k}, #{u.name}, #{u.string_form}, #{u.factor} base: #{f}, #{s}" if $debug
+  $stderr.puts "#{k}, #{u.name}, #{u.string_form}, #{u.factor} base: #{f}, #{s}" if $debug
   n = u.name
   if /'/ =~ n
     c = "units "#{n}" '#{s}'"
-    puts c if $debug
+    $stderr.puts c if $debug
     next
   else
     c = "units '#{n}' '#{s}'"
   end
-  puts c if $debug
+  $stderr.puts c if $debug
   x = `#{c}`
-  puts x if $debug
+  $stderr.puts x if $debug
 
   if /\* ([\d.e+-]+)\s+\/ ([\d.e+-]+)/m =~ x
     factor = $1
     s2 = (s=='') ? "" : ",#{s.inspect}"
     puts <<EOL
   describe Q[1,#{n.inspect}] do
-    it {should be_a_quantity_close_to Q[#{factor}#{s2}] }
+    it {is_expected.to be_a_quantity_close_to Q[#{factor}#{s2}] }
   end
 EOL
     factor = factor.to_f
-    puts "factor = #{factor} <=> f=#{f} => #{factor.to_f<=>f}" if $debug
+    $stderr.puts "factor = #{factor} <=> f=#{f} => #{factor.to_f<=>f}" if $debug
     if !close_values(factor, f)
-      puts "#{k}, #{u.name}, #{u.string_form}, #{u.factor} base: #{f}, #{s}"
-      puts c
-      puts x
-      puts "factor = #{factor} <=> f=#{f} => #{factor<=>f}"
-      puts "diff = #{(factor-f).abs/(factor.abs+f.abs)}"
-      puts "--"
+      $stderr.puts "#{k}, #{u.name}, #{u.string_form}, #{u.factor} base: #{f}, #{s}"
+      $stderr.puts c
+      $stderr.puts x
+      $stderr.puts "factor = #{factor} <=> f=#{f} => #{factor<=>f}"
+      $stderr.puts "diff = #{(factor-f).abs/(factor.abs+f.abs)}"
+      $stderr.puts "--"
     end
   end
 end
