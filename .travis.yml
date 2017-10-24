@@ -15,6 +15,9 @@ notifications:
 
 install: true
 
+before_script:
+  - bundle install
+
 script:
   - bundle exec rake spec
 
