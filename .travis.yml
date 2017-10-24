@@ -1,0 +1,22 @@
+language:
+  ruby
+
+rvm:
+  - 2.1
+  - 2.2
+  - 2.3
+
+matrix:
+  fast_finish:
+    true
+
+notifications:
+  email: false
+
+install: true
+
+script:
+  - bundle exec rake spec
+
+gemfile:
+  - Gemfile
