@@ -6,7 +6,7 @@
 unit conversion of physical quantities.
 Major features: (1) It uses rich database of GNU Units.
 (2) It provides normal class interface without modifying built-in classes.
-Former name is [Quanty](http://narray.rubyforge.org/quanty/quanty-en.html),
+Former name is [Quanty](https://rubygems.org/gems/quanty),
 the first Ruby units library released in 2001.
 
 * [GitHub](https://github.com/masa16/phys-units)
@@ -142,7 +142,7 @@ Note that this usage involves global changes on a build-in class and will cause 
 * 2017-10-24 ver 1.0.0
     * Unit data from GNU Units version 2.14 (including 2014 CODATA recommended values)
 * 2013-04-27 ver 0.9.0
-    * Change module name from 'Quanty' to Phys-Units.
+    * Change module name from [Quanty](https://rubygems.org/gems/quanty) to Phys-Units.
     * Unit data from GNU Units version 2.04 (including 2010 CODATA recommended values)
 
 ## Copying License
