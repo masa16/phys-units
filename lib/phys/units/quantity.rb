@@ -89,7 +89,7 @@ module Phys
         @expr = nil
         @unit = unit
       when Unit
-        raise "Wrong # of argument" if unit
+        raise ArgumentError,"Wrong # of argument" if unit
         @expr = nil
         @unit = expr
       else
@@ -545,16 +545,9 @@ module Phys
     # Inspect String.
     # @return [String]
     def inspect
-      if @expr
-        expr = "," +@expr.inspect
-      else
-        expr = ""
-      end
-      if @@verbose_inspect
-        sufx = " "+@unit.inspect
-      else
-        sufx = ""
-      end
+      expr = @expr || @unit.expr
+      expr = (expr) ? ","+expr.inspect : ""
+      sufx = (@@verbose_inspect) ? " "+@unit.inspect : ""
       self.class.to_s+"["+Unit::Utils.num_inspect(@value)+expr+"]"+sufx
     end
 
