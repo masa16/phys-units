@@ -87,7 +87,9 @@ module Phys
 
     # Expression of the unit.
     # @return [String, NilClass]
-    attr_reader :expr
+    def expr
+      @expr || @name || string_form
+    end
 
     # @visibility private
     attr_reader :offset
@@ -576,7 +578,7 @@ module Phys
         @factor = 1
         @dim = {@name=>1}
         @dim.default = 0
-        @expr = expr
+        @expr = nil
         if String===expr && /!dimensionless/ =~ expr
           @dimensionless = true
         end
