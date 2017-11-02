@@ -7,7 +7,7 @@ describe "Create Units" do
     its(:factor) {is_expected.to eq 1}
     its(:conversion_factor) {is_expected.to eq 1}
     its(:name) {is_expected.to be_nil}
-    its(:expr) {is_expected.to be_nil}
+    its(:expr) {is_expected.to eq ""}
     its(:offset) {is_expected.to be_nil}
     its(:dimension) {is_expected.to eq({})}
     its(:dimension_value) {is_expected.to eq 1}
@@ -22,7 +22,7 @@ describe "Create Units" do
     its(:factor) {is_expected.to eq 2}
     its(:conversion_factor) {is_expected.to eq 2}
     its(:name) {is_expected.to be_nil}
-    its(:expr) {is_expected.to be_nil}
+    its(:expr) {is_expected.to eq "2"}
     its(:offset) {is_expected.to be_nil}
     its(:dimension) {is_expected.to eq({})}
     its(:dimension_value) {is_expected.to eq 1}
@@ -37,7 +37,7 @@ describe "Create Units" do
     its(:factor) {is_expected.to eq 1}
     its(:conversion_factor) {is_expected.to eq Math::PI}
     its(:name) {is_expected.to eq 'pi'}
-    its(:expr) {is_expected.to eq '!dimensionless'}
+    its(:expr) {is_expected.to eq 'pi'}
     its(:offset) {is_expected.to be_nil}
     its(:dimension) {is_expected.to eq({'pi'=>1})}
     its(:dimension_value) {is_expected.to eq Math::PI}
@@ -52,7 +52,7 @@ describe "Create Units" do
     its(:factor) {is_expected.to eq 1}
     its(:conversion_factor) {is_expected.to eq 1}
     its(:name) {is_expected.to eq 'm'}
-    its(:expr) {is_expected.to eq '!'}
+    its(:expr) {is_expected.to eq 'm'}
     its(:offset) {is_expected.to be_nil}
     its(:dimension) {is_expected.to eq({'m'=>1})}
     its(:dimension_value) {is_expected.to eq 1}
@@ -88,7 +88,7 @@ describe "Create Units" do
     its(:factor) {is_expected.to eq 1609.344}
     its(:conversion_factor) {is_expected.to eq 1609.344}
     its(:name) {is_expected.to be_nil}
-    its(:expr) {is_expected.to be_nil}
+    its(:expr) {is_expected.to eq "1609.344 m"}
     its(:offset) {is_expected.to be_nil}
     its(:dimension) {is_expected.to eq({'m'=>1})}
     its(:dimension_value) {is_expected.to eq 1}
@@ -149,7 +149,7 @@ describe "Create Units" do
     its(:factor) {is_expected.to eq 123.5}
     its(:conversion_factor) {is_expected.to eq 123.5}
     its(:name) {is_expected.to be_nil}
-    its(:expr) {is_expected.to be_nil}
+    its(:expr) {is_expected.to eq '123.5 s'}
     its(:offset) {is_expected.to be_nil}
     its(:dimension) {is_expected.to eq({'s'=>1})}
     its(:dimension_value) {is_expected.to eq 1}
@@ -164,7 +164,7 @@ describe "Create Units" do
     its(:factor) {is_expected.to eq 1}
     its(:conversion_factor) {is_expected.to eq 1}
     its(:name) {is_expected.to be_nil}
-    its(:expr) {is_expected.to be_nil}
+    its(:expr) {is_expected.to eq "m s^-1"}
     its(:offset) {is_expected.to be_nil}
     its(:dimension) {is_expected.to eq({'m'=>1, 's'=>-1})}
     its(:dimension_value) {is_expected.to eq 1}
@@ -180,7 +180,7 @@ describe "Create Units" do
     its(:factor) {is_expected.to eq 1}
     its(:conversion_factor) {is_expected.to eq 1}
     its(:name) {is_expected.to be_nil}
-    its(:expr) {is_expected.to be_nil}
+    its(:expr) {is_expected.to eq "m^2 s^-2"}
     its(:offset) {is_expected.to be_nil}
     its(:dimension) {is_expected.to eq({'m'=>2, 's'=>-2})}
     its(:dimension_value) {is_expected.to eq 1}
@@ -199,7 +199,7 @@ describe "Create Units" do
     its(:factor) {is_expected.to eq 1}
     its(:conversion_factor) {is_expected.to eq 1}
     its(:name) {is_expected.to eq 'tempC'}
-    its(:expr) {is_expected.to be_nil}
+    its(:expr) {is_expected.to eq 'tempC'}
     its(:offset) {is_expected.to eq 273.15}
     its(:dimension) {is_expected.to eq({'K'=>1})}
     its(:dimension_value) {is_expected.to eq 1}
@@ -215,7 +215,7 @@ describe "Create Units" do
     its(:factor) {is_expected.to be_an_instance_of Rational}
     its(:conversion_factor) {is_expected.to eq Rational(5,9)}
     its(:name) {is_expected.to eq 'tempF'}
-    its(:expr) {is_expected.to be_nil}
+    its(:expr) {is_expected.to eq 'tempF'}
     its(:offset) {is_expected.to eq Rational(45967,180)}
     its(:dimension) {is_expected.to eq({'K'=>1})}
     its(:dimension_value) {is_expected.to eq 1}
