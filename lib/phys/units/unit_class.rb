@@ -115,8 +115,8 @@ module Phys
       def find_prefix(x)
         Unit.prefix_regex =~ x
         pre,post = $1,$2
-        if pre and pre and stem = (LIST[post] || unit_stem(post))
-          PREFIX[pre] * stem
+        if pre and post and stem = (LIST[post] || unit_stem(post))
+          Unit.new(stem * PREFIX[pre].factor, x)
         end
       end
 
