@@ -3,7 +3,7 @@ module Phys
   # @visibility private
   module UnitMeasures
     def self.included(mod)
-      Phys::Unit::LIST.each do |k,u|
+      Unit::LIST.each do |k,u|
         if /^[A-Z]\w*$/ =~ k
           const_set(k,u)
         end
@@ -30,25 +30,28 @@ module Phys
   #     end
   #   end
   #
-  #   include Phys::UnitsMixin
+  #   extend Phys::UnitsMixin
   #
   #   1*miles/hr >> m/s    #=> Phys::Quantity[0.44704,"m/s"]
   #
   module UnitsMixin
     include UnitMeasures
+
     module_function
+
     alias method_missing_units_alias method_missing
+
     def method_missing(method, *args, &block)
-      if unit=Phys::Unit.find_unit(method)
+      if unit = Unit.find_unit(method)
         raise "argument must be empty" unless args.empty?
-        Phys::Quantity.new(1,method,unit)
+        Quantity.new(Rational(1), method, unit)
       else
         method_missing_units_alias(method, *args, &block)
       end
     end
 
     def print_units(unit=nil)
-      Phys::Unit::LIST.each do |k,u|
+      Unit::LIST.each do |k,u|
         if unit.nil? || unit===u
           len = 32 - k.size
           len = 1 if len < 1
@@ -68,16 +71,31 @@ module Phys
   #     include Phys::UnitsNumericMixin
   #   end
   #
-  #   1.miles/1.hr >> 'm/s'  #=> Phys::Quantity[0.44704,"m/s"]
+  #   1.miles/hr >> m/s     #=> Phys::Quantity[0.44704,"m/s"]
+  #   1.(km/s) >> miles/hr  #=> Phys::Quantity[(1/0.00044704),"miles/hr"]
+  #
   module UnitsNumericMixin
+
     alias method_missing_units_alias method_missing
+
     def method_missing(method, *args, &block)
-      if unit=Phys::Unit.find_unit(method)
+      if unit = Unit.find_unit(method)
         raise "argument must be empty" unless args.empty?
-        Phys::Quantity.new(self,method,unit)
+        case self
+        when Integer
+          Quantity.new(Rational(self), method, unit)
+        when Numeric
+          Quantity.new(self, method, unit)
+        else
+          self * Quantity.new(1, method, unit)
+        end
       else
         method_missing_units_alias(method, *args, &block)
       end
+    end
+
+    def call(unit)
+      self * unit
     end
   end
 
